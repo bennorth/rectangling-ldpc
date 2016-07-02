@@ -205,3 +205,9 @@ class TestFactorGraphState:
         exp_score_2 = py_fgs.score_2
         nptest.assert_allclose(got_score_2, exp_score_2)
         self.assert_scores(fgs, py_fgs)
+
+class TestFactorGraphState:
+    def test_construction(self, engine_context, sample_obs):
+        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
+        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
+        acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
