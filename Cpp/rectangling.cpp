@@ -43,6 +43,11 @@ public:
         return distrn(rnd_);
     }
 
+    MatrixXi excess_binomial_rnd(size_t n1, size_t n2,
+                                 double p, size_t n_obs_total) {
+        return ::excess_binomial_rnd(rnd_, n1, n2, p, n_obs_total);
+    }
+
 private:
     rnd_engine_t rnd_;
 };
