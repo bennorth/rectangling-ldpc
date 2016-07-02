@@ -77,3 +77,29 @@ class TestObservations:
                                                1.25, 12000)
         assert obs.zeta == 1.25
         assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
+
+    @pytest.mark.parametrize('chi1, chi2',
+                             [(zero_chi1(), zero_chi2()),
+                              (sample_chi1(), sample_chi2())])
+    #
+    def test_random_construction_thetas(self, engine_context, chi1, chi2):
+        obs = engine_context.make_Observations(chi1, chi2, 3.0, 120000)
+        got_theta = obs.theta
+
+        # A zeta of 3.0 means P(dot) = 0.75 and P(cross) = 0.25.  We
+        # expect an excess of dot over cross of 0.5, then.  Expected
+        # theta values are all around 5000, but not exactly.  Choose
+        # values to pass test, but sanity-checking they're near 5000.
+        #
+        exp_zero_theta = np.array([[5062, 4892, 4922, 4908],
+                                   [5004, 4896, 4914, 5042],
+                                   [4884, 5070, 5092, 4846]], dtype='i')
+
+        chi12 = chi1[:, None] ^ chi2[None, :]
+        assert chi12.shape == got_theta.shape
+
+        chi12_mult = np.where(chi12, -1, 1)
+        assert (np.all(chi1 == 0) and np.all(chi2 == 0)) <= np.all(chi12_mult == 1)
+
+        exp_theta = chi12_mult * exp_zero_theta
+        nptest.assert_array_equal(obs.theta, exp_theta)
