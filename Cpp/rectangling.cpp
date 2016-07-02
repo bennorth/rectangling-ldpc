@@ -47,6 +47,20 @@ MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
     return m;
 }
 
+
+////////////////////////////////////////////////////////////////////////
+
+class Observations
+{
+public:
+    Observations(double zeta, const MatrixXi& theta)
+        : zeta_(zeta), theta_(theta) {}
+
+private:
+    double zeta_;
+    MatrixXi theta_;
+};
+
 class EngineContext
 {
 public:
