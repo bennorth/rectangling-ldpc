@@ -180,6 +180,9 @@ public:
     VectorXd s1() const;
     VectorXd s2() const;
 
+    VectorXi pattern_1() const { return pattern_from_score(s1()); }
+    VectorXi pattern_2() const { return pattern_from_score(s2()); }
+
 private:
     const Observations& obs_;
 
@@ -280,6 +283,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def("update_score_2", &FactorGraphState::update_score_2)
         .def_property_readonly("s1", &FactorGraphState::s1)
         .def_property_readonly("s2", &FactorGraphState::s2)
+        .def_property_readonly("pattern_1", &FactorGraphState::pattern_1)
+        .def_property_readonly("pattern_2", &FactorGraphState::pattern_2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
