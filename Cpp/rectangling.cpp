@@ -68,7 +68,9 @@ public:
 
 private:
     double zeta_;
+    double log_zeta_recip_;
     MatrixXi theta_;
+    MatrixXd z_pwr_theta_;
 
     static MatrixXi random_theta_(rnd_engine_t& rnd,
                                   const VectorXi& chi1, const VectorXi& chi2,
@@ -76,7 +78,10 @@ private:
 };
 
 Observations::Observations(double zeta, const MatrixXi& theta)
-    : zeta_(zeta), theta_(theta)
+    : zeta_(zeta), log_zeta_recip_(1.0 / std::log(zeta)),
+      theta_(theta), z_pwr_theta_(theta
+                                  .cast<double>()
+                                  .unaryExpr([this](double u) { return zeta_to_power(u); }))
 {}
 
 Observations::Observations(rnd_engine_t& rnd,
