@@ -157,15 +157,12 @@ class TestFactorGraphState:
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
         return cr.FactorGraphState(sample_obs, rnd_scores_1, rnd_scores_2)
 
-    def test_update_score_1(self, engine_context, sample_obs):
-        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
-        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
+    def test_update_score_1(self, sample_fgs, sample_obs):
+        py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
+                                     sample_fgs.score_1, sample_fgs.score_2)
 
-        fgs = cr.FactorGraphState(sample_obs, rnd_scores_1, rnd_scores_2)
-        fgs.update_score_1()
-        got_score_1 = fgs.score_1
-
-        py_fgs = pr.FactorGraphState(py_Observations(sample_obs), rnd_scores_1, rnd_scores_2)
+        sample_fgs.update_score_1()
+        got_score_1 = sample_fgs.score_1
         exp_score_1 = py_fgs.with_score_1_updated().score_1
 
         nptest.assert_allclose(got_score_1, exp_score_1)
