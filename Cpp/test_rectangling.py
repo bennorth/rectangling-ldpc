@@ -164,5 +164,4 @@ class TestFactorGraphState:
         sample_fgs.update_score_1()
         got_score_1 = sample_fgs.score_1
         exp_score_1 = py_fgs.with_score_1_updated().score_1
-
         nptest.assert_allclose(got_score_1, exp_score_1)
