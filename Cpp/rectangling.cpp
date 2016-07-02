@@ -61,6 +61,9 @@ public:
                  const VectorXi& chi1, const VectorXi& chi2,
                  double zeta, size_t n_observations);
 
+    double zeta() const { return zeta_; }
+    const MatrixXi& theta() const { return theta_; }
+
 private:
     double zeta_;
     MatrixXi theta_;
@@ -121,6 +124,8 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<Observations>(m, "Observations")
         .def(py::init<double, const MatrixXi&>())
+        .def_property_readonly("zeta", &Observations::zeta)
+        .def_property_readonly("theta", &Observations::theta)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
