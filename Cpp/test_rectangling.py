@@ -67,3 +67,5 @@ class TestObservations:
                                  sample_chi1, sample_chi2):
         obs = engine_context.make_Observations(sample_chi1, sample_chi2,
                                                1.25, 12000)
+        assert obs.zeta == 1.25
+        assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
