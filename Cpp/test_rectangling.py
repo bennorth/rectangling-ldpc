@@ -182,24 +182,26 @@ class TestFactorGraphState:
         nptest.assert_allclose(fgs1.s2, fgs2.s2)
         nptest.assert_array_equal(fgs1.pattern_2, fgs2.pattern_2)
 
-    def test_update_score_1(self, sample_fgs, sample_obs):
+    @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
+    def test_update_score_1(self, fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
-                                     sample_fgs.score_1, sample_fgs.score_2)
+                                     fgs.score_1, fgs.score_2)
 
-        sample_fgs.update_score_1()
-        got_score_1 = sample_fgs.score_1
+        fgs.update_score_1()
+        got_score_1 = fgs.score_1
         py_fgs = py_fgs.with_score_1_updated()
         exp_score_1 = py_fgs.score_1
         nptest.assert_allclose(got_score_1, exp_score_1)
-        self.assert_scores(sample_fgs, py_fgs)
+        self.assert_scores(fgs, py_fgs)
 
-    def test_update_score_2(self, sample_fgs, sample_obs):
+    @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
+    def test_update_score_2(self, fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
-                                     sample_fgs.score_1, sample_fgs.score_2)
+                                     fgs.score_1, fgs.score_2)
 
-        sample_fgs.update_score_2()
-        got_score_2 = sample_fgs.score_2
+        fgs.update_score_2()
+        got_score_2 = fgs.score_2
         py_fgs = py_fgs.with_score_2_updated()
         exp_score_2 = py_fgs.score_2
         nptest.assert_allclose(got_score_2, exp_score_2)
-        self.assert_scores(sample_fgs, py_fgs)
+        self.assert_scores(fgs, py_fgs)
