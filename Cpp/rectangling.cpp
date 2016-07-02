@@ -70,6 +70,10 @@ public:
 private:
     double zeta_;
     MatrixXi theta_;
+
+    static MatrixXi random_theta_(rnd_engine_t& rnd,
+                                  const VectorXi& chi1, const VectorXi& chi2,
+                                  double zeta, size_t n_observations);
 };
 
 Observations::Observations(rnd_engine_t& rnd,
@@ -77,7 +81,13 @@ Observations::Observations(rnd_engine_t& rnd,
                            double zeta, size_t n_observations)
 {
     zeta_ = zeta;
+    theta_ = random_theta_(rnd, chi1, chi2, zeta, n_observations);
+}
 
+MatrixXi Observations::random_theta_(rnd_engine_t& rnd,
+                                    const VectorXi& chi1, const VectorXi& chi2,
+                                    double zeta, size_t n_observations)
+{
     double delta = (zeta - 1.0) / (zeta + 1.0);
     double prob_dot = 0.5 * (1.0 + delta);
     auto de_chi_dots_over_crosses = excess_binomial_rnd(rnd, chi1.size(), chi2.size(),
@@ -88,7 +98,7 @@ Observations::Observations(rnd_engine_t& rnd,
     auto chi2_mult = chi2.unaryExpr(mk_mult);
     auto chi_12 = chi1_mult * chi2_mult.transpose();
 
-    theta_ = chi_12.array() * de_chi_dots_over_crosses.array();
+    return chi_12.array() * de_chi_dots_over_crosses.array();
 }
 
 
