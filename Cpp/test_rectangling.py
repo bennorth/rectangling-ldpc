@@ -157,6 +157,11 @@ class TestFactorGraphState:
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
         return cr.FactorGraphState(sample_obs, rnd_scores_1, rnd_scores_2)
 
+    @staticmethod
+    def assert_scores(fgs1, fgs2):
+        nptest.assert_allclose(fgs1.s1, fgs2.s1)
+        nptest.assert_allclose(fgs1.s2, fgs2.s2)
+
     def test_update_score_1(self, sample_fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
                                      sample_fgs.score_1, sample_fgs.score_2)
@@ -166,8 +171,7 @@ class TestFactorGraphState:
         py_fgs = py_fgs.with_score_1_updated()
         exp_score_1 = py_fgs.score_1
         nptest.assert_allclose(got_score_1, exp_score_1)
-        nptest.assert_allclose(sample_fgs.s1, py_fgs.s1)
-        nptest.assert_allclose(sample_fgs.s2, py_fgs.s2)
+        self.assert_scores(sample_fgs, py_fgs)
 
     def test_update_score_2(self, sample_fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
@@ -178,5 +182,4 @@ class TestFactorGraphState:
         py_fgs = py_fgs.with_score_2_updated()
         exp_score_2 = py_fgs.score_2
         nptest.assert_allclose(got_score_2, exp_score_2)
-        nptest.assert_allclose(sample_fgs.s1, py_fgs.s1)
-        nptest.assert_allclose(sample_fgs.s2, py_fgs.s2)
+        self.assert_scores(sample_fgs, py_fgs)
