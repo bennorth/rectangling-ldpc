@@ -68,6 +68,8 @@ public:
 
     double zeta_to_power(double x) const { return std::pow(zeta_, x); }
 
+    MatrixXd chk_f(const MatrixXd& x) const;
+
 private:
     double zeta_;
     double log_zeta_recip_;
@@ -109,6 +111,14 @@ MatrixXi Observations::random_theta_(rnd_engine_t& rnd,
     return chi_12.array() * de_chi_dots_over_crosses.array();
 }
 
+MatrixXd Observations::chk_f(const MatrixXd& x) const
+{
+    auto z_pwr_x = x.unaryExpr([this](double u) { return zeta_to_power(u); }).array();
+    auto z_pwr_th = z_pwr_theta_.array();
+    auto likelihood_ratio = (1.0 + z_pwr_th * z_pwr_x) / (z_pwr_th + z_pwr_x);
+    auto log_likelihood_ratio = likelihood_ratio.unaryExpr([](double u) { return std::log(u); });
+    return (log_zeta_recip_ * log_likelihood_ratio);
+}
 
 ////////////////////////////////////////////////////////////////////////
 
