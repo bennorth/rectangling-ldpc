@@ -1,6 +1,7 @@
 #include <Eigen/Dense>
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
+#include <trng/normal_dist.hpp>
 #include <stdexcept>
 #include <cmath>
 #include <pybind11/pybind11.h>
@@ -49,6 +50,20 @@ MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
     return m;
 }
 
+MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
+{
+    auto n1 = theta.rows();
+    auto n2 = theta.cols();
+    MatrixXd m(n1, n2);
+
+    trng::normal_dist<double> normal(0.0, 1.0);
+
+    for (auto i = 0; i != n1; ++i)
+        for (auto j = 0; j != n2; ++j)
+            m(i, j) = normal(rnd);
+
+    return m;
+}
 
 ////////////////////////////////////////////////////////////////////////
 
