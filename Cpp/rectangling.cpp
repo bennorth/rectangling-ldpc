@@ -66,6 +66,11 @@ MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
     return m;
 }
 
+VectorXi pattern_from_score(const VectorXd& scores)
+{
+    return scores.unaryExpr([](double x) { return (x > 0.0) ? 1 : 0; }).cast<int>();
+}
+
 ////////////////////////////////////////////////////////////////////////
 
 class Observations
