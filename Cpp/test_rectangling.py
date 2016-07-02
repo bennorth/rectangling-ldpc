@@ -29,27 +29,23 @@ def engine_context():
 
 
 class TestEngineContext:
-    @pytest.fixture
-    def ec(self):
-        return cr.EngineContext(42)
-
     def test_construction(self):
         cr.EngineContext(42)
 
-    def test_binomial(self, ec):
-        n_successes = ec.test_binomial(0.8, 10000)
+    def test_binomial(self, engine_context):
+        n_successes = engine_context.test_binomial(0.8, 10000)
         # Value chosen to make test pass, but sanity-checking that it's
         # near 8000.
         assert n_successes == 8029
 
-    def test_excess_binomial_rnd_bad_input(self, ec):
+    def test_excess_binomial_rnd_bad_input(self, engine_context):
         pytest.raises_regexp(ValueError, r'must be in \(0, 1\)',
-                             ec.excess_binomial_rnd, 2, 3, -0.5, 10)
+                             engine_context.excess_binomial_rnd, 2, 3, -0.5, 10)
 
     @pytest.mark.parametrize('p', [0.00001, 0.99999], ids='01')
     @pytest.mark.parametrize('n_leftover', range(6))
-    def test_excess_binomial_rnd(self, ec, n_leftover, p):
-        n_excess = ec.excess_binomial_rnd(2, 3, p, 600 + n_leftover)
+    def test_excess_binomial_rnd(self, engine_context, n_leftover, p):
+        n_excess = engine_context.excess_binomial_rnd(2, 3, p, 600 + n_leftover)
         raw_exp_n_excess = np.full((2, 3), 100, dtype='i')
         raw_exp_n_excess.ravel()[:n_leftover] += 1
         exp_n_excess = (raw_exp_n_excess if p > 0.5 else -raw_exp_n_excess)
