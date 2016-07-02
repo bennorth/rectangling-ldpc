@@ -51,6 +51,11 @@ class TestEngineContext:
         exp_n_excess = (raw_exp_n_excess if p > 0.5 else -raw_exp_n_excess)
         nptest.assert_array_equal(n_excess, exp_n_excess)
 
+    def test_normal_like(self, engine_context):
+        dummy_theta = np.zeros((3, 5), dtype='i')
+        zs = engine_context.unit_normal_shaped_like(dummy_theta)
+        assert zs.shape == dummy_theta.shape
+
 @pytest.fixture
 def sample_chi1():
     return np.array([0, 1, 0], dtype='i')
