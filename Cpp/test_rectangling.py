@@ -144,6 +144,9 @@ class TestObservations:
         nptest.assert_allclose(got_chk_value, exp_chk_value)
 
 class TestFactorGraphState:
-    def test_construction(self, sample_obs):
-        zero_scores = np.zeros_like(sample_obs.theta, dtype='f')
-        fgs = cr.FactorGraphState(sample_obs, zero_scores, zero_scores)
+    def test_construction(self, engine_context, sample_obs):
+        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
+        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
+        fgs = cr.FactorGraphState(sample_obs, rnd_scores_1, rnd_scores_2)
+        nptest.assert_array_equal(fgs.score_1, rnd_scores_1)
+        nptest.assert_array_equal(fgs.score_2, rnd_scores_2)

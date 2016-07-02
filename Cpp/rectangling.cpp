@@ -165,6 +165,9 @@ public:
                      const MatrixXd& score_1,
                      const MatrixXd& score_2);
 
+    const MatrixXd& score_1() const { return score_1_; }
+    const MatrixXd& score_2() const { return score_2_; }
+
 private:
     const Observations& obs_;
 
@@ -233,6 +236,8 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<FactorGraphState>(m, "FactorGraphState")
         .def(py::init<const Observations&, const MatrixXd&, const MatrixXd&>())
+        .def_property_readonly("score_1", &FactorGraphState::score_1)
+        .def_property_readonly("score_2", &FactorGraphState::score_2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
