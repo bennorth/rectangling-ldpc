@@ -55,8 +55,7 @@ MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
 class Observations
 {
 public:
-    Observations(double zeta, const MatrixXi& theta)
-        : zeta_(zeta), theta_(theta) {}
+    Observations(double zeta, const MatrixXi& theta);
 
     Observations(rnd_engine_t& rnd,
                  const VectorXi& chi1, const VectorXi& chi2,
@@ -75,6 +74,10 @@ private:
                                   const VectorXi& chi1, const VectorXi& chi2,
                                   double zeta, size_t n_observations);
 };
+
+Observations::Observations(double zeta, const MatrixXi& theta)
+    : zeta_(zeta), theta_(theta)
+{}
 
 Observations::Observations(rnd_engine_t& rnd,
                            const VectorXi& chi1, const VectorXi& chi2,
