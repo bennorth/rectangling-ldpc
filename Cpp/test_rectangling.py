@@ -22,6 +22,12 @@ def test_matrix_interchange(function_name, expected_kind):
     assert mx.dtype.kind == expected_kind
     nptest.assert_array_equal(mx, 42)
 
+
+@pytest.fixture
+def engine_context():
+    return cr.EngineContext(42)
+
+
 class TestEngineContext:
     @pytest.fixture
     def ec(self):
