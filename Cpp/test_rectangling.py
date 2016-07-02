@@ -67,6 +67,10 @@ def zero_chi1():
 def zero_chi2():
     return np.array([0, 0, 0, 0], dtype='i')
 
+@pytest.fixture
+def zero_obs():
+    return cr.Observations(1.25, np.zeros((3, 4), dtype='i'))
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
