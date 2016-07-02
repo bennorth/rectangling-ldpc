@@ -6,6 +6,7 @@
 #include <pybind11/eigen.h>
 
 using Eigen::MatrixXi;
+using Eigen::VectorXi;
 using Eigen::MatrixXd;
 using rnd_engine_t = trng::yarn2;
 
@@ -55,6 +56,10 @@ class Observations
 public:
     Observations(double zeta, const MatrixXi& theta)
         : zeta_(zeta), theta_(theta) {}
+
+    Observations(rnd_engine_t& rnd,
+                 const VectorXi& chi1, const VectorXi& chi2,
+                 double zeta, size_t n_observations);
 
 private:
     double zeta_;
