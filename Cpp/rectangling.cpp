@@ -182,6 +182,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("z_pwr_theta", &Observations::z_pwr_theta)
         .def_property_readonly("theta", &Observations::theta)
         .def("zeta_to_power", &Observations::zeta_to_power)
+        .def("chk_f", &Observations::chk_f)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
