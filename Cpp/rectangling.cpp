@@ -62,7 +62,9 @@ public:
                  double zeta, size_t n_observations);
 
     double zeta() const { return zeta_; }
+    double log_zeta_recip() const { return log_zeta_recip_; }
     const MatrixXi& theta() const { return theta_; }
+    const MatrixXd& z_pwr_theta() const { return z_pwr_theta_; }
 
     double zeta_to_power(double x) const { return std::pow(zeta_, x); }
 
@@ -147,6 +149,8 @@ PYBIND11_PLUGIN(rectangling) {
     py::class_<Observations>(m, "Observations")
         .def(py::init<double, const MatrixXi&>())
         .def_property_readonly("zeta", &Observations::zeta)
+        .def_property_readonly("log_zeta_recip", &Observations::log_zeta_recip)
+        .def_property_readonly("z_pwr_theta", &Observations::z_pwr_theta)
         .def_property_readonly("theta", &Observations::theta)
         .def("zeta_to_power", &Observations::zeta_to_power)
         ;
