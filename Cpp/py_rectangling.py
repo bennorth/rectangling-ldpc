@@ -45,3 +45,11 @@ class FactorGraphState(namedtuple('FactorGraphState', 'obs score_1 score_2')):
     def s2(self):
         msgs = self.obs.chk_f(self.score_1)
         return np.sum(msgs, axis=0)
+
+    @property
+    def pattern_1(self):
+        return np.sign(self.s1) == 1.0
+
+    @property
+    def pattern_2(self):
+        return np.sign(self.s2) == 1.0
