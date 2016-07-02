@@ -79,10 +79,8 @@ private:
 Observations::Observations(rnd_engine_t& rnd,
                            const VectorXi& chi1, const VectorXi& chi2,
                            double zeta, size_t n_observations)
-{
-    zeta_ = zeta;
-    theta_ = random_theta_(rnd, chi1, chi2, zeta, n_observations);
-}
+    : Observations(zeta, random_theta_(rnd, chi1, chi2, zeta, n_observations))
+{}
 
 MatrixXi Observations::random_theta_(rnd_engine_t& rnd,
                                     const VectorXi& chi1, const VectorXi& chi2,
