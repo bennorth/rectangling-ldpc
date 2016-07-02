@@ -26,7 +26,23 @@ MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
     if (p <= 0.0 || p >= 1.0)
         throw std::range_error("p must be in (0, 1)");
 
-    auto m = MatrixXi::Constant(n1, n2, 0).eval();
+    size_t n_entries = (n1 * n2);
+    size_t n_obs_common = n_obs_total / n_entries;
+    size_t n_obs_remaining = n_obs_total % n_entries;
+
+    auto m = MatrixXi::Constant(n1, n2, -n_obs_common).eval();
+
+    trng::binomial_dist binomial_bulk(p, n_obs_common);
+
+    for (size_t i = 0; i != n1; ++i)
+        for (size_t j = 0; j != n2; ++j)
+            m(i, j) += 2 * binomial_bulk(rnd);
+
+    trng::binomial_dist binomial_1(p, 1);
+
+    for (size_t i = 0; n_obs_remaining; ++i)
+        for (size_t j = 0; n_obs_remaining && (j != n2); ++j, --n_obs_remaining)
+            m(i, j) += 2 * binomial_1(rnd) - 1;
 
     return m;
 }
