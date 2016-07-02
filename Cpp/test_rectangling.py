@@ -128,3 +128,9 @@ class TestObservations:
     def test_zeta_to_power(self, zero_obs):
         for u in np.linspace(-5, 5, 23):
             nptest.assert_allclose(zero_obs.zeta ** u, zero_obs.zeta_to_power(u))
+
+    def test_chk(self, engine_context, sample_obs):
+        zs = engine_context.unit_normal_shaped_like(sample_obs.theta)
+        got_chk_value = sample_obs.chk_f(zs)
+        exp_chk_value = py_Observations(sample_obs).chk_f(zs)
+        nptest.assert_allclose(got_chk_value, exp_chk_value)
