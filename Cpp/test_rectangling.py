@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.testing as nptest
 import rectangling as cr
+import py_rectangling as pr
 import pytest
 
 def test_import():
@@ -26,6 +27,10 @@ def test_matrix_interchange(function_name, expected_kind):
 @pytest.fixture
 def engine_context():
     return cr.EngineContext(42)
+
+
+def py_Observations(obs):
+    return pr.Observations(obs.zeta, obs.theta)
 
 
 class TestEngineContext:
