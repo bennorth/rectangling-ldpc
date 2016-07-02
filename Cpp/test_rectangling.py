@@ -123,7 +123,9 @@ class TestObservations:
         nptest.assert_array_equal(obs.theta, exp_theta)
 
         nptest.assert_allclose(obs.log_zeta_recip, 1.0 / np.log(obs.zeta))
-        nptest.assert_allclose(obs.z_pwr_theta, obs.zeta ** obs.theta)
+
+    def test_z_pwr_theta(self, sample_obs):
+        nptest.assert_allclose(sample_obs.z_pwr_theta, sample_obs.zeta ** sample_obs.theta)
 
     def test_zeta_to_power(self, zero_obs):
         for u in np.linspace(-5, 5, 23):
