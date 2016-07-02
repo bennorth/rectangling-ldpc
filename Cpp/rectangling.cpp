@@ -2,6 +2,7 @@
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
 #include <stdexcept>
+#include <cmath>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
@@ -63,6 +64,8 @@ public:
 
     double zeta() const { return zeta_; }
     const MatrixXi& theta() const { return theta_; }
+
+    double zeta_to_power(double x) const { return std::pow(zeta_, x); }
 
 private:
     double zeta_;
@@ -129,6 +132,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<double, const MatrixXi&>())
         .def_property_readonly("zeta", &Observations::zeta)
         .def_property_readonly("theta", &Observations::theta)
+        .def("zeta_to_power", &Observations::zeta_to_power)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
