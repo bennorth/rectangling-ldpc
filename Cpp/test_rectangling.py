@@ -166,6 +166,8 @@ class TestFactorGraphState:
         py_fgs = py_fgs.with_score_1_updated()
         exp_score_1 = py_fgs.score_1
         nptest.assert_allclose(got_score_1, exp_score_1)
+        nptest.assert_allclose(sample_fgs.s1, py_fgs.s1)
+        nptest.assert_allclose(sample_fgs.s2, py_fgs.s2)
 
     def test_update_score_2(self, sample_fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
@@ -176,3 +178,5 @@ class TestFactorGraphState:
         py_fgs = py_fgs.with_score_2_updated()
         exp_score_2 = py_fgs.score_2
         nptest.assert_allclose(got_score_2, exp_score_2)
+        nptest.assert_allclose(sample_fgs.s1, py_fgs.s1)
+        nptest.assert_allclose(sample_fgs.s2, py_fgs.s2)
