@@ -158,6 +158,31 @@ MatrixXd Observations::chk_f(const MatrixXd& x) const
 
 ////////////////////////////////////////////////////////////////////////
 
+class FactorGraphState
+{
+public:
+    FactorGraphState(const Observations& obs,
+                     const MatrixXd& score_1,
+                     const MatrixXd& score_2);
+
+private:
+    const Observations& obs_;
+
+    // score_1[i, j] is message sent from K1i to check node linking K1i and K2j (and K12ij).
+    // score_2[i, j] is message sent from K2j to check node linking K2j and K1i (and K12ij).
+    //
+    MatrixXd score_1_, score_2_;
+};
+
+FactorGraphState::FactorGraphState(const Observations& obs,
+                                   const MatrixXd& score_1,
+                                   const MatrixXd& score_2)
+    : obs_(obs), score_1_(score_1), score_2_(score_2)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
@@ -204,6 +229,10 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("theta", &Observations::theta)
         .def("zeta_to_power", &Observations::zeta_to_power)
         .def("chk_f", &Observations::chk_f)
+        ;
+
+    py::class_<FactorGraphState>(m, "FactorGraphState")
+        .def(py::init<const Observations&, const MatrixXd&, const MatrixXd&>())
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
