@@ -160,7 +160,9 @@ class TestFactorGraphState:
     @staticmethod
     def assert_scores(fgs1, fgs2):
         nptest.assert_allclose(fgs1.s1, fgs2.s1)
+        nptest.assert_array_equal(fgs1.pattern_1, fgs2.pattern_1)
         nptest.assert_allclose(fgs1.s2, fgs2.s2)
+        nptest.assert_array_equal(fgs1.pattern_2, fgs2.pattern_2)
 
     def test_update_score_1(self, sample_fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
