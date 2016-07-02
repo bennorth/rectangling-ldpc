@@ -81,6 +81,10 @@ def zero_chi2():
 def zero_obs():
     return cr.Observations(1.25, np.zeros((3, 4), dtype='i'))
 
+@pytest.fixture
+def sample_obs(engine_context, sample_chi1, sample_chi2):
+    return engine_context.make_Observations(sample_chi1, sample_chi2, 1.25, 9000)
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
