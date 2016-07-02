@@ -1,6 +1,7 @@
 #include <Eigen/Dense>
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
+#include <stdexcept>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
@@ -16,6 +17,18 @@ MatrixXi test_matrix_i(size_t n1, size_t n2)
 MatrixXd test_matrix_d(size_t n1, size_t n2)
 {
     return MatrixXd::Constant(n1, n2, 42.0);
+}
+
+MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
+                             size_t n1, size_t n2,
+                             double p, size_t n_obs_total)
+{
+    if (p <= 0.0 || p >= 1.0)
+        throw std::range_error("p must be in (0, 1)");
+
+    auto m = MatrixXi::Constant(n1, n2, 0).eval();
+
+    return m;
 }
 
 class EngineContext
