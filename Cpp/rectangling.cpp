@@ -127,6 +127,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<unsigned>())
         .def("test_binomial", &EngineContext::test_binomial)
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
+        .def("make_Observations", &EngineContext::make_Observations)
         ;
 
     return m.ptr();
