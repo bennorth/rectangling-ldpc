@@ -130,7 +130,28 @@ MatrixXd Observations::chk_f(const MatrixXd& x) const
 {
     auto z_pwr_x = x.unaryExpr([this](double u) { return zeta_to_power(u); }).array();
     auto z_pwr_th = z_pwr_theta_.array();
-    auto likelihood_ratio = (1.0 + z_pwr_th * z_pwr_x) / (z_pwr_th + z_pwr_x);
+
+    auto x_nrows = z_pwr_x.rows();
+    auto x_ncols = z_pwr_x.cols();
+    auto n_rows_match = (x_nrows == z_pwr_th.rows());
+    auto n_cols_match = (x_ncols == z_pwr_th.cols());
+    auto one_row = (x_nrows == 1);
+    auto one_col = (x_ncols == 1);
+
+    MatrixXd likelihood_ratio;
+    if (n_rows_match && n_cols_match)
+        likelihood_ratio = (1.0 + z_pwr_th * z_pwr_x) / (z_pwr_th + z_pwr_x);
+    else if (n_rows_match && one_col) {
+        auto z_pwr_th_cw = z_pwr_th.colwise();
+        auto z_pwr_x_c0 = z_pwr_x.col(0);
+        likelihood_ratio = (1.0 + z_pwr_th_cw * z_pwr_x_c0) / (z_pwr_th_cw + z_pwr_x_c0);
+    } else if (n_cols_match && one_row) {
+        auto z_pwr_th_rw = z_pwr_th.rowwise();
+        auto z_pwr_x_r0 = z_pwr_x.row(0);
+        likelihood_ratio = (1.0 + z_pwr_th_rw * z_pwr_x_r0) / (z_pwr_th_rw + z_pwr_x_r0);
+    } else
+        throw std::invalid_argument("incompatible dimensions of 'x' wrt 'theta'");
+
     auto log_likelihood_ratio = likelihood_ratio.unaryExpr([](double u) { return std::log(u); });
     return (log_zeta_recip_ * log_likelihood_ratio);
 }
