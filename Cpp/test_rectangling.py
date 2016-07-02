@@ -62,3 +62,8 @@ def sample_chi2():
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
+
+    def test_random_construction(self, engine_context,
+                                 sample_chi1, sample_chi2):
+        obs = engine_context.make_Observations(sample_chi1, sample_chi2,
+                                               1.25, 12000)
