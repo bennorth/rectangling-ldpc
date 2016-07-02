@@ -23,5 +23,15 @@ def test_matrix_interchange(function_name, expected_kind):
     nptest.assert_array_equal(mx, 42)
 
 class TestEngineContext:
+    @pytest.fixture
+    def ec(self):
+        return cr.EngineContext(42)
+
     def test_construction(self):
         cr.EngineContext(42)
+
+    def test_binomial(self, ec):
+        n_successes = ec.test_binomial(0.8, 10000)
+        # Value chosen to make test pass, but sanity-checking that it's
+        # near 8000.
+        assert n_successes == 8029
