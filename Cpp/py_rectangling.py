@@ -29,3 +29,9 @@ class FactorGraphState(namedtuple('FactorGraphState', 'obs score_1 score_2')):
         msg_sums = np.sum(msgs, axis=1)
         updated_score_1 = msg_sums[:, None] - msgs
         return self._replace(score_1=updated_score_1)
+
+    def with_score_2_updated(self):
+        msgs = self.obs.chk_f(self.score_1)
+        msg_sums = np.sum(msgs, axis=0)
+        updated_score_2 = msg_sums[None, :] - msgs
+        return self._replace(score_2=updated_score_2)
