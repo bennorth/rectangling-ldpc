@@ -21,3 +21,7 @@ def test_matrix_interchange(function_name, expected_kind):
     assert mx.shape == shape
     assert mx.dtype.kind == expected_kind
     nptest.assert_array_equal(mx, 42)
+
+class TestEngineContext:
+    def test_construction(self):
+        cr.EngineContext(42)
