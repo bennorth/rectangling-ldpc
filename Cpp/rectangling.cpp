@@ -1,5 +1,6 @@
 #include <Eigen/Dense>
 #include <trng/yarn2.hpp>
+#include <trng/binomial_dist.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
@@ -24,6 +25,11 @@ public:
     // doesn't match.  Gak.
     EngineContext(unsigned s) : rnd_(std::move(s)) {}
 
+    size_t test_binomial(double p, size_t n_trials) {
+        trng::binomial_dist distrn(p, n_trials);
+        return distrn(rnd_);
+    }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -38,6 +44,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<EngineContext>(m, "EngineContext")
         .def(py::init<unsigned>())
+        .def("test_binomial", &EngineContext::test_binomial)
         ;
 
     return m.ptr();
