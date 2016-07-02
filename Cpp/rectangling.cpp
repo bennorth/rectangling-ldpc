@@ -1,9 +1,11 @@
 #include <Eigen/Dense>
+#include <trng/yarn2.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
+using rnd_engine_t = trng::yarn2;
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
 {
@@ -15,6 +17,16 @@ MatrixXd test_matrix_d(size_t n1, size_t n2)
     return MatrixXd::Constant(n1, n2, 42.0);
 }
 
+class EngineContext
+{
+public:
+    // The 'move' is to make sure the general 'generator&' template
+    // doesn't match.  Gak.
+    EngineContext(unsigned s) : rnd_(std::move(s)) {}
+
+private:
+    rnd_engine_t rnd_;
+};
 
 namespace py = pybind11;
 
