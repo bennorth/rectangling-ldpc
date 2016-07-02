@@ -142,3 +142,8 @@ class TestObservations:
         got_chk_value = sample_obs.chk_f(zs)
         exp_chk_value = py_Observations(sample_obs).chk_f(zs)
         nptest.assert_allclose(got_chk_value, exp_chk_value)
+
+class TestFactorGraphState:
+    def test_construction(self, sample_obs):
+        zero_scores = np.zeros_like(sample_obs.theta, dtype='f')
+        fgs = cr.FactorGraphState(sample_obs, zero_scores, zero_scores)
