@@ -35,3 +35,7 @@ class TestEngineContext:
         # Value chosen to make test pass, but sanity-checking that it's
         # near 8000.
         assert n_successes == 8029
+
+    def test_excess_binomial_rnd_bad_input(self, ec):
+        pytest.raises_regexp(ValueError, r'must be in \(0, 1\)',
+                             ec.excess_binomial_rnd, 2, 3, -0.5, 10)
