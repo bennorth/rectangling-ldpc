@@ -88,6 +88,9 @@ Observations::Observations(rnd_engine_t& rnd,
     theta_ = chi_12.array() * de_chi_dots_over_crosses.array();
 }
 
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
