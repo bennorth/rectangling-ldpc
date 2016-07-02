@@ -231,11 +231,24 @@ VectorXd FactorGraphState::s2() const
 
 class AccurateConvergenceState
 {
+public:
+    AccurateConvergenceState(const Observations& obs,
+                             const VectorXd& score_1,
+                             const RowVectorXd& score_2);
+
 private:
     const Observations& obs_;
     VectorXd score_1_;
     RowVectorXd score_2_;
 };
+
+AccurateConvergenceState::AccurateConvergenceState(const Observations& obs,
+                                                   const VectorXd& score_1,
+                                                   const RowVectorXd& score_2)
+    : obs_(obs),
+      score_1_(score_1),
+      score_2_(score_2)
+{}
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -302,6 +315,7 @@ PYBIND11_PLUGIN(rectangling) {
         ;
 
     py::class_<AccurateConvergenceState>(m, "AccurateConvergenceState")
+        .def(py::init<const Observations&, const VectorXd&, const VectorXd&>())
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
