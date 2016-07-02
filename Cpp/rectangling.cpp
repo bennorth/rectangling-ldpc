@@ -11,6 +11,7 @@ using Eigen::MatrixXi;
 using Eigen::VectorXi;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using Eigen::RowVectorXd;
 using rnd_engine_t = trng::yarn2;
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
@@ -228,6 +229,16 @@ VectorXd FactorGraphState::s2() const
 
 ////////////////////////////////////////////////////////////////////////
 
+class AccurateConvergenceState
+{
+private:
+    const Observations& obs_;
+    VectorXd score_1_;
+    RowVectorXd score_2_;
+};
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
@@ -288,6 +299,9 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("s2", &FactorGraphState::s2)
         .def_property_readonly("pattern_1", &FactorGraphState::pattern_1)
         .def_property_readonly("pattern_2", &FactorGraphState::pattern_2)
+        ;
+
+    py::class_<AccurateConvergenceState>(m, "AccurateConvergenceState")
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
