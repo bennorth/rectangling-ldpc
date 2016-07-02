@@ -131,8 +131,14 @@ class TestObservations:
         for u in np.linspace(-5, 5, 23):
             nptest.assert_allclose(zero_obs.zeta ** u, zero_obs.zeta_to_power(u))
 
-    def test_chk(self, engine_context, sample_obs):
-        zs = engine_context.unit_normal_shaped_like(sample_obs.theta)
+    @pytest.mark.parametrize('row_slc, col_slc',
+                             [(slice(None), slice(None)),
+                              (slice(None), slice(0, 1)),
+                              (slice(0, 1), slice(None))],
+                             ids=['matrix', 'col-vec', 'row-vec'])
+    #
+    def test_chk(self, engine_context, sample_obs, row_slc, col_slc):
+        zs = engine_context.unit_normal_shaped_like(sample_obs.theta)[row_slc, col_slc]
         got_chk_value = sample_obs.chk_f(zs)
         exp_chk_value = py_Observations(sample_obs).chk_f(zs)
         nptest.assert_allclose(got_chk_value, exp_chk_value)
