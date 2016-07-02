@@ -102,6 +102,11 @@ public:
         return ::excess_binomial_rnd(rnd_, n1, n2, p, n_obs_total);
     }
 
+    Observations make_Observations(const VectorXi& chi1, const VectorXi& chi2,
+                                   double zeta, size_t n_observations) {
+        return Observations(rnd_, chi1, chi2, zeta, n_observations);
+    }
+
 private:
     rnd_engine_t rnd_;
 };
