@@ -51,6 +51,14 @@ class TestEngineContext:
         exp_n_excess = (raw_exp_n_excess if p > 0.5 else -raw_exp_n_excess)
         nptest.assert_array_equal(n_excess, exp_n_excess)
 
+@pytest.fixture
+def sample_chi1():
+    return np.array([0, 1, 0], dtype='i')
+
+@pytest.fixture
+def sample_chi2():
+    return np.array([0, 1, 1, 0], dtype='i')
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
