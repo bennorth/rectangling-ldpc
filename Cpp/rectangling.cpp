@@ -154,6 +154,10 @@ public:
         return ::excess_binomial_rnd(rnd_, n1, n2, p, n_obs_total);
     }
 
+    MatrixXd unit_normal_shaped_like(const MatrixXi& theta) {
+        return ::unit_normal_shaped_like(rnd_, theta);
+    }
+
     Observations make_Observations(const VectorXi& chi1, const VectorXi& chi2,
                                    double zeta, size_t n_observations) {
         return Observations(rnd_, chi1, chi2, zeta, n_observations);
@@ -184,6 +188,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<unsigned>())
         .def("test_binomial", &EngineContext::test_binomial)
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
+        .def("unit_normal_shaped_like", &EngineContext::unit_normal_shaped_like)
         .def("make_Observations", &EngineContext::make_Observations)
         ;
 
