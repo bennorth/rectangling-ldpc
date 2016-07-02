@@ -14,14 +14,10 @@ using Eigen::VectorXd;
 using rnd_engine_t = trng::yarn2;
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
-{
-    return MatrixXi::Constant(n1, n2, 42);
-}
+{ return MatrixXi::Constant(n1, n2, 42); }
 
 MatrixXd test_matrix_d(size_t n1, size_t n2)
-{
-    return MatrixXd::Constant(n1, n2, 42.0);
-}
+{ return MatrixXd::Constant(n1, n2, 42.0); }
 
 MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
                              size_t n1, size_t n2,
@@ -67,9 +63,7 @@ MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
 }
 
 VectorXi pattern_from_score(const VectorXd& scores)
-{
-    return scores.unaryExpr([](double x) { return (x > 0.0) ? 1 : 0; }).cast<int>();
-}
+{ return scores.unaryExpr([](double x) { return (x > 0.0) ? 1 : 0; }).cast<int>(); }
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -198,15 +192,13 @@ FactorGraphState::FactorGraphState(const Observations& obs,
                                    const MatrixXd& score_1,
                                    const MatrixXd& score_2)
     : obs_(obs), score_1_(score_1), score_2_(score_2)
-{
-}
+{}
 
 FactorGraphState::FactorGraphState(rnd_engine_t& rnd, const Observations& obs)
     : FactorGraphState(obs,
                        unit_normal_shaped_like(rnd, obs.theta()),
                        unit_normal_shaped_like(rnd, obs.theta()))
-{
-}
+{}
 
 void FactorGraphState::update_score_1()
 {
@@ -249,22 +241,18 @@ public:
     }
 
     MatrixXi excess_binomial_rnd(size_t n1, size_t n2,
-                                 double p, size_t n_obs_total) {
-        return ::excess_binomial_rnd(rnd_, n1, n2, p, n_obs_total);
-    }
+                                 double p, size_t n_obs_total)
+    { return ::excess_binomial_rnd(rnd_, n1, n2, p, n_obs_total); }
 
-    MatrixXd unit_normal_shaped_like(const MatrixXi& theta) {
-        return ::unit_normal_shaped_like(rnd_, theta);
-    }
+    MatrixXd unit_normal_shaped_like(const MatrixXi& theta)
+    { return ::unit_normal_shaped_like(rnd_, theta); }
 
     Observations make_Observations(const VectorXi& chi1, const VectorXi& chi2,
-                                   double zeta, size_t n_observations) {
-        return Observations(rnd_, chi1, chi2, zeta, n_observations);
-    }
+                                   double zeta, size_t n_observations)
+    { return Observations(rnd_, chi1, chi2, zeta, n_observations); }
 
-    FactorGraphState make_FactorGraphState(const Observations& obs) {
-        return FactorGraphState(rnd_, obs);
-    }
+    FactorGraphState make_FactorGraphState(const Observations& obs)
+    { return FactorGraphState(rnd_, obs); }
 
 private:
     rnd_engine_t rnd_;
@@ -275,8 +263,10 @@ namespace py = pybind11;
 PYBIND11_PLUGIN(rectangling) {
     py::module m("rectangling", "Colossus rectangling methods");
 
-    m.def("test_matrix_i", &test_matrix_i, "create test matrix of 42s")
-     .def("test_matrix_d", &test_matrix_d, "create test matrix of 42.0s");
+    m // Formatting here a bit odd but makes 'def()'s line up
+        .def("test_matrix_i", &test_matrix_i, "create test matrix of 42s")
+        .def("test_matrix_d", &test_matrix_d, "create test matrix of 42.0s")
+        ;
 
     py::class_<Observations>(m, "Observations")
         .def(py::init<double, const MatrixXi&>())
