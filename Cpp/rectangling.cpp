@@ -73,9 +73,9 @@ Observations::Observations(rnd_engine_t& rnd,
     zeta_ = zeta;
 
     double delta = (zeta - 1.0) / (zeta + 1.0);
-    double prob_cross = 0.5 * (1.0 - delta);
+    double prob_dot = 0.5 * (1.0 + delta);
     auto de_chi_dots_over_crosses = excess_binomial_rnd(rnd, chi1.size(), chi2.size(),
-                                                        prob_cross, n_observations);
+                                                        prob_dot, n_observations);
 
     auto mk_mult = [](int x) { return (x ? -1 : 1); };
     auto chi1_mult = chi1.unaryExpr(mk_mult);
