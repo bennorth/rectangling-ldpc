@@ -240,6 +240,10 @@ private:
     const Observations& obs_;
     VectorXd score_1_;
     RowVectorXd score_2_;
+
+    static const Observations& verify_dimensions_consistent(const Observations& obs,
+                                                            const VectorXd& score_1,
+                                                            const RowVectorXd& score_2);
 };
 
 AccurateConvergenceState::AccurateConvergenceState(const Observations& obs,
@@ -249,6 +253,15 @@ AccurateConvergenceState::AccurateConvergenceState(const Observations& obs,
       score_1_(score_1),
       score_2_(score_2)
 {}
+
+const Observations& AccurateConvergenceState::verify_dimensions_consistent(
+    const Observations& obs, const VectorXd& score_1, const RowVectorXd& score_2)
+{
+    if ((obs.theta().rows() != score_1.size()) || (obs.theta().cols() != score_2.size()))
+        throw std::invalid_argument("incompatible dimensions of obs and scores");
+
+    return obs;
+}
 
 ////////////////////////////////////////////////////////////////////////
 
