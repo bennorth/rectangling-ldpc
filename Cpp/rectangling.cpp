@@ -165,6 +165,8 @@ public:
                      const MatrixXd& score_1,
                      const MatrixXd& score_2);
 
+    void update_score_1();
+
     const MatrixXd& score_1() const { return score_1_; }
     const MatrixXd& score_2() const { return score_2_; }
 
@@ -182,6 +184,13 @@ FactorGraphState::FactorGraphState(const Observations& obs,
                                    const MatrixXd& score_2)
     : obs_(obs), score_1_(score_1), score_2_(score_2)
 {
+}
+
+void FactorGraphState::update_score_1()
+{
+    auto msgs = obs_.chk_f(score_2_);
+    auto msg_sums = msgs.rowwise().sum();
+    score_1_ = (-msgs).colwise() + msg_sums;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -238,6 +247,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const Observations&, const MatrixXd&, const MatrixXd&>())
         .def_property_readonly("score_1", &FactorGraphState::score_1)
         .def_property_readonly("score_2", &FactorGraphState::score_2)
+        .def("update_score_1", &FactorGraphState::update_score_1)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
