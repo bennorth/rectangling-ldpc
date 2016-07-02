@@ -107,3 +107,7 @@ class TestObservations:
 
         exp_theta = chi12_mult * exp_zero_theta
         nptest.assert_array_equal(obs.theta, exp_theta)
+
+    def test_zeta_to_power(self, zero_obs):
+        for u in np.linspace(-5, 5, 23):
+            nptest.assert_allclose(zero_obs.zeta ** u, zero_obs.zeta_to_power(u))
