@@ -10,6 +10,7 @@
 using Eigen::MatrixXi;
 using Eigen::VectorXi;
 using Eigen::MatrixXd;
+using Eigen::VectorXd;
 using rnd_engine_t = trng::yarn2;
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
@@ -171,6 +172,9 @@ public:
     const MatrixXd& score_1() const { return score_1_; }
     const MatrixXd& score_2() const { return score_2_; }
 
+    VectorXd s1() const;
+    VectorXd s2() const;
+
 private:
     const Observations& obs_;
 
@@ -199,6 +203,18 @@ void FactorGraphState::update_score_2()
     auto msgs = obs_.chk_f(score_1_);
     auto msg_sums = msgs.colwise().sum();
     score_2_ = (-msgs).rowwise() + msg_sums;
+}
+
+VectorXd FactorGraphState::s1() const
+{
+    auto msgs = obs_.chk_f(score_2_);
+    return msgs.rowwise().sum();
+}
+
+VectorXd FactorGraphState::s2() const
+{
+    auto msgs = obs_.chk_f(score_1_);
+    return msgs.colwise().sum();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -257,6 +273,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("score_2", &FactorGraphState::score_2)
         .def("update_score_1", &FactorGraphState::update_score_1)
         .def("update_score_2", &FactorGraphState::update_score_2)
+        .def_property_readonly("s1", &FactorGraphState::s1)
+        .def_property_readonly("s2", &FactorGraphState::s2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
