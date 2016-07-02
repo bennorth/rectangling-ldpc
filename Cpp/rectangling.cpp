@@ -36,5 +36,8 @@ PYBIND11_PLUGIN(rectangling) {
     m.def("test_matrix_i", &test_matrix_i, "create test matrix of 42s")
      .def("test_matrix_d", &test_matrix_d, "create test matrix of 42.0s");
 
+    py::class_<EngineContext>(m, "EngineContext")
+        .def(py::init<unsigned>());
+
     return m.ptr();
 }
