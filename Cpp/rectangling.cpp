@@ -171,6 +171,8 @@ public:
                      const MatrixXd& score_1,
                      const MatrixXd& score_2);
 
+    FactorGraphState(rnd_engine_t& rnd, const Observations& obs);
+
     void update_score_1();
     void update_score_2();
 
@@ -196,6 +198,13 @@ FactorGraphState::FactorGraphState(const Observations& obs,
                                    const MatrixXd& score_1,
                                    const MatrixXd& score_2)
     : obs_(obs), score_1_(score_1), score_2_(score_2)
+{
+}
+
+FactorGraphState::FactorGraphState(rnd_engine_t& rnd, const Observations& obs)
+    : FactorGraphState(obs,
+                       unit_normal_shaped_like(rnd, obs.theta()),
+                       unit_normal_shaped_like(rnd, obs.theta()))
 {
 }
 
@@ -253,6 +262,10 @@ public:
         return Observations(rnd_, chi1, chi2, zeta, n_observations);
     }
 
+    FactorGraphState make_FactorGraphState(const Observations& obs) {
+        return FactorGraphState(rnd_, obs);
+    }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -293,6 +306,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
         .def("unit_normal_shaped_like", &EngineContext::unit_normal_shaped_like)
         .def("make_Observations", &EngineContext::make_Observations)
+        .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
         ;
 
     return m.ptr();
