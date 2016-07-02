@@ -249,7 +249,7 @@ private:
 AccurateConvergenceState::AccurateConvergenceState(const Observations& obs,
                                                    const VectorXd& score_1,
                                                    const RowVectorXd& score_2)
-    : obs_(obs),
+    : obs_(verify_dimensions_consistent(obs, score_1, score_2)),
       score_1_(score_1),
       score_2_(score_2)
 {}
