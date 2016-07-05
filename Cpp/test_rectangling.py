@@ -172,6 +172,30 @@ class TestDecodingState:
 
         return all_acs[label]
 
+    def _test_update_score_1(self, engine_context, sample_obs, state_label):
+        c_state = self.state(engine_context, sample_obs, state_label)
+        py_state = self.py_cls(py_Observations(sample_obs),
+                               c_state.score_1, c_state.score_2)
+
+        c_state.update_score_1()
+        got_score_1 = c_state.score_1
+        py_state = py_state.with_score_1_updated()
+        exp_score_1 = py_state.score_1
+        nptest.assert_allclose(got_score_1, exp_score_1)
+        self.assert_scores(c_state, py_state)
+
+    def _test_update_score_2(self, engine_context, sample_obs, state_label):
+        c_state = self.state(engine_context, sample_obs, state_label)
+        py_state = self.py_cls(py_Observations(sample_obs),
+                               c_state.score_1, c_state.score_2)
+
+        c_state.update_score_2()
+        got_score_2 = c_state.score_2
+        py_state = py_state.with_score_2_updated()
+        exp_score_2 = py_state.score_2
+        nptest.assert_allclose(got_score_2, exp_score_2)
+        self.assert_scores(c_state, py_state)
+
 class TestFactorGraphState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
