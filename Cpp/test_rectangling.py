@@ -229,7 +229,7 @@ class TestAccurateConvergenceState(TestDecodingState):
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         return rnd_scores_1, rnd_scores_2
 
-    def acs(self, engine_context, sample_obs, label):
+    def state(self, engine_context, sample_obs, label):
         # Create both and then only return the requested one to avoid
         # getting the same values out of the randomness engine.
         rnd_scores_1, rnd_scores_2 = self.random_scores(engine_context, sample_obs)
@@ -246,7 +246,7 @@ class TestAccurateConvergenceState(TestDecodingState):
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
-        acs = self.acs(engine_context, sample_obs, state_label)
+        acs = self.state(engine_context, sample_obs, state_label)
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
 
@@ -259,7 +259,7 @@ class TestAccurateConvergenceState(TestDecodingState):
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_2(self, engine_context, sample_obs, state_label):
-        acs = self.acs(engine_context, sample_obs, state_label)
+        acs = self.state(engine_context, sample_obs, state_label)
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
 
