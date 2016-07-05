@@ -229,12 +229,12 @@ class TestFactorGraphState:
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         sample_acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
 
-        all_fgs = {'sample': sample_acs}
-                  #'random': engine_context.make_Accur(sample_obs)}
+        all_fgs = {'sample': sample_acs,
+                   'random': engine_context.make_AccurateConvergenceState(sample_obs)}
 
         # Check we really did get different scores
-        # score_1_diff = all_fgs['sample'].score_1 - all_fgs['random'].score_1
-        # assert np.min(np.abs(score_1_diff)) > 0.1
+        score_1_diff = all_fgs['sample'].s1 - all_fgs['random'].s1
+        assert np.min(np.abs(score_1_diff)) > 0.09
 
         return all_fgs[request.param]
 
@@ -245,7 +245,7 @@ class TestFactorGraphState:
         nptest.assert_allclose(acs1.s2, acs2.s2)
         nptest.assert_array_equal(acs1.pattern_2, acs2.pattern_2)
 
-    @pytest.mark.parametrize('acs', ['sample'], indirect=True)
+    @pytest.mark.parametrize('acs', ['sample', 'random'], indirect=True)
     def test_update_score_1(self, acs, sample_obs):
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
@@ -257,7 +257,7 @@ class TestFactorGraphState:
         nptest.assert_allclose(got_score_1, exp_score_1)
         self.assert_scores(acs, py_acs)
 
-    @pytest.mark.parametrize('acs', ['sample'], indirect=True)
+    @pytest.mark.parametrize('acs', ['sample', 'random'], indirect=True)
     def test_update_score_2(self, acs, sample_obs):
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
