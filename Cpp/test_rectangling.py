@@ -223,12 +223,16 @@ class TestAccurateConvergenceState(TestDecodingState):
         nptest.assert_array_equal(acs.pattern_1, (rnd_scores_1 > 0))
         nptest.assert_array_equal(acs.pattern_2, (rnd_scores_2 > 0))
 
+    @staticmethod
+    def random_scores(engine_context, sample_obs):
+        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
+        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
+        return rnd_scores_1, rnd_scores_2
+
     def acs(self, engine_context, sample_obs, label):
         # Create both and then only return the requested one to avoid
         # getting the same values out of the randomness engine.
-
-        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
-        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
+        rnd_scores_1, rnd_scores_2 = self.random_scores(engine_context, sample_obs)
         sample_acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
 
         all_acs = {'sample': sample_acs,
