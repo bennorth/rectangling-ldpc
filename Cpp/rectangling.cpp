@@ -238,6 +238,9 @@ public:
 
     AccurateConvergenceState(rnd_engine_t& rnd, const Observations& obs);
 
+    void update_score_1();
+    void update_score_2();
+
     const VectorXd& s1() const { return score_1_; }
     const RowVectorXd& s2() const { return score_2_; }
 
@@ -269,6 +272,18 @@ const Observations& AccurateConvergenceState::verify_dimensions_consistent(
         throw std::invalid_argument("incompatible dimensions of obs and scores");
 
     return obs;
+}
+
+void AccurateConvergenceState::update_score_1()
+{
+    auto msgs = obs_.chk_f(score_2_);
+    score_1_ = msgs.rowwise().sum();
+}
+
+void AccurateConvergenceState::update_score_2()
+{
+    auto msgs = obs_.chk_f(score_1_);
+    score_2_ = msgs.colwise().sum();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -341,6 +356,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("s2", &AccurateConvergenceState::s2)
         .def_property_readonly("pattern_1", &AccurateConvergenceState::pattern_1)
         .def_property_readonly("pattern_2", &AccurateConvergenceState::pattern_2)
+        .def("update_score_1", &AccurateConvergenceState::update_score_1)
+        .def("update_score_2", &AccurateConvergenceState::update_score_2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
