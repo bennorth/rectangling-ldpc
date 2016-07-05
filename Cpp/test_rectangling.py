@@ -212,8 +212,9 @@ class TestFactorGraphState(TestDecodingState):
     c_cls = cr.FactorGraphState
     c_make_fun_name = 'make_FactorGraphState'
 
-    @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
-    def test_update_score_1(self, fgs, sample_obs):
+    @pytest.mark.parametrize('state_label', ['sample', 'random'])
+    def test_update_score_1(self, engine_context, sample_obs, state_label):
+        fgs = self.state(engine_context, sample_obs, state_label)
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
                                      fgs.score_1, fgs.score_2)
 
@@ -224,8 +225,9 @@ class TestFactorGraphState(TestDecodingState):
         nptest.assert_allclose(got_score_1, exp_score_1)
         self.assert_scores(fgs, py_fgs)
 
-    @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
-    def test_update_score_2(self, fgs, sample_obs):
+    @pytest.mark.parametrize('state_label', ['sample', 'random'])
+    def test_update_score_2(self, engine_context, sample_obs, state_label):
+        fgs = self.state(engine_context, sample_obs, state_label)
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
                                      fgs.score_1, fgs.score_2)
 
