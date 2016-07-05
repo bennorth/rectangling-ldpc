@@ -229,14 +229,14 @@ class TestFactorGraphState:
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         sample_acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
 
-        all_fgs = {'sample': sample_acs,
+        all_acs = {'sample': sample_acs,
                    'random': engine_context.make_AccurateConvergenceState(sample_obs)}
 
         # Check we really did get different scores
-        score_1_diff = all_fgs['sample'].s1 - all_fgs['random'].s1
+        score_1_diff = all_acs['sample'].s1 - all_acs['random'].s1
         assert np.min(np.abs(score_1_diff)) > 0.09
 
-        return all_fgs[request.param]
+        return all_acs[request.param]
 
     @staticmethod
     def assert_scores(acs1, acs2):
