@@ -233,8 +233,9 @@ class TestAccurateConvergenceState(TestDecodingState):
 
     @staticmethod
     def random_scores(engine_context, sample_obs):
-        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
-        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
+        theta_shape = sample_obs.theta.shape
+        rnd_scores_1 = engine_context.unit_normal_of_size(theta_shape[0], 1).ravel()
+        rnd_scores_2 = engine_context.unit_normal_of_size(1, theta_shape[1]).ravel()
         return rnd_scores_1, rnd_scores_2
 
     py_cls = pr.AccurateConvergenceState
