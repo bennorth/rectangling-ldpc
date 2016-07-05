@@ -56,8 +56,8 @@ MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
 
     trng::normal_dist<double> normal(0.0, 1.0);
 
-    for (auto i = 0; i != n1; ++i)
-        for (auto j = 0; j != n2; ++j)
+    for (size_t i = 0; i != n1; ++i)
+        for (size_t j = 0; j != n2; ++j)
             m(i, j) = normal(rnd);
 
     return m;
