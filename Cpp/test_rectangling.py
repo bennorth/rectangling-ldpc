@@ -211,3 +211,5 @@ class TestFactorGraphState:
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
+        nptest.assert_array_equal(acs.s1, rnd_scores_1)
+        nptest.assert_array_equal(acs.s2, rnd_scores_2)
