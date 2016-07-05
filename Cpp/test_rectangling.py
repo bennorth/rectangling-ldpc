@@ -61,6 +61,10 @@ class TestEngineContext:
         zs = engine_context.unit_normal_shaped_like(dummy_theta)
         assert zs.shape == dummy_theta.shape
 
+    def test_normal_of_size(self, engine_context):
+        zs = engine_context.unit_normal_of_size(3, 4)
+        assert zs.shape == (3, 4)
+
 @pytest.fixture
 def sample_chi1():
     return np.array([0, 1, 0], dtype='i')
