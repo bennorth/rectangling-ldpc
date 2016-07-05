@@ -213,3 +213,5 @@ class TestFactorGraphState:
         acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
         nptest.assert_array_equal(acs.s1, rnd_scores_1)
         nptest.assert_array_equal(acs.s2, rnd_scores_2)
+        nptest.assert_array_equal(acs.pattern_1, (rnd_scores_1 > 0))
+        nptest.assert_array_equal(acs.pattern_2, (rnd_scores_2 > 0))

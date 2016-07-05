@@ -241,6 +241,9 @@ public:
     const VectorXd& s1() const { return score_1_; }
     const RowVectorXd& s2() const { return score_2_; }
 
+    VectorXi pattern_1() const { return pattern_from_score(score_1_); }
+    VectorXi pattern_2() const { return pattern_from_score(score_2_.transpose()); }
+
 private:
     const Observations& obs_;
     VectorXd score_1_;
@@ -336,6 +339,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const Observations&, const VectorXd&, const VectorXd&>())
         .def_property_readonly("s1", &AccurateConvergenceState::s1)
         .def_property_readonly("s2", &AccurateConvergenceState::s2)
+        .def_property_readonly("pattern_1", &AccurateConvergenceState::pattern_1)
+        .def_property_readonly("pattern_2", &AccurateConvergenceState::pattern_2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
