@@ -223,8 +223,7 @@ class TestAccurateConvergenceState(TestDecodingState):
         nptest.assert_array_equal(acs.pattern_1, (rnd_scores_1 > 0))
         nptest.assert_array_equal(acs.pattern_2, (rnd_scores_2 > 0))
 
-    @pytest.fixture
-    def acs(self, engine_context, sample_obs, request):
+    def acs(self, engine_context, sample_obs, label):
         # Create both and then only return the requested one to avoid
         # getting the same values out of the randomness engine.
 
@@ -239,10 +238,11 @@ class TestAccurateConvergenceState(TestDecodingState):
         score_1_diff = all_acs['sample'].s1 - all_acs['random'].s1
         assert np.min(np.abs(score_1_diff)) > 0.09
 
-        return all_acs[request.param]
+        return all_acs[label]
 
-    @pytest.mark.parametrize('acs', ['sample', 'random'], indirect=True)
-    def test_update_score_1(self, acs, sample_obs):
+    @pytest.mark.parametrize('state_label', ['sample', 'random'])
+    def test_update_score_1(self, engine_context, sample_obs, state_label):
+        acs = self.acs(engine_context, sample_obs, state_label)
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
 
@@ -253,8 +253,9 @@ class TestAccurateConvergenceState(TestDecodingState):
         nptest.assert_allclose(got_score_1, exp_score_1)
         self.assert_scores(acs, py_acs)
 
-    @pytest.mark.parametrize('acs', ['sample', 'random'], indirect=True)
-    def test_update_score_2(self, acs, sample_obs):
+    @pytest.mark.parametrize('state_label', ['sample', 'random'])
+    def test_update_score_2(self, engine_context, sample_obs, state_label):
+        acs = self.acs(engine_context, sample_obs, state_label)
         py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
                                              acs.s1, acs.s2)
 
