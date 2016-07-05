@@ -213,7 +213,7 @@ class TestFactorGraphState(TestDecodingState):
         nptest.assert_allclose(got_score_2, exp_score_2)
         self.assert_scores(fgs, py_fgs)
 
-class TestAccurateConvergenceState:
+class TestAccurateConvergenceState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)[:, 0]
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
@@ -240,13 +240,6 @@ class TestAccurateConvergenceState:
         assert np.min(np.abs(score_1_diff)) > 0.09
 
         return all_acs[request.param]
-
-    @staticmethod
-    def assert_scores(acs1, acs2):
-        nptest.assert_allclose(acs1.s1, acs2.s1)
-        nptest.assert_array_equal(acs1.pattern_1, acs2.pattern_1)
-        nptest.assert_allclose(acs1.s2, acs2.s2)
-        nptest.assert_array_equal(acs1.pattern_2, acs2.pattern_2)
 
     @pytest.mark.parametrize('acs', ['sample', 'random'], indirect=True)
     def test_update_score_1(self, acs, sample_obs):
