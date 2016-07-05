@@ -180,12 +180,6 @@ class TestFactorGraphState(TestDecodingState):
         nptest.assert_array_equal(fgs.score_1, rnd_scores_1)
         nptest.assert_array_equal(fgs.score_2, rnd_scores_2)
 
-    @pytest.fixture
-    def sample_fgs(self, engine_context, sample_obs):
-        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
-        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
-        return cr.FactorGraphState(sample_obs, rnd_scores_1, rnd_scores_2)
-
     def random_scores(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
