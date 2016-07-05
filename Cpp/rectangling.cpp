@@ -308,6 +308,9 @@ public:
     MatrixXd unit_normal_shaped_like(const MatrixXi& theta)
     { return ::unit_normal_shaped_like(rnd_, theta); }
 
+    MatrixXd unit_normal_of_size(size_t n1, size_t n2)
+    { return ::unit_normal_of_size(rnd_, n1, n2); }
+
     Observations make_Observations(const VectorXi& chi1, const VectorXi& chi2,
                                    double zeta, size_t n_observations)
     { return Observations(rnd_, chi1, chi2, zeta, n_observations); }
@@ -366,6 +369,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("test_binomial", &EngineContext::test_binomial)
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
         .def("unit_normal_shaped_like", &EngineContext::unit_normal_shaped_like)
+        .def("unit_normal_of_size", &EngineContext::unit_normal_of_size)
         .def("make_Observations", &EngineContext::make_Observations)
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
         ;
