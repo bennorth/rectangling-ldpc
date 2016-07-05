@@ -236,6 +236,11 @@ public:
                              const VectorXd& score_1,
                              const RowVectorXd& score_2);
 
+    AccurateConvergenceState(rnd_engine_t& rnd, const Observations& obs);
+
+    const VectorXd& s1() const { return score_1_; }
+    const RowVectorXd& s2() const { return score_2_; }
+
 private:
     const Observations& obs_;
     VectorXd score_1_;
@@ -329,6 +334,8 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<AccurateConvergenceState>(m, "AccurateConvergenceState")
         .def(py::init<const Observations&, const VectorXd&, const VectorXd&>())
+        .def_property_readonly("s1", &AccurateConvergenceState::s1)
+        .def_property_readonly("s2", &AccurateConvergenceState::s2)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
