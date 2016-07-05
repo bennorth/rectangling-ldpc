@@ -229,14 +229,17 @@ class TestAccurateConvergenceState(TestDecodingState):
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         return rnd_scores_1, rnd_scores_2
 
+    c_cls = cr.AccurateConvergenceState
+    c_make_fun_name = 'make_AccurateConvergenceState'
+
     def state(self, engine_context, sample_obs, label):
         # Create both and then only return the requested one to avoid
         # getting the same values out of the randomness engine.
         rnd_scores_1, rnd_scores_2 = self.random_scores(engine_context, sample_obs)
-        sample_acs = cr.AccurateConvergenceState(sample_obs, rnd_scores_1, rnd_scores_2)
-
+        sample_acs = self.c_cls(sample_obs, rnd_scores_1, rnd_scores_2)
+        c_make_fun = getattr(engine_context, self.c_make_fun_name)
         all_acs = {'sample': sample_acs,
-                   'random': engine_context.make_AccurateConvergenceState(sample_obs)}
+                   'random': c_make_fun(sample_obs)}
 
         # Check we really did get different scores
         score_1_diff = all_acs['sample'].s1 - all_acs['random'].s1
