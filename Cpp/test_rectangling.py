@@ -204,6 +204,14 @@ class TestFactorGraphState(TestDecodingState):
 
         return all_fgs[request.param]
 
+    def random_scores(self, engine_context, sample_obs):
+        rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
+        rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
+        return rnd_scores_1, rnd_scores_2
+
+    c_cls = cr.FactorGraphState
+    c_make_fun_name = 'make_FactorGraphState'
+
     @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
     def test_update_score_1(self, fgs, sample_obs):
         py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
