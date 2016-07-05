@@ -53,3 +53,28 @@ class FactorGraphState(namedtuple('FactorGraphState', 'obs score_1 score_2')):
     @property
     def pattern_2(self):
         return np.sign(self.s2) == 1.0
+
+class AccurateConvergenceState(namedtuple('AccurateConvergenceState', 'obs score_1 score_2')):
+    @property
+    def s1(self): return self.score_1
+
+    @property
+    def s2(self): return self.score_2
+
+    @property
+    def pattern_1(self):
+        return np.sign(self.score_1) == 1.0
+
+    @property
+    def pattern_2(self):
+        return np.sign(self.score_2) == 1.0
+
+    def with_score_1_updated(self):
+        score_summands = self.obs.chk_f(self.score_2[None, :])
+        updated_score_1 = np.sum(score_summands, axis=1)
+        return self._replace(score_1=updated_score_1)
+
+    def with_score_2_updated(self):
+        score_summands = self.obs.chk_f(self.score_1[:, None])
+        updated_score_2 = np.sum(score_summands, axis=0)
+        return self._replace(score_2=updated_score_2)
