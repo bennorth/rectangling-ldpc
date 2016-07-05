@@ -209,34 +209,17 @@ class TestFactorGraphState(TestDecodingState):
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
         return rnd_scores_1, rnd_scores_2
 
+    py_cls = pr.FactorGraphState
     c_cls = cr.FactorGraphState
     c_make_fun_name = 'make_FactorGraphState'
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
-        fgs = self.state(engine_context, sample_obs, state_label)
-        py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
-                                     fgs.score_1, fgs.score_2)
-
-        fgs.update_score_1()
-        got_score_1 = fgs.score_1
-        py_fgs = py_fgs.with_score_1_updated()
-        exp_score_1 = py_fgs.score_1
-        nptest.assert_allclose(got_score_1, exp_score_1)
-        self.assert_scores(fgs, py_fgs)
+        self._test_update_score_1(engine_context, sample_obs, state_label)
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_2(self, engine_context, sample_obs, state_label):
-        fgs = self.state(engine_context, sample_obs, state_label)
-        py_fgs = pr.FactorGraphState(py_Observations(sample_obs),
-                                     fgs.score_1, fgs.score_2)
-
-        fgs.update_score_2()
-        got_score_2 = fgs.score_2
-        py_fgs = py_fgs.with_score_2_updated()
-        exp_score_2 = py_fgs.score_2
-        nptest.assert_allclose(got_score_2, exp_score_2)
-        self.assert_scores(fgs, py_fgs)
+        self._test_update_score_2(engine_context, sample_obs, state_label)
 
 class TestAccurateConvergenceState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
@@ -254,31 +237,14 @@ class TestAccurateConvergenceState(TestDecodingState):
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)[0, :]
         return rnd_scores_1, rnd_scores_2
 
+    py_cls = pr.AccurateConvergenceState
     c_cls = cr.AccurateConvergenceState
     c_make_fun_name = 'make_AccurateConvergenceState'
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
-        acs = self.state(engine_context, sample_obs, state_label)
-        py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
-                                             acs.s1, acs.s2)
-
-        acs.update_score_1()
-        got_score_1 = acs.s1
-        py_acs = py_acs.with_score_1_updated()
-        exp_score_1 = py_acs.score_1
-        nptest.assert_allclose(got_score_1, exp_score_1)
-        self.assert_scores(acs, py_acs)
+        self._test_update_score_1(engine_context, sample_obs, state_label)
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_2(self, engine_context, sample_obs, state_label):
-        acs = self.state(engine_context, sample_obs, state_label)
-        py_acs = pr.AccurateConvergenceState(py_Observations(sample_obs),
-                                             acs.s1, acs.s2)
-
-        acs.update_score_2()
-        got_score_2 = acs.s2
-        py_acs = py_acs.with_score_2_updated()
-        exp_score_2 = py_acs.score_2
-        nptest.assert_allclose(got_score_2, exp_score_2)
-        self.assert_scores(acs, py_acs)
+        self._test_update_score_2(engine_context, sample_obs, state_label)
