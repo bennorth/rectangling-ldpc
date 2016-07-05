@@ -147,7 +147,17 @@ class TestObservations:
         exp_chk_value = py_Observations(sample_obs).chk_f(zs)
         nptest.assert_allclose(got_chk_value, exp_chk_value)
 
-class TestFactorGraphState:
+class TestDecodingState:
+    @staticmethod
+    def assert_scores(fgs1, fgs2):
+        nptest.assert_allclose(fgs1.score_1, fgs2.score_1)
+        nptest.assert_allclose(fgs1.s1, fgs2.s1)
+        nptest.assert_array_equal(fgs1.pattern_1, fgs2.pattern_1)
+        nptest.assert_allclose(fgs1.score_2, fgs2.score_2)
+        nptest.assert_allclose(fgs1.s2, fgs2.s2)
+        nptest.assert_array_equal(fgs1.pattern_2, fgs2.pattern_2)
+
+class TestFactorGraphState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
         rnd_scores_2 = engine_context.unit_normal_shaped_like(sample_obs.theta)
@@ -178,15 +188,6 @@ class TestFactorGraphState:
         assert np.min(np.abs(score_1_diff)) > 0.1
 
         return all_fgs[request.param]
-
-    @staticmethod
-    def assert_scores(fgs1, fgs2):
-        nptest.assert_allclose(fgs1.score_1, fgs2.score_1)
-        nptest.assert_allclose(fgs1.s1, fgs2.s1)
-        nptest.assert_array_equal(fgs1.pattern_1, fgs2.pattern_1)
-        nptest.assert_allclose(fgs1.score_2, fgs2.score_2)
-        nptest.assert_allclose(fgs1.s2, fgs2.s2)
-        nptest.assert_array_equal(fgs1.pattern_2, fgs2.pattern_2)
 
     @pytest.mark.parametrize('fgs', ['sample', 'random'], indirect=True)
     def test_update_score_1(self, fgs, sample_obs):
