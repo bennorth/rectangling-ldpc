@@ -266,6 +266,12 @@ AccurateConvergenceState::AccurateConvergenceState(const Observations& obs,
       score_2_(score_2)
 {}
 
+AccurateConvergenceState::AccurateConvergenceState(rnd_engine_t& rnd, const Observations& obs)
+    : AccurateConvergenceState(obs,
+                               unit_normal_of_size(rnd, obs.theta().rows(), 1),
+                               unit_normal_of_size(rnd, 1, obs.theta().cols()))
+{}
+
 const Observations& AccurateConvergenceState::verify_dimensions_consistent(
     const Observations& obs, const VectorXd& score_1, const RowVectorXd& score_2)
 {
