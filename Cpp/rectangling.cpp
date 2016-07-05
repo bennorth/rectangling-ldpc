@@ -324,6 +324,9 @@ public:
     FactorGraphState make_FactorGraphState(const Observations& obs)
     { return FactorGraphState(rnd_, obs); }
 
+    AccurateConvergenceState make_AccurateConvergenceState(const Observations& obs)
+    { return AccurateConvergenceState(rnd_, obs); }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -378,6 +381,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("unit_normal_of_size", &EngineContext::unit_normal_of_size)
         .def("make_Observations", &EngineContext::make_Observations)
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
+        .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
         ;
 
     return m.ptr();
