@@ -157,6 +157,21 @@ class TestDecodingState:
         nptest.assert_allclose(fgs1.s2, fgs2.s2)
         nptest.assert_array_equal(fgs1.pattern_2, fgs2.pattern_2)
 
+    def state(self, engine_context, sample_obs, label):
+        # Create both and then only return the requested one to avoid
+        # getting the same values out of the randomness engine.
+        rnd_scores_1, rnd_scores_2 = self.random_scores(engine_context, sample_obs)
+        sample_acs = self.c_cls(sample_obs, rnd_scores_1, rnd_scores_2)
+        c_make_fun = getattr(engine_context, self.c_make_fun_name)
+        all_acs = {'sample': sample_acs,
+                   'random': c_make_fun(sample_obs)}
+
+        # Check we really did get different scores
+        score_1_diff = all_acs['sample'].s1 - all_acs['random'].s1
+        assert np.min(np.abs(score_1_diff)) > 0.09
+
+        return all_acs[label]
+
 class TestFactorGraphState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
@@ -231,21 +246,6 @@ class TestAccurateConvergenceState(TestDecodingState):
 
     c_cls = cr.AccurateConvergenceState
     c_make_fun_name = 'make_AccurateConvergenceState'
-
-    def state(self, engine_context, sample_obs, label):
-        # Create both and then only return the requested one to avoid
-        # getting the same values out of the randomness engine.
-        rnd_scores_1, rnd_scores_2 = self.random_scores(engine_context, sample_obs)
-        sample_acs = self.c_cls(sample_obs, rnd_scores_1, rnd_scores_2)
-        c_make_fun = getattr(engine_context, self.c_make_fun_name)
-        all_acs = {'sample': sample_acs,
-                   'random': c_make_fun(sample_obs)}
-
-        # Check we really did get different scores
-        score_1_diff = all_acs['sample'].s1 - all_acs['random'].s1
-        assert np.min(np.abs(score_1_diff)) > 0.09
-
-        return all_acs[label]
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
