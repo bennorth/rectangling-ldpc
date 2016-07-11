@@ -69,6 +69,15 @@ VectorXi pattern_from_score(const VectorXd& scores)
 
 ////////////////////////////////////////////////////////////////////////
 
+class Patterns
+{
+public:
+    Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
+    const VectorXi chi1, chi2;
+};
+
+////////////////////////////////////////////////////////////////////////
+
 class Observations
 {
 public:
