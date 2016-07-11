@@ -78,3 +78,21 @@ class AccurateConvergenceState(namedtuple('AccurateConvergenceState', 'obs score
         score_summands = self.obs.chk_f(self.score_1[:, None])
         updated_score_2 = np.sum(score_summands, axis=0)
         return self._replace(score_2=updated_score_2)
+
+def converge_fg(fgs, n_same_converged, max_n_iter):
+    prev_patterns = fgs.pattern_1, fgs.pattern_2
+    n_same = 1
+    n_iterations = 0
+    while n_iterations < max_n_iter and n_same < n_same_converged:
+        fgs = fgs.with_score_1_updated().with_score_2_updated()
+        patterns = fgs.pattern_1, fgs.pattern_2
+        if np.all(patterns[0] == prev_patterns[0]) and np.all(patterns[1] == prev_patterns[1]):
+            n_same += 1
+        else:
+            prev_patterns = patterns
+            n_same = 1
+        n_iterations += 1
+    if n_same == n_same_converged:
+        return True, patterns
+    else:
+        return False, None
