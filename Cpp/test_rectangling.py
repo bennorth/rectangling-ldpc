@@ -104,6 +104,13 @@ class TestObservations:
         assert obs.zeta == 1.25
         assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
 
+    def test_random_construction_from_patterns(self, engine_context,
+                                               sample_chi1, sample_chi2):
+        patterns = cr.Patterns(sample_chi1, sample_chi2)
+        obs = engine_context.make_Observations(patterns, 1.25, 12000)
+        assert obs.zeta == 1.25
+        assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
+
     @pytest.mark.parametrize('chi1, chi2',
                              [(zero_chi1(), zero_chi2()),
                               (sample_chi1(), sample_chi2())])
