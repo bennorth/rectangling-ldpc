@@ -89,6 +89,10 @@ def zero_obs():
 def sample_obs(engine_context, sample_chi1, sample_chi2):
     return engine_context.make_Observations(sample_chi1, sample_chi2, 1.25, 9000)
 
+class TestPatterns:
+    def test_construction(self):
+        cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
