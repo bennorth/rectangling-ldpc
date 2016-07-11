@@ -97,17 +97,17 @@ class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
 
-    def test_random_construction(self, engine_context,
+    @pytest.mark.parametrize('how', ['chis', 'patterns'])
+    def test_random_construction(self, how, engine_context,
                                  sample_chi1, sample_chi2):
-        obs = engine_context.make_Observations(sample_chi1, sample_chi2,
-                                               1.25, 12000)
-        assert obs.zeta == 1.25
-        assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
-
-    def test_random_construction_from_patterns(self, engine_context,
-                                               sample_chi1, sample_chi2):
-        patterns = cr.Patterns(sample_chi1, sample_chi2)
-        obs = engine_context.make_Observations(patterns, 1.25, 12000)
+        if how == 'chis':
+            args = (sample_chi1, sample_chi2, 1.25, 12000)
+        elif how == 'patterns':
+            patterns = cr.Patterns(sample_chi1, sample_chi2)
+            args = (patterns, 1.25, 12000)
+        else:
+            raise ValueError('unknown how')
+        obs = engine_context.make_Observations(*args)
         assert obs.zeta == 1.25
         assert obs.theta.shape == (sample_chi1.size, sample_chi2.size)
 
