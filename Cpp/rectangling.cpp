@@ -372,6 +372,10 @@ public:
                                         double zeta, size_t n_observations)
     { return Observations(rnd_, chi1, chi2, zeta, n_observations); }
 
+    Observations make_Observations_pat(const Patterns& patterns,
+                                       double zeta, size_t n_observations)
+    { return Observations(rnd_, patterns, zeta, n_observations); }
+
     FactorGraphState make_FactorGraphState(const Observations& obs)
     { return FactorGraphState(rnd_, obs); }
 
@@ -439,6 +443,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("unit_normal_shaped_like", &EngineContext::unit_normal_shaped_like)
         .def("unit_normal_of_size", &EngineContext::unit_normal_of_size)
         .def("make_Observations", &EngineContext::make_Observations_chis)
+        .def("make_Observations", &EngineContext::make_Observations_pat)
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
         .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
         ;
