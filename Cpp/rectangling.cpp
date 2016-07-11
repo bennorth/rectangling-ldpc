@@ -383,6 +383,12 @@ PYBIND11_PLUGIN(rectangling) {
         .def("test_matrix_d", &test_matrix_d, "create test matrix of 42.0s")
         ;
 
+    py::class_<Patterns>(m, "Patterns")
+        .def(py::init<const VectorXi&, const VectorXi&>())
+        .def_readonly("chi1", &Patterns::chi1)
+        .def_readonly("chi2", &Patterns::chi2)
+        ;
+
     py::class_<Observations>(m, "Observations")
         .def(py::init<double, const MatrixXi&>())
         .def_property_readonly("zeta", &Observations::zeta)
