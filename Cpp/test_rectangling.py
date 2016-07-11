@@ -196,6 +196,19 @@ class TestDecodingState:
         nptest.assert_allclose(got_score_2, exp_score_2)
         self.assert_scores(c_state, py_state)
 
+    @pytest.mark.parametrize('state_label', ['sample', 'random'])
+    def test_convergence(self, engine_context, sample_obs, state_label):
+        if type(self) == TestDecodingState:
+            return
+
+        c_state = self.state(engine_context, sample_obs, state_label)
+        py_state = self.py_cls(py_Observations(sample_obs),
+                               c_state.score_1, c_state.score_2)
+
+        converged_p, m_patterns = pr.converge_fg(py_state, 5, 50)
+        self.c_converge_fun(c_state, 5, 50)
+        #assert False
+
 class TestFactorGraphState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
         rnd_scores_1 = engine_context.unit_normal_shaped_like(sample_obs.theta)
@@ -212,6 +225,7 @@ class TestFactorGraphState(TestDecodingState):
     py_cls = pr.FactorGraphState
     c_cls = cr.FactorGraphState
     c_make_fun_name = 'make_FactorGraphState'
+    c_converge_fun = cr.converge_FGS
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
@@ -241,6 +255,7 @@ class TestAccurateConvergenceState(TestDecodingState):
     py_cls = pr.AccurateConvergenceState
     c_cls = cr.AccurateConvergenceState
     c_make_fun_name = 'make_AccurateConvergenceState'
+    c_converge_fun = cr.converge_ACS
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
