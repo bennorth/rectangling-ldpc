@@ -419,5 +419,9 @@ PYBIND11_PLUGIN(rectangling) {
         .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
         ;
 
+    m // Formatting....
+        .def("converge_FGS", &update_until_convergence<FactorGraphState>)
+        .def("converge_ACS", &update_until_convergence<AccurateConvergenceState>);
+
     return m.ptr();
 }
