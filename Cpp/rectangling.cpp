@@ -297,6 +297,37 @@ void AccurateConvergenceState::update_score_2()
 
 ////////////////////////////////////////////////////////////////////////
 
+template<typename State>
+bool update_until_convergence(State& state, size_t n_same_converged, size_t max_n_iter)
+{
+    VectorXi prev_patterns_1 = state.pattern_1();
+    VectorXi prev_patterns_2 = state.pattern_2();
+
+    size_t n_same = 1;
+    size_t n_iterations = 0;
+
+    while (n_iterations < max_n_iter && n_same < n_same_converged) {
+        state.update_score_1();
+        state.update_score_2();
+
+        VectorXi patterns_1 = state.pattern_1();
+        VectorXi patterns_2 = state.pattern_2();
+
+        if (patterns_1 == prev_patterns_1 && patterns_2 == prev_patterns_2) {
+            n_same += 1;
+        } else {
+            prev_patterns_1 = patterns_1;
+            prev_patterns_2 = patterns_2;
+            n_same = 1;
+        }
+        n_iterations += 1;
+    }
+
+    return (n_same == n_same_converged);
+}
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
