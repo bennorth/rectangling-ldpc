@@ -87,6 +87,9 @@ public:
                  const VectorXi& chi1, const VectorXi& chi2,
                  double zeta, size_t n_observations);
 
+    Observations(rnd_engine_t& rnd, const Patterns& patterns,
+                 double zeta, size_t n_observations);
+
     double zeta() const { return zeta_; }
     double log_zeta_recip() const { return log_zeta_recip_; }
     const MatrixXi& theta() const { return theta_; }
@@ -118,6 +121,12 @@ Observations::Observations(rnd_engine_t& rnd,
                            const VectorXi& chi1, const VectorXi& chi2,
                            double zeta, size_t n_observations)
     : Observations(zeta, random_theta_(rnd, chi1, chi2, zeta, n_observations))
+{}
+
+Observations::Observations(rnd_engine_t& rnd,
+                           const Patterns& patterns,
+                           double zeta, size_t n_observations)
+    : Observations(rnd, patterns.chi1, patterns.chi2, zeta, n_observations)
 {}
 
 MatrixXi Observations::random_theta_(rnd_engine_t& rnd,
