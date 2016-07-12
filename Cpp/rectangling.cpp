@@ -349,6 +349,42 @@ bool update_until_convergence(State& state, size_t n_same_converged, size_t max_
 
 ////////////////////////////////////////////////////////////////////////
 
+/*
+  Generating legal wheel patterns for Chi1 (41 cams) and Chi2 (31 cams)
+
+  D-Chi1 must have as near to 20.5 crosses as possible, while having an
+  even number of crosses.  So it must have 20 crosses.
+
+  D-Chi2 similarly must have 16 crosses.
+
+  The un-delta'd wheels then must have:
+
+  Chi1: 20 crosses and 21 dots
+     or 21 crosses and 20 dots;
+
+  Chi2: 15 crosses and 16 dots
+     or 16 crosses and 15 dots.
+
+  Cannot have more than four consecutive like characters in the
+  un-delta'd wheel, i.e., no more than three consecutive dots in the
+  delta'd-wheel.
+
+  [25D(e), p.148]
+
+  Adapting the analysis of [25X, p.183] to Chi1:
+
+  Chi1 must consist of 10 blocks of cross and 10 blocks of dot.  Each
+  consists of from 1 to 4 characters.  Either the sum of the cross-block
+  sizes must be 20 and the sum of the dot-block sizes 21, or the other
+  way round.  Therefore we choose ten numbers from {1, 2, 3, 4} which
+  sum to 20, and ten which sum to 21, and interleave them.  Then choose
+  whether we start with a dot- or cross-block.  Then choose a random
+  starting position.  (For sampling, we can ignore the redundancy by a
+  factor of 10 arising from choosing which block to start with.)
+ */
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
