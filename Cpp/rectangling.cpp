@@ -387,6 +387,7 @@ class DirichletState
 {
 public:
     enum class Bound { Lower, Upper };
+    DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound);
 
     const VectorXi& terms() const { return terms_; }
 
@@ -395,6 +396,32 @@ private:
     size_t required_sum_;
     VectorXi terms_;
 };
+
+DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound)
+    : max_term_(max_term), required_sum_(required_sum)
+{
+    size_t required_sum_0b = required_sum - n_terms;
+    size_t max_term_0b = max_term - 1;
+
+    size_t n_maximal = required_sum_0b / max_term_0b;
+    terms_.resize(n_terms);
+    for (size_t i = 0; i < n_maximal; ++i)
+        terms_(i) = max_term;  // Populate with one-based values ...
+
+    // ... but track zero-based total-so-far.
+    size_t total_so_far = n_maximal * max_term_0b;
+
+    if (n_maximal == n_terms)
+        return;
+
+    for (size_t i = n_maximal + 1; i < n_terms; ++i)
+        terms_(i) = 1;
+
+    terms_(n_maximal) = required_sum_0b - total_so_far + 1;
+
+    if (bound == Bound::Lower)
+        terms_.reverseInPlace();
+}
 
 ////////////////////////////////////////////////////////////////////////
 
