@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.testing as nptest
+import re
 import rectangling as cr
 import py_rectangling as pr
 import pytest
@@ -281,3 +282,26 @@ class TestDirichletState:
     def test_enum(self):
         assert cr.DirichletState.Bound.Lower is not None
         assert cr.DirichletState.Bound.Upper is not None
+
+    @pytest.mark.parametrize('reqd_sum', [10, 11, 12, 13, 20, 21, 22, 23, 24, 30])
+    @pytest.mark.parametrize(
+        'bnd',
+        [cr.DirichletState.Bound.Lower, cr.DirichletState.Bound.Upper],
+        ids=['lower', 'upper'])
+    #
+    def test_construction(self, reqd_sum, bnd):
+        ds = cr.DirichletState(10, 4, reqd_sum, bnd)
+        raw_terms = ds.terms
+        assert np.sum(raw_terms) == reqd_sum
+
+        upper_p = (bnd == cr.DirichletState.Bound.Upper)
+        if upper_p:
+            assert np.all(np.diff(raw_terms) <= 0)
+        else:
+            assert np.all(np.diff(raw_terms) >= 0)
+
+        # This seems a bit perverse but regular expressions capture what
+        # we're trying to assert reasonably well:
+        upper_terms = (raw_terms if upper_p else raw_terms[::-1])
+        terms_as_str = ''.join(map(str, upper_terms))
+        assert re.match('^4*[23]?1*$',terms_as_str)
