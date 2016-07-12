@@ -516,6 +516,10 @@ PYBIND11_PLUGIN(rectangling) {
         ;
 
     py::class_<DirichletState> cls_DirichletState(m, "DirichletState");
+    cls_DirichletState
+        .def(py::init<size_t, size_t, size_t, DirichletState::Bound>())
+        .def_property_readonly("terms", &DirichletState::terms)
+        ;
 
     py::enum_<DirichletState::Bound>(cls_DirichletState, "Bound")
         .value("Lower", DirichletState::Bound::Lower)
