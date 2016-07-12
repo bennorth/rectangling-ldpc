@@ -383,6 +383,12 @@ bool update_until_convergence(State& state, size_t n_same_converged, size_t max_
   factor of 10 arising from choosing which block to start with.)
  */
 
+class DirichletState
+{
+public:
+    enum class Bound { Lower, Upper };
+};
+
 ////////////////////////////////////////////////////////////////////////
 
 class EngineContext
@@ -473,6 +479,13 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("pattern_2", &AccurateConvergenceState::pattern_2)
         .def("update_score_1", &AccurateConvergenceState::update_score_1)
         .def("update_score_2", &AccurateConvergenceState::update_score_2)
+        ;
+
+    py::class_<DirichletState> cls_DirichletState(m, "DirichletState");
+
+    py::enum_<DirichletState::Bound>(cls_DirichletState, "Bound")
+        .value("Lower", DirichletState::Bound::Lower)
+        .value("Upper", DirichletState::Bound::Upper)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
