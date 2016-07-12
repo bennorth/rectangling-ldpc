@@ -41,9 +41,12 @@ MatrixXi excess_binomial_rnd(rnd_engine_t& rnd,
 
     trng::binomial_dist binomial_1(p, 1);
 
-    for (size_t i = 0; n_obs_remaining; ++i)
-        for (size_t j = 0; n_obs_remaining && (j != n2); ++j, --n_obs_remaining)
-            m(i, j) += 2 * binomial_1(rnd) - 1;
+    size_t i1 = 0, i2 = 0;
+    while (n_obs_remaining--) {
+        m(i1, i2) += 2 * binomial_1(rnd) - 1;
+        i1 = (i1 + 1) % n1;
+        i2 = (i2 + 1) % n2;
+    }
 
     return m;
 }

@@ -52,7 +52,8 @@ class TestEngineContext:
     def test_excess_binomial_rnd(self, engine_context, n_leftover, p):
         n_excess = engine_context.excess_binomial_rnd(2, 3, p, 600 + n_leftover)
         raw_exp_n_excess = np.full((2, 3), 100, dtype='i')
-        raw_exp_n_excess.ravel()[:n_leftover] += 1
+        unwrapped_idxs = np.arange(n_leftover, dtype=np.int32)
+        raw_exp_n_excess[unwrapped_idxs % 2, unwrapped_idxs % 3] += 1
         exp_n_excess = (raw_exp_n_excess if p > 0.5 else -raw_exp_n_excess)
         nptest.assert_array_equal(n_excess, exp_n_excess)
 
