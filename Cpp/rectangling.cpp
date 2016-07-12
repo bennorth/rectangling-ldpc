@@ -388,6 +388,8 @@ class DirichletState
 public:
     enum class Bound { Lower, Upper };
 
+    const VectorXi& terms() const { return terms_; }
+
 private:
     size_t max_term_;
     size_t required_sum_;
