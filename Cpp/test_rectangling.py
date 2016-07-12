@@ -305,3 +305,10 @@ class TestDirichletState:
         upper_terms = (raw_terms if upper_p else raw_terms[::-1])
         terms_as_str = ''.join(map(str, upper_terms))
         assert re.match('^4*[23]?1*$',terms_as_str)
+
+    def test_bad_construction(self):
+        bnd = cr.DirichletState.Bound.Lower
+        pytest.raises_regexp(ValueError, 'too large',
+                             cr.DirichletState, 10, 4, 1000, bnd)
+        pytest.raises_regexp(ValueError, 'too small',
+                             cr.DirichletState, 10, 4, 8, bnd)
