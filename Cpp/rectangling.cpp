@@ -387,6 +387,11 @@ class DirichletState
 {
 public:
     enum class Bound { Lower, Upper };
+
+private:
+    size_t max_term_;
+    size_t required_sum_;
+    VectorXi terms_;
 };
 
 ////////////////////////////////////////////////////////////////////////
