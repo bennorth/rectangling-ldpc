@@ -276,3 +276,8 @@ class TestAccurateConvergenceState(TestDecodingState):
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_2(self, engine_context, sample_obs, state_label):
         self._test_update_score_2(engine_context, sample_obs, state_label)
+
+class TestDirichletState:
+    def test_enum(self):
+        assert cr.DirichletState.Bound.Lower is not None
+        assert cr.DirichletState.Bound.Upper is not None
