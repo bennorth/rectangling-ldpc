@@ -409,3 +409,4 @@ class TestDirichletSamplingState:
 class TestDirichletSamplingRun:
     def test_construction(self, engine_context):
         dsr = engine_context.make_DirichletSamplingRun(10, 3, 10)
+        assert dsr.result.sum() == 10

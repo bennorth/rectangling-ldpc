@@ -559,6 +559,8 @@ public:
     DirichletSamplingRun(rnd_engine_t& rnd,
                          size_t n_terms, size_t max_term, size_t required_sum);
 
+    VectorXu result() const { return state_.maybe_coalesced_result(); }
+
 private:
     rnd_engine_t& rnd_;
     DirichletSamplingState state_;
@@ -699,6 +701,7 @@ PYBIND11_PLUGIN(rectangling) {
         ;
 
     py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")
+        .def_property_readonly("result", &DirichletSamplingRun::result)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
