@@ -496,8 +496,9 @@ private:
 };
 
 DirichletSamplingState::DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum)
-    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum), has_coalesced_(false)
+    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum)
 {
+    determine_coalescence_();
 }
 
 void DirichletSamplingState::determine_coalescence_()
