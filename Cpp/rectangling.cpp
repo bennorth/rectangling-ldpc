@@ -403,13 +403,14 @@ public:
     const VectorXi& terms() const { return terms_; }
 
 private:
+    size_t n_terms_;
     size_t max_term_;
     size_t required_sum_;
     VectorXi terms_;
 };
 
 DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound)
-    : max_term_(max_term), required_sum_(required_sum)
+    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum)
 {
     if (n_terms * max_term < required_sum)
         throw std::range_error("inconsistent arguments: required_sum too large");
