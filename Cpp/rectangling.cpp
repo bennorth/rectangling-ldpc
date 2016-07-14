@@ -500,6 +500,7 @@ public:
     bool has_coalesced() const { return has_coalesced_; }
     size_t lambda_size() const { return vec_lambda_.size(); }
     size_t n_terms() const { return n_terms_; }
+    void extend_lambda_vec(const VectorXd& more_lambda);
 
 private:
     const size_t n_terms_;
@@ -539,6 +540,15 @@ VectorXu DirichletSamplingState::maybe_coalesced_result() const
         return maybe_coalesced_result_;
     else
         return VectorXu();
+}
+
+void DirichletSamplingState::extend_lambda_vec(const VectorXd& more_lambda)
+{
+    const double* lambda_begin = more_lambda.data();
+    const double* lambda_end = lambda_begin + more_lambda.size();
+
+    vec_lambda_.insert(vec_lambda_.end(), lambda_begin, lambda_end);
+    determine_coalescence_();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -678,6 +688,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("has_coalesced", &DirichletSamplingState::has_coalesced)
         .def_property_readonly("lambda_size", &DirichletSamplingState::lambda_size)
         .def_property_readonly("n_terms", &DirichletSamplingState::n_terms)
+        .def("extend_lambda_vec", &DirichletSamplingState::extend_lambda_vec)
         ;
 
     py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")
