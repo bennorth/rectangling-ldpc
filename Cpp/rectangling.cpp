@@ -1,13 +1,17 @@
 #include <stdexcept>
 #include <cmath>
+
 #include <Eigen/Dense>
+
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
 #include <trng/normal_dist.hpp>
 #include <trng/uniform_dist.hpp>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
+
 
 using Eigen::MatrixXi;
 using Eigen::VectorXi;
@@ -17,6 +21,7 @@ using Eigen::RowVectorXd;
 using VectorXu = Eigen::Matrix<size_t, Eigen::Dynamic, 1>;
 
 using rnd_engine_t = trng::yarn2;
+
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
 { return MatrixXi::Constant(n1, n2, 42); }
