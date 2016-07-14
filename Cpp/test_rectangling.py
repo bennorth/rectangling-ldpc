@@ -304,7 +304,7 @@ class TestDirichletState:
         # we're trying to assert reasonably well:
         upper_terms = (raw_terms if upper_p else raw_terms[::-1])
         terms_as_str = ''.join(map(str, upper_terms))
-        assert re.match('^4*[23]?1*$',terms_as_str)
+        assert re.match('^4*[321]?0*$',terms_as_str)
 
     def test_bad_construction(self):
         bnd = cr.DirichletState.Bound.Lower
