@@ -414,17 +414,12 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
     if (n_terms * max_term < required_sum)
         throw std::range_error("inconsistent arguments: required_sum too large");
 
+    size_t n_maximal = required_sum / max_term;
+    size_t left_over = required_sum % max_term;
 
-    size_t required_sum_0b = required_sum - n_terms;
-    size_t max_term_0b = max_term - 1;
-
-    size_t n_maximal = required_sum_0b / max_term_0b;
     terms_.resize(n_terms);
     for (size_t i = 0; i < n_maximal; ++i)
-        terms_(i) = max_term;  // Populate with one-based values ...
-
-    // ... but track zero-based total-so-far.
-    size_t total_so_far = n_maximal * max_term_0b;
+        terms_(i) = max_term;
 
     // If it exactly fits (e.g., 12 = 4 + 4 + 4), there are no more
     // terms to populate, and also Upper and Lower are equal, so we're
@@ -433,9 +428,9 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
         return;
 
     for (size_t i = n_maximal + 1; i < n_terms; ++i)
-        terms_(i) = 1;
+        terms_(i) = 0;
 
-    terms_(n_maximal) = required_sum_0b - total_so_far + 1;
+    terms_(n_maximal) = left_over;
 
     if (bound == Bound::Lower)
         terms_.reverseInPlace();
