@@ -483,6 +483,7 @@ class DirichletSamplingState
 {
 public:
     DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum);
+    VectorXu maybe_coalesced_result() const;
 
 private:
     const size_t n_terms_;
@@ -514,6 +515,14 @@ void DirichletSamplingState::determine_coalescence_()
     // Set this anyway; it will be ignored if they're not the same.
     maybe_coalesced_result_ = x_lwr.terms();
     has_coalesced_ = (x_lwr.terms() == x_upr.terms());
+}
+
+VectorXu DirichletSamplingState::maybe_coalesced_result() const
+{
+    if (has_coalesced_)
+        return maybe_coalesced_result_;
+    else
+        return VectorXu();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -624,6 +633,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<DirichletSamplingState>(m, "DirichletSamplingState")
         .def(py::init<size_t, size_t, size_t>())
+        .def("maybe_coalesced_result", &DirichletSamplingState::maybe_coalesced_result)
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
