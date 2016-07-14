@@ -45,6 +45,14 @@ class TestEngineContext:
         # near 8000.
         assert n_successes == 8029
 
+    def test_uniform(self, engine_context):
+        xs = engine_context.uniform_of_size(1000, 20.0)
+        # Values chosen to make test pass, but sanity-checking that
+        # they're near expected.
+        assert np.sum(xs < 5.0) == 243  # exp. 250
+        assert np.sum(xs < 10.0) == 494  # exp. 500
+        assert np.sum(xs < 15.0) == 730  # exp. 750
+
     def test_excess_binomial_rnd_bad_input(self, engine_context):
         pytest.raises_regexp(ValueError, r'must be in \(0, 1\)',
                              engine_context.excess_binomial_rnd, 2, 3, -0.5, 10)
