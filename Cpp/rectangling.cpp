@@ -401,6 +401,7 @@ class DirichletState
 public:
     enum class Bound { Lower, Upper };
     DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound);
+    DirichletState(const VectorXu& terms, size_t max_term);
 
     const VectorXu& terms() const { return terms_; }
 
@@ -437,6 +438,11 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
 
     if (bound == Bound::Lower)
         terms_.reverseInPlace();
+}
+
+DirichletState::DirichletState(const VectorXu& terms, size_t max_term)
+    : n_terms_(terms.rows()), max_term_(max_term), required_sum_(terms.sum()), terms_(terms)
+{
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -533,6 +539,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<DirichletState> cls_DirichletState(m, "DirichletState");
     cls_DirichletState
+        .def(py::init<const VectorXu&, size_t>())
         .def(py::init<size_t, size_t, size_t, DirichletState::Bound>())
         .def_property_readonly("terms", &DirichletState::terms)
         ;
