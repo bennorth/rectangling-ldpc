@@ -527,6 +527,25 @@ VectorXu DirichletSamplingState::maybe_coalesced_result() const
 
 ////////////////////////////////////////////////////////////////////////
 
+class DirichletSamplingRun
+{
+public:
+    DirichletSamplingRun(rnd_engine_t& rnd,
+                         size_t n_terms, size_t max_term, size_t required_sum);
+
+private:
+    rnd_engine_t& rnd_;
+    DirichletSamplingState state_;
+};
+
+DirichletSamplingRun::DirichletSamplingRun(rnd_engine_t& rnd,
+                                           size_t n_terms, size_t max_term, size_t required_sum)
+    : rnd_(rnd), state_(n_terms, max_term, required_sum)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
