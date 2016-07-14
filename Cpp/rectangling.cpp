@@ -488,10 +488,12 @@ private:
     const size_t n_terms_;
     const size_t max_term_;
     const size_t required_sum_;
+    VectorXu maybe_coalesced_result_;
+    bool has_coalesced_;
 };
 
 DirichletSamplingState::DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum)
-    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum)
+    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum), has_coalesced_(false)
 {
 }
 
