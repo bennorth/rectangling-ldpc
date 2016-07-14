@@ -582,6 +582,9 @@ public:
     AccurateConvergenceState make_AccurateConvergenceState(const Observations& obs)
     { return AccurateConvergenceState(rnd_, obs); }
 
+    DirichletSamplingRun make_DirichletSamplingRun(size_t n_terms, size_t max_term, size_t required_sum)
+    { return DirichletSamplingRun(rnd_, n_terms, max_term, required_sum); }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -668,6 +671,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("make_Observations", &EngineContext::make_Observations_pat)
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
         .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
+        .def("make_DirichletSamplingRun", &EngineContext::make_DirichletSamplingRun)
         ;
 
     m // Formatting....
