@@ -414,8 +414,6 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
     if (n_terms * max_term < required_sum)
         throw std::range_error("inconsistent arguments: required_sum too large");
 
-    if (required_sum < n_terms)
-        throw std::range_error("inconsistent arguments: required_sum too small");
 
     size_t required_sum_0b = required_sum - n_terms;
     size_t max_term_0b = max_term - 1;
