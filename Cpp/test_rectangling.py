@@ -306,6 +306,15 @@ class TestDirichletState:
         terms_as_str = ''.join(map(str, upper_terms))
         assert re.match('^4*[321]?0*$',terms_as_str)
 
+    @pytest.mark.parametrize(
+        'bnd',
+        [cr.DirichletState.Bound.Lower, cr.DirichletState.Bound.Upper],
+        ids=['lower', 'upper'])
+    #
+    def test_perfect_fit(self, bnd):
+        ds = cr.DirichletState(3, 4, 12, bnd)
+        assert np.all(ds.terms == 4)
+
     def test_bad_construction(self):
         bnd = cr.DirichletState.Bound.Lower
         pytest.raises_regexp(ValueError, 'too large',
