@@ -381,4 +381,5 @@ class TestDirichletState:
 
 class TestDirichletSamplingState:
     def test_construction(self):
-        cr.DirichletSamplingState(10, 3, 10)
+        dss = cr.DirichletSamplingState(10, 3, 10)
+        assert dss.maybe_coalesced_result().size == 0
