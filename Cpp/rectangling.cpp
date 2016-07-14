@@ -655,6 +655,9 @@ PYBIND11_PLUGIN(rectangling) {
         .def("maybe_coalesced_result", &DirichletSamplingState::maybe_coalesced_result)
         ;
 
+    py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")
+        ;
+
     py::class_<EngineContext>(m, "EngineContext")
         .def(py::init<unsigned>())
         .def("test_binomial", &EngineContext::test_binomial)
