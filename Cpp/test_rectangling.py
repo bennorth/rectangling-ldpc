@@ -410,3 +410,32 @@ class TestDirichletSamplingRun:
     def test_construction(self, engine_context):
         dsr = engine_context.make_DirichletSamplingRun(10, 3, 10)
         assert dsr.result.sum() == 10
+
+    @staticmethod
+    def two_index_checking(s):
+        assert np.min(s) == 2
+        assert np.max(s) == 3
+        assert np.sum(s) == 29
+        return list(s).index(2)
+
+    def test_distribution(self, engine_context):
+        """
+        The 'known good' values for the final check are just those which
+        result from an initial run of the test.  However, they are
+        reasonable.  Also, a much larger run (1mln samples) produced the
+        counts whose difference from the expected uniform 100000 were
+
+            [-55, 325, 109, -173, -319, 379, -350, -411, 165, 330]
+
+        The following does not account for non-independence between the
+        results, but the stddev of a p=0.1 binomial with 100000 draws is
+        300, so the above deviations do not seem extreme.
+        """
+        samples = [engine_context.make_DirichletSamplingRun(10, 3, 29).result
+                   for _ in range(1000)]
+
+        two_posns = [self.two_index_checking(s) for s in samples]
+        two_posn_freq = Counter(two_posns)
+        two_posn_counts = [v for k, v in sorted(two_posn_freq.items())]
+
+        assert two_posn_counts == [91, 97, 106, 83, 98, 107, 109, 92, 106, 111]
