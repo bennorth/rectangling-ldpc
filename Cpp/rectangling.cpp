@@ -488,6 +488,7 @@ private:
     const size_t n_terms_;
     const size_t max_term_;
     const size_t required_sum_;
+    std::vector<double> vec_lambda_;
     VectorXu maybe_coalesced_result_;
     bool has_coalesced_;
 };
