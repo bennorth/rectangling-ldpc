@@ -297,10 +297,11 @@ class TestDirichletState:
         assert np.sum(raw_terms) == reqd_sum
 
         upper_p = (bnd == cr.DirichletState.Bound.Upper)
+        signed_terms = raw_terms.astype(np.int64)
         if upper_p:
-            assert np.all(np.diff(raw_terms) <= 0)
+            assert np.all(np.diff(signed_terms) <= 0)
         else:
-            assert np.all(np.diff(raw_terms) >= 0)
+            assert np.all(np.diff(signed_terms) >= 0)
 
         # This seems a bit perverse but regular expressions capture what
         # we're trying to assert reasonably well:
