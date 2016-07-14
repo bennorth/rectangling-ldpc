@@ -12,6 +12,8 @@ using Eigen::VectorXi;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::RowVectorXd;
+using VectorXu = Eigen::Matrix<size_t, Eigen::Dynamic, 1>;
+
 using rnd_engine_t = trng::yarn2;
 
 MatrixXi test_matrix_i(size_t n1, size_t n2)
