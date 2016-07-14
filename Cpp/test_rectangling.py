@@ -377,3 +377,8 @@ class TestDirichletState:
         for x in reversed(xs):
             ds_one_by_one.mutate(x)
         assert np.all(ds_many.terms == ds_one_by_one.terms)
+
+
+class TestDirichletSamplingState:
+    def test_construction(self):
+        cr.DirichletSamplingState(10, 3, 10)
