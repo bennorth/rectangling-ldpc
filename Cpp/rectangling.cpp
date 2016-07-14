@@ -404,6 +404,7 @@ public:
     DirichletState(const VectorXu& terms, size_t max_term);
 
     const VectorXu& terms() const { return terms_; }
+    void mutate(double x);
 
 private:
     const size_t n_terms_;
@@ -443,6 +444,28 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
 DirichletState::DirichletState(const VectorXu& terms, size_t max_term)
     : n_terms_(terms.rows()), max_term_(max_term), required_sum_(terms.sum()), terms_(terms)
 {
+}
+
+void DirichletState::mutate(double x)
+{
+    if ((x < 0.0) || (x >= static_cast<double>(n_terms_ - 1)))
+        throw std::range_error("x out of range [0, n-1)");
+
+    double integer_part;
+    double fractional_part = std::modf(x, &integer_part);
+
+    size_t first_elt_idx = static_cast<size_t>(integer_part);
+    size_t pair_sum = terms_(first_elt_idx) + terms_(first_elt_idx + 1);
+
+    size_t min_choice_0 = (pair_sum < max_term_) ? 0 : (pair_sum - max_term_);
+    size_t max_choice_0 = std::min(pair_sum, max_term_);
+    size_t n_choices = max_choice_0 - min_choice_0 + 1;
+
+    size_t choice_offset = static_cast<size_t>(n_choices * fractional_part);
+    size_t choice_0 = min_choice_0 + choice_offset;
+
+    terms_(first_elt_idx) = choice_0;
+    terms_(first_elt_idx + 1) = pair_sum - choice_0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -542,6 +565,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXu&, size_t>())
         .def(py::init<size_t, size_t, size_t, DirichletState::Bound>())
         .def_property_readonly("terms", &DirichletState::terms)
+        .def("mutate", &DirichletState::mutate)
         ;
 
     py::enum_<DirichletState::Bound>(cls_DirichletState, "Bound")
