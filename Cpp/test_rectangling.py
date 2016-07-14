@@ -399,6 +399,12 @@ class TestDirichletSamplingState:
         dss = cr.DirichletSamplingState(10, 3, 30)
         assert np.all(dss.maybe_coalesced_result() == np.full(10, 3, dtype=np.uint64))
 
+    def test_extend_lambda_vec(self):
+        dss = cr.DirichletSamplingState(10, 3, 10)
+        dss.extend_lambda_vec(np.zeros(7, dtype=np.float64))
+        assert not dss.has_coalesced
+        assert dss.lambda_size == 7
+
 
 class TestDirichletSamplingRun:
     def test_construction(self, engine_context):
