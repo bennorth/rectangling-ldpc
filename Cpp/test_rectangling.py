@@ -383,3 +383,7 @@ class TestDirichletSamplingState:
     def test_construction(self):
         dss = cr.DirichletSamplingState(10, 3, 10)
         assert dss.maybe_coalesced_result().size == 0
+
+    def test_always_coalesced(self):
+        dss = cr.DirichletSamplingState(10, 3, 30)
+        assert np.all(dss.maybe_coalesced_result() == np.full(10, 3, dtype=np.uint64))
