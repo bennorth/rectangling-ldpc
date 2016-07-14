@@ -479,6 +479,24 @@ void DirichletState::mutate_many(const std::vector<double>& xs)
 
 ////////////////////////////////////////////////////////////////////////
 
+class DirichletSamplingState
+{
+public:
+    DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum);
+
+private:
+    const size_t n_terms_;
+    const size_t max_term_;
+    const size_t required_sum_;
+};
+
+DirichletSamplingState::DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum)
+    : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+
 class EngineContext
 {
 public:
@@ -581,6 +599,10 @@ PYBIND11_PLUGIN(rectangling) {
     py::enum_<DirichletState::Bound>(cls_DirichletState, "Bound")
         .value("Lower", DirichletState::Bound::Lower)
         .value("Upper", DirichletState::Bound::Upper)
+        ;
+
+    py::class_<DirichletSamplingState>(m, "DirichletSamplingState")
+        .def(py::init<size_t, size_t, size_t>())
         ;
 
     py::class_<EngineContext>(m, "EngineContext")
