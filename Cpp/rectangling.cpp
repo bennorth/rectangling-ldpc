@@ -2,6 +2,7 @@
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
 #include <trng/normal_dist.hpp>
+#include <trng/uniform_dist.hpp>
 #include <stdexcept>
 #include <cmath>
 #include <pybind11/pybind11.h>
@@ -65,6 +66,18 @@ MatrixXd unit_normal_of_size(rnd_engine_t& rnd, size_t n1, size_t n2)
             m(i, j) = normal(rnd);
 
     return m;
+}
+
+VectorXd uniform_of_size(rnd_engine_t& rnd, size_t n, double upper_bound)
+{
+    VectorXd x(n);
+
+    trng::uniform_dist<double> uniform(0.0, upper_bound);
+
+    for (size_t i = 0; i != n; ++i)
+        x(i) = uniform(rnd);
+
+    return x;
 }
 
 MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
