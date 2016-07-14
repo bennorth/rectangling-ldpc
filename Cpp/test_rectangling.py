@@ -310,5 +310,3 @@ class TestDirichletState:
         bnd = cr.DirichletState.Bound.Lower
         pytest.raises_regexp(ValueError, 'too large',
                              cr.DirichletState, 10, 4, 1000, bnd)
-        pytest.raises_regexp(ValueError, 'too small',
-                             cr.DirichletState, 10, 4, 8, bnd)
