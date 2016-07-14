@@ -296,7 +296,7 @@ class TestDirichletState:
 
     @pytest.mark.parametrize('reqd_sum', [10, 11, 12, 13, 20, 21, 22, 23, 24, 30])
     @parametrize_for_bounds()
-    def test_construction(self, reqd_sum, bnd):
+    def test_bound_construction(self, reqd_sum, bnd):
         ds = cr.DirichletState(10, 4, reqd_sum, bnd)
         raw_terms = ds.terms
         assert np.sum(raw_terms) == reqd_sum
