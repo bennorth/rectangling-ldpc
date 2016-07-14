@@ -1,10 +1,10 @@
+#include <stdexcept>
+#include <cmath>
 #include <Eigen/Dense>
 #include <trng/yarn2.hpp>
 #include <trng/binomial_dist.hpp>
 #include <trng/normal_dist.hpp>
 #include <trng/uniform_dist.hpp>
-#include <stdexcept>
-#include <cmath>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
