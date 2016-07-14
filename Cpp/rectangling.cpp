@@ -6,6 +6,7 @@
 #include <cmath>
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
+#include <pybind11/stl.h>
 
 using Eigen::MatrixXi;
 using Eigen::VectorXi;
@@ -405,6 +406,7 @@ public:
 
     const VectorXu& terms() const { return terms_; }
     void mutate(double x);
+    void mutate_many(const std::vector<double>& xs);
 
 private:
     const size_t n_terms_;
@@ -466,6 +468,13 @@ void DirichletState::mutate(double x)
 
     terms_(first_elt_idx) = choice_0;
     terms_(first_elt_idx + 1) = pair_sum - choice_0;
+}
+
+void DirichletState::mutate_many(const std::vector<double>& xs)
+{
+    size_t n_elts = xs.size();
+    while (n_elts)
+        mutate(xs[--n_elts]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -566,6 +575,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<size_t, size_t, size_t, DirichletState::Bound>())
         .def_property_readonly("terms", &DirichletState::terms)
         .def("mutate", &DirichletState::mutate)
+        .def("mutate_many", &DirichletState::mutate_many)
         ;
 
     py::enum_<DirichletState::Bound>(cls_DirichletState, "Bound")
