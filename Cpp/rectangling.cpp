@@ -383,6 +383,17 @@ bool update_until_convergence(State& state, size_t n_same_converged, size_t max_
   factor of 10 arising from choosing which block to start with.)
  */
 
+/*
+  Discrete Dirichlet distribution
+
+  Paper has everything in terms of positive integers, but I think the
+  implementation become simpler if we think of it as non-negative,
+  adjusting everything afterwards.  I.e., an original 'required sum' of
+  20 from 8 numbers in {1, 2, 3, 4} because a required sum of 20-8 = 12
+  from 8 numbers in {0, 1, 2, 3}.  Then the user can add one to each
+  term afterwards.
+*/
+
 class DirichletState
 {
 public:
