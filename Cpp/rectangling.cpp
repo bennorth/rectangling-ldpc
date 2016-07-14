@@ -486,6 +486,7 @@ public:
     VectorXu maybe_coalesced_result() const;
     bool has_coalesced() const { return has_coalesced_; }
     size_t lambda_size() const { return vec_lambda_.size(); }
+    size_t n_terms() const { return n_terms_; }
 
 private:
     const size_t n_terms_;
@@ -660,6 +661,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("maybe_coalesced_result", &DirichletSamplingState::maybe_coalesced_result)
         .def_property_readonly("has_coalesced", &DirichletSamplingState::has_coalesced)
         .def_property_readonly("lambda_size", &DirichletSamplingState::lambda_size)
+        .def_property_readonly("n_terms", &DirichletSamplingState::n_terms)
         ;
 
     py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")

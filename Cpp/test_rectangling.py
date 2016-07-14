@@ -381,10 +381,11 @@ class TestDirichletState:
 
 class TestDirichletSamplingState:
     def test_construction(self):
-        dss = cr.DirichletSamplingState(10, 3, 10)
+        dss = cr.DirichletSamplingState(10, 3, 12)
         assert dss.maybe_coalesced_result().size == 0
         assert not dss.has_coalesced
         assert dss.lambda_size == 0
+        assert dss.n_terms == 10
 
     def test_always_coalesced(self):
         dss = cr.DirichletSamplingState(10, 3, 30)
