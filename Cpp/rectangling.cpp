@@ -403,9 +403,9 @@ public:
     const VectorXi& terms() const { return terms_; }
 
 private:
-    size_t n_terms_;
-    size_t max_term_;
-    size_t required_sum_;
+    const size_t n_terms_;
+    const size_t max_term_;
+    const size_t required_sum_;
     VectorXi terms_;
 };
 
