@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.testing as nptest
 import re
+from collections import Counter
 import rectangling as cr
 import py_rectangling as pr
 import pytest
@@ -323,3 +324,44 @@ class TestDirichletState:
         bnd = cr.DirichletState.Bound.Lower
         pytest.raises_regexp(ValueError, 'too large',
                              cr.DirichletState, 10, 4, 1000, bnd)
+
+    @pytest.mark.parametrize('max_term', range(5, 9))
+    @pytest.mark.parametrize('x_intpart', np.arange(4))
+    def test_mutation(self, max_term, x_intpart):
+        """
+        mutate() must:
+
+        Leave all non-selected terms unchanged.
+        Leave the pair-sum of the selected two terms unchanged.
+        Give (nearly) uniform distribution of results for a fine enough sampling.
+        The 'first new term' values should be a contiguous range.
+        The 'second new term' values should be a contiguous range.
+        Those ranges should be the same.
+        For 'big' pair-sums, some term should achieve the maximum.
+        For 'small' pair-sums, some term should achieve zero.
+        """
+        exp_unchd_idxs = sorted(set(range(4)) - set([x_intpart, x_intpart+1]))
+        terms_0 = np.array([1, 5, 3, 5, 2], dtype=np.uint64)
+        pairs = []
+        for x in np.linspace(0.0, 1.0, num=137, endpoint=False):
+            ds = cr.DirichletState(terms_0, max_term)
+            ds.mutate(x_intpart + x)
+            assert np.all(ds.terms[exp_unchd_idxs] == terms_0[exp_unchd_idxs])
+            pairs.append(tuple(ds.terms[[x_intpart, x_intpart+1]]))
+
+        exp_pair_sum = terms_0[[x_intpart, x_intpart+1]].sum()
+        for pr in pairs:
+            assert sum(pr) == exp_pair_sum
+
+        freq = Counter(pairs)
+        assert max(freq.values()) - min(freq.values()) <= 1
+
+        all_firsts = np.array(sorted(set(pr[0] for pr in pairs)))
+        all_seconds = np.array(sorted(set(pr[1] for pr in pairs)))
+        assert np.all(np.diff(all_firsts) == 1)
+        assert np.all(all_firsts == all_seconds)
+
+        if exp_pair_sum >= max_term:
+            assert np.max(all_firsts) == max_term
+        if exp_pair_sum <= max_term:
+            assert np.min(all_firsts) == 0
