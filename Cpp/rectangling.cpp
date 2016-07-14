@@ -568,6 +568,13 @@ DirichletSamplingRun::DirichletSamplingRun(rnd_engine_t& rnd,
                                            size_t n_terms, size_t max_term, size_t required_sum)
     : rnd_(rnd), state_(n_terms, max_term, required_sum)
 {
+    while ( ! state_.has_coalesced()) {
+        size_t required_n_new = std::max(static_cast<size_t>(1), state_.lambda_size());
+        VectorXd new_lambda = uniform_of_size(rnd_,
+                                              required_n_new,
+                                              static_cast<double>(state_.n_terms() - 1));
+        state_.extend_lambda_vec(new_lambda);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
