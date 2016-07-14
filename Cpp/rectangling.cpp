@@ -402,13 +402,13 @@ public:
     enum class Bound { Lower, Upper };
     DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound);
 
-    const VectorXi& terms() const { return terms_; }
+    const VectorXu& terms() const { return terms_; }
 
 private:
     const size_t n_terms_;
     const size_t max_term_;
     const size_t required_sum_;
-    VectorXi terms_;
+    VectorXu terms_;
 };
 
 DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_sum, Bound bound)
