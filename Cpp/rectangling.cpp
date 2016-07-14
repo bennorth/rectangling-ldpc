@@ -491,11 +491,28 @@ private:
     std::vector<double> vec_lambda_;
     VectorXu maybe_coalesced_result_;
     bool has_coalesced_;
+
+    void determine_coalescence_();
 };
 
 DirichletSamplingState::DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum)
     : n_terms_(n_terms), max_term_(max_term), required_sum_(required_sum), has_coalesced_(false)
 {
+}
+
+void DirichletSamplingState::determine_coalescence_()
+{
+    DirichletState x_lwr(n_terms_, max_term_, required_sum_,
+                         DirichletState::Bound::Lower);
+    DirichletState x_upr(n_terms_, max_term_, required_sum_,
+                         DirichletState::Bound::Upper);
+
+    x_lwr.mutate_many(vec_lambda_);
+    x_upr.mutate_many(vec_lambda_);
+
+    // Set this anyway; it will be ignored if they're not the same.
+    maybe_coalesced_result_ = x_lwr.terms();
+    has_coalesced_ = (x_lwr.terms() == x_upr.terms());
 }
 
 ////////////////////////////////////////////////////////////////////////
