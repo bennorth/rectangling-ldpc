@@ -283,12 +283,14 @@ class TestDirichletState:
         assert cr.DirichletState.Bound.Lower is not None
         assert cr.DirichletState.Bound.Upper is not None
 
+    def parametrize_for_bounds():
+        return pytest.mark.parametrize(
+            'bnd',
+            [cr.DirichletState.Bound.Lower, cr.DirichletState.Bound.Upper],
+            ids=['lower', 'upper'])
+
     @pytest.mark.parametrize('reqd_sum', [10, 11, 12, 13, 20, 21, 22, 23, 24, 30])
-    @pytest.mark.parametrize(
-        'bnd',
-        [cr.DirichletState.Bound.Lower, cr.DirichletState.Bound.Upper],
-        ids=['lower', 'upper'])
-    #
+    @parametrize_for_bounds()
     def test_construction(self, reqd_sum, bnd):
         ds = cr.DirichletState(10, 4, reqd_sum, bnd)
         raw_terms = ds.terms
@@ -306,11 +308,7 @@ class TestDirichletState:
         terms_as_str = ''.join(map(str, upper_terms))
         assert re.match('^4*[321]?0*$',terms_as_str)
 
-    @pytest.mark.parametrize(
-        'bnd',
-        [cr.DirichletState.Bound.Lower, cr.DirichletState.Bound.Upper],
-        ids=['lower', 'upper'])
-    #
+    @parametrize_for_bounds()
     def test_perfect_fit(self, bnd):
         ds = cr.DirichletState(3, 4, 12, bnd)
         assert np.all(ds.terms == 4)
