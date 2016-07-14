@@ -584,6 +584,9 @@ public:
     MatrixXd unit_normal_of_size(size_t n1, size_t n2)
     { return ::unit_normal_of_size(rnd_, n1, n2); }
 
+    VectorXd uniform_of_size(size_t n, double upper_bound)
+    { return ::uniform_of_size(rnd_, n, upper_bound); }
+
     Observations make_Observations_chis(const VectorXi& chi1, const VectorXi& chi2,
                                         double zeta, size_t n_observations)
     { return Observations(rnd_, chi1, chi2, zeta, n_observations); }
@@ -686,6 +689,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
         .def("unit_normal_shaped_like", &EngineContext::unit_normal_shaped_like)
         .def("unit_normal_of_size", &EngineContext::unit_normal_of_size)
+        .def("uniform_of_size", &EngineContext::uniform_of_size)
         .def("make_Observations", &EngineContext::make_Observations_chis)
         .def("make_Observations", &EngineContext::make_Observations_pat)
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
