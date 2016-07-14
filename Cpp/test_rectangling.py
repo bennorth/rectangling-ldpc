@@ -283,6 +283,11 @@ class TestDirichletState:
         assert cr.DirichletState.Bound.Lower is not None
         assert cr.DirichletState.Bound.Upper is not None
 
+    def test_direct_construction(self):
+        exp_terms = np.array([2, 4, 3, 7], dtype=np.uint32)
+        ds = cr.DirichletState(exp_terms, 8)
+        assert np.all(ds.terms == exp_terms)
+
     def parametrize_for_bounds():
         return pytest.mark.parametrize(
             'bnd',
