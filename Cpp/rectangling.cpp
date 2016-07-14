@@ -426,6 +426,9 @@ DirichletState::DirichletState(size_t n_terms, size_t max_term, size_t required_
     // ... but track zero-based total-so-far.
     size_t total_so_far = n_maximal * max_term_0b;
 
+    // If it exactly fits (e.g., 12 = 4 + 4 + 4), there are no more
+    // terms to populate, and also Upper and Lower are equal, so we're
+    // finished.
     if (n_maximal == n_terms)
         return;
 
