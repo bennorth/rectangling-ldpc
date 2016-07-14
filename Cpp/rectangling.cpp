@@ -630,20 +630,20 @@ private:
 namespace py = pybind11;
 
 PYBIND11_PLUGIN(rectangling) {
-    py::module m("rectangling", "Colossus rectangling methods");
+    py::module rect_module("rectangling", "Colossus rectangling methods");
 
-    m // Formatting here a bit odd but makes 'def()'s line up
+    rect_module
         .def("test_matrix_i", &test_matrix_i, "create test matrix of 42s")
         .def("test_matrix_d", &test_matrix_d, "create test matrix of 42.0s")
         ;
 
-    py::class_<Patterns>(m, "Patterns")
+    py::class_<Patterns>(rect_module, "Patterns")
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
         ;
 
-    py::class_<Observations>(m, "Observations")
+    py::class_<Observations>(rect_module, "Observations")
         .def(py::init<double, const MatrixXi&>())
         .def_property_readonly("zeta", &Observations::zeta)
         .def_property_readonly("log_zeta_recip", &Observations::log_zeta_recip)
@@ -653,7 +653,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("chk_f", &Observations::chk_f)
         ;
 
-    py::class_<FactorGraphState>(m, "FactorGraphState")
+    py::class_<FactorGraphState>(rect_module, "FactorGraphState")
         .def(py::init<const Observations&, const MatrixXd&, const MatrixXd&>())
         .def_property_readonly("score_1", &FactorGraphState::score_1)
         .def_property_readonly("score_2", &FactorGraphState::score_2)
@@ -665,7 +665,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("pattern_2", &FactorGraphState::pattern_2)
         ;
 
-    py::class_<AccurateConvergenceState>(m, "AccurateConvergenceState")
+    py::class_<AccurateConvergenceState>(rect_module, "AccurateConvergenceState")
         .def(py::init<const Observations&, const VectorXd&, const VectorXd&>())
         .def_property_readonly("s1", &AccurateConvergenceState::s1)
         .def_property_readonly("score_1", &AccurateConvergenceState::score_1)
@@ -677,7 +677,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("update_score_2", &AccurateConvergenceState::update_score_2)
         ;
 
-    py::class_<DirichletState> cls_DirichletState(m, "DirichletState");
+    py::class_<DirichletState> cls_DirichletState(rect_module, "DirichletState");
     cls_DirichletState
         .def(py::init<const VectorXu&, size_t>())
         .def(py::init<size_t, size_t, size_t, DirichletState::Bound>())
@@ -691,7 +691,7 @@ PYBIND11_PLUGIN(rectangling) {
         .value("Upper", DirichletState::Bound::Upper)
         ;
 
-    py::class_<DirichletSamplingState>(m, "DirichletSamplingState")
+    py::class_<DirichletSamplingState>(rect_module, "DirichletSamplingState")
         .def(py::init<size_t, size_t, size_t>())
         .def("maybe_coalesced_result", &DirichletSamplingState::maybe_coalesced_result)
         .def_property_readonly("has_coalesced", &DirichletSamplingState::has_coalesced)
@@ -700,11 +700,11 @@ PYBIND11_PLUGIN(rectangling) {
         .def("extend_lambda_vec", &DirichletSamplingState::extend_lambda_vec)
         ;
 
-    py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")
+    py::class_<DirichletSamplingRun>(rect_module, "DirichletSamplingRun")
         .def_property_readonly("result", &DirichletSamplingRun::result)
         ;
 
-    py::class_<EngineContext>(m, "EngineContext")
+    py::class_<EngineContext>(rect_module, "EngineContext")
         .def(py::init<unsigned>())
         .def("test_binomial", &EngineContext::test_binomial)
         .def("excess_binomial_rnd", &EngineContext::excess_binomial_rnd)
@@ -718,9 +718,9 @@ PYBIND11_PLUGIN(rectangling) {
         .def("make_DirichletSamplingRun", &EngineContext::make_DirichletSamplingRun)
         ;
 
-    m // Formatting....
+    rect_module
         .def("converge_FGS", &update_until_convergence<FactorGraphState>)
         .def("converge_ACS", &update_until_convergence<AccurateConvergenceState>);
 
-    return m.ptr();
+    return rect_module.ptr();
 }
