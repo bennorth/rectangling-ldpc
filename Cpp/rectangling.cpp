@@ -484,6 +484,8 @@ class DirichletSamplingState
 public:
     DirichletSamplingState(size_t n_terms, size_t max_term, size_t required_sum);
     VectorXu maybe_coalesced_result() const;
+    bool has_coalesced() const { return has_coalesced_; }
+    size_t lambda_size() const { return vec_lambda_.size(); }
 
 private:
     const size_t n_terms_;
@@ -656,6 +658,8 @@ PYBIND11_PLUGIN(rectangling) {
     py::class_<DirichletSamplingState>(m, "DirichletSamplingState")
         .def(py::init<size_t, size_t, size_t>())
         .def("maybe_coalesced_result", &DirichletSamplingState::maybe_coalesced_result)
+        .def_property_readonly("has_coalesced", &DirichletSamplingState::has_coalesced)
+        .def_property_readonly("lambda_size", &DirichletSamplingState::lambda_size)
         ;
 
     py::class_<DirichletSamplingRun>(m, "DirichletSamplingRun")
