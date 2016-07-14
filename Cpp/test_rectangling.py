@@ -365,3 +365,15 @@ class TestDirichletState:
             assert np.max(all_firsts) == max_term
         if exp_pair_sum <= max_term:
             assert np.min(all_firsts) == 0
+
+    @pytest.mark.parametrize('n_mutations', [1, 5, 10, 50])
+    def test_multiple_mutation(self, n_mutations):
+        terms_0 = np.array([1, 5, 3, 5, 2], dtype=np.uint64)
+        ds_many = cr.DirichletState(terms_0, 8)
+        np.random.seed(42)
+        xs = list(np.random.uniform(0.0, 4.0, size=n_mutations))
+        ds_many.mutate_many(xs)
+        ds_one_by_one = cr.DirichletState(terms_0, 8)
+        for x in reversed(xs):
+            ds_one_by_one.mutate(x)
+        assert np.all(ds_many.terms == ds_one_by_one.terms)
