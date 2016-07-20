@@ -720,6 +720,9 @@ public:
     DirichletSamplingRun make_DirichletSamplingRun(size_t n_terms, size_t max_term, size_t required_sum)
     { return DirichletSamplingRun(rnd_, n_terms, max_term, required_sum); }
 
+    VectorXi make_legal_wheel_pattern(size_t n)
+    { return Patterns::legal_wheel_pattern(rnd_, n); }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -817,6 +820,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("make_FactorGraphState", &EngineContext::make_FactorGraphState)
         .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
         .def("make_DirichletSamplingRun", &EngineContext::make_DirichletSamplingRun)
+        .def("make_legal_wheel_pattern", &EngineContext::make_legal_wheel_pattern)
         ;
 
     rect_module
