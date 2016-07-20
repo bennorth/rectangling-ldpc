@@ -388,7 +388,7 @@ class TestDirichletState:
                              cr.DirichletState, 10, 4, 1000, bnd)
 
     @pytest.mark.parametrize('max_term', range(5, 9))
-    @pytest.mark.parametrize('x_intpart', np.arange(4))
+    @pytest.mark.parametrize('x_intpart', np.arange(4), ids=str)
     def test_mutation(self, max_term, x_intpart):
         """
         mutate() must:
