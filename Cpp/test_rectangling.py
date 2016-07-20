@@ -46,6 +46,13 @@ def test_vector_rotate(n, exp_rot_xs):
                               np.array(exp_rot_xs))
 
 
+def test_vector_delta_wheel_trivial_cases():
+    assert cr.delta_wheel(np.array([], dtype=int)).size == 0
+    single_0 = np.array([0], dtype=int)
+    nptest.assert_array_equal(cr.delta_wheel(np.array([0], dtype=int)), single_0)
+    nptest.assert_array_equal(cr.delta_wheel(np.array([1], dtype=int)), single_0)
+
+
 @pytest.fixture
 def engine_context():
     return cr.EngineContext(42)
