@@ -840,6 +840,9 @@ public:
     VectorXi make_legal_wheel_pattern(size_t n)
     { return Patterns::legal_wheel_pattern(rnd_, n); }
 
+    Patterns make_Patterns(size_t n1, size_t n2)
+    { return Patterns(rnd_, n1, n2); }
+
 private:
     rnd_engine_t rnd_;
 };
@@ -940,6 +943,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("make_AccurateConvergenceState", &EngineContext::make_AccurateConvergenceState)
         .def("make_DirichletSamplingRun", &EngineContext::make_DirichletSamplingRun)
         .def("make_legal_wheel_pattern", &EngineContext::make_legal_wheel_pattern)
+        .def("make_Patterns", &EngineContext::make_Patterns)
         ;
 
     rect_module
