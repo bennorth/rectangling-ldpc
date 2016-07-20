@@ -343,6 +343,7 @@ public:
     static size_t n_cross_in_un_delta(size_t n, double u);
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
                                             const VectorXu& ns_dots);
+    static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
 };
 
 const size_t Patterns::max_consecutive_same;
@@ -383,6 +384,28 @@ VectorXi Patterns::interleave_crosses_dots(const VectorXu& ns_crosses,
     }
 
     return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
+}
+
+VectorXi Patterns::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
+{
+    // Draw from uniform even in cases where we won't need it, for consistency.
+    trng::uniform_dist<double> uniform(0.0, 1.0);
+    size_t n_cross_delta = n_cross_in_delta(n, uniform(rnd));
+    size_t n_blocks = n_cross_delta / 2;
+    size_t n_cross_un_delta = n_cross_in_un_delta(n, uniform(rnd));
+    size_t n_dot_un_delta = n - n_cross_un_delta;
+
+    // Adjust arguments back/forth for zero-based nature of DirichletState.
+    auto generate_terms = [&rnd, n_blocks](size_t n_syms) {
+        DirichletSamplingRun dsr {rnd, n_blocks,
+                                  max_consecutive_same - 1, n_syms - n_blocks};
+        return (dsr.result().array() + 1).eval();
+    };
+
+    auto ns_cross = generate_terms(n_cross_un_delta);
+    auto ns_dot = generate_terms(n_dot_un_delta);
+    auto base_pattern = interleave_crosses_dots(ns_cross, ns_dot);
+    return rotate(base_pattern, rnd(n));
 }
 
 ////////////////////////////////////////////////////////////////////////
