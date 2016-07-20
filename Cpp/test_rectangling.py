@@ -4,6 +4,7 @@ import re
 from collections import Counter
 from toolz.functoolz import compose
 from operator import itemgetter as nth
+from itertools import groupby
 import rectangling as cr
 import py_rectangling as pr
 import pytest
@@ -157,6 +158,18 @@ class TestPatterns:
     def test_n_cross_in_un_delta(self, n, exp_ns_cross):
         assert cr.Patterns.n_cross_in_un_delta(n, 0.25) == exp_ns_cross[0]
         assert cr.Patterns.n_cross_in_un_delta(n, 0.75) == exp_ns_cross[1]
+
+    def test_interleave_crosses_dots(self):
+        ns_cross = np.array([1, 4, 3, 1, 2])
+        ns_dot = np.array([3, 2, 2, 1, 2])
+        pattern = cr.Patterns.interleave_crosses_dots(ns_cross, ns_dot)
+
+        # Should start with a 'cross':
+        assert pattern[0] == 1
+
+        run_lengths = np.array([len(list(g)) for x, g in groupby(pattern)])
+        nptest.assert_array_equal(run_lengths[::2], ns_cross)
+        nptest.assert_array_equal(run_lengths[1::2], ns_dot)
 
 class TestObservations:
     def test_construction(self):
