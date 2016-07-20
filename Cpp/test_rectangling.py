@@ -174,6 +174,13 @@ class TestPatterns:
     def test_max_consecutive_same(self):
         assert isinstance(cr.Patterns.max_consecutive_same, int)
 
+    @staticmethod
+    def delta_wheel(xs):
+        xs_rot1 = np.empty_like(xs)
+        xs_rot1[:-1] = xs[1:]
+        xs_rot1[-1] = xs[0]
+        return xs ^ xs_rot1
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
