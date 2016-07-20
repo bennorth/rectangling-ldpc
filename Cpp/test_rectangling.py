@@ -46,6 +46,13 @@ def test_vector_rotate(n, exp_rot_xs):
                               np.array(exp_rot_xs))
 
 
+def test_vector_delta_wheel():
+    ns = np.arange(100)
+    # Pseudo-random strings of 0s and 1s
+    xs = (((ns % 5) > 3) ^ ((ns % 7) > 4)).astype(int)
+    nptest.assert_array_equal(cr.delta_wheel(xs), TestPatterns.delta_wheel(xs))
+
+
 def test_vector_delta_wheel_trivial_cases():
     assert cr.delta_wheel(np.array([], dtype=int)).size == 0
     single_0 = np.array([0], dtype=int)
