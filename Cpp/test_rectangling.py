@@ -259,6 +259,12 @@ class TestPatterns:
         assert cr.Patterns.wheel_is_legal(chi)
         return ''.join(map(str, chi))
 
+    def test_is_legal(self, engine_context):
+        # Individual wheel_is_legal() tested above, so sanity check only:
+        for _ in range(100):
+            patterns = engine_context.make_Patterns(41, 31)
+            assert patterns.is_legal()
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))

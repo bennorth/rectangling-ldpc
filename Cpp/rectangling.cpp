@@ -356,6 +356,9 @@ public:
 
     const VectorXi chi1, chi2;
 
+    bool is_legal() const
+    { return wheel_is_legal(chi1) && wheel_is_legal(chi2); }
+
 // Not really intended for public API, but for testability:
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
@@ -894,6 +897,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         .def("max_run_length", &Patterns::max_run_length)
         .def("wheel_is_legal", &Patterns::wheel_is_legal)
+        .def("is_legal", &Patterns::is_legal)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
