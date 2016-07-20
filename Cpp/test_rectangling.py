@@ -2,6 +2,8 @@ import numpy as np
 import numpy.testing as nptest
 import re
 from collections import Counter
+from toolz.functoolz import compose
+from operator import itemgetter as nth
 import rectangling as cr
 import py_rectangling as pr
 import pytest
@@ -103,6 +105,25 @@ def sample_obs(engine_context, sample_chi1, sample_chi2):
 class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
+
+    # Test cases taken from 25D(e).  The two 'expected number of crosses in delta-chi'
+    # correspond to a 'low' and 'high' value of the uniform variate respectively.  Often
+    # these values are the same.  The case 'n % 4 == 0' doesn't occur amongst the real
+    # chi wheels, but we make up a test case for it anyway.
+    @pytest.mark.parametrize(
+        'n, exp_ns_cross',
+        [(41, [20, 20]),  # n % 4 == 1
+         (31, [16, 16]),  # n % 4 == 3
+         (29, [14, 14]),  # n % 4 == 1
+         (26, [12, 14]),  # n % 4 == 2
+         (23, [12, 12]),  # n % 4 == 3
+         (24, [12, 12]),  # n % 4 == 0
+         ],
+        ids=compose(str, nth(0)))
+    #
+    def test_n_cross_in_delta(self, n, exp_ns_cross):
+        assert cr.Patterns.n_cross_in_delta(n, 0.25) == exp_ns_cross[0]
+        assert cr.Patterns.n_cross_in_delta(n, 0.75) == exp_ns_cross[1]
 
 class TestObservations:
     def test_construction(self):
