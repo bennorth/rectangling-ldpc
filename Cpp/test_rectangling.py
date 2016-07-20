@@ -126,6 +126,21 @@ class TestPatterns:
         assert cr.Patterns.n_cross_in_delta(n, 0.25) == exp_ns_cross[0]
         assert cr.Patterns.n_cross_in_delta(n, 0.75) == exp_ns_cross[1]
 
+    @pytest.mark.parametrize(
+        'n, exp_ns_cross',
+        [(41, [20, 21]),  # n % 4 == 1
+         (31, [15, 16]),  # n % 4 == 3
+         (29, [14, 15]),  # n % 4 == 1
+         (26, [13, 13]),  # n % 4 == 2
+         (23, [11, 12]),  # n % 4 == 3
+         (24, [12, 12]),  # n % 4 == 0
+         ],
+        ids=compose(str, nth(0)))
+    #
+    def test_n_cross_in_un_delta(self, n, exp_ns_cross):
+        assert cr.Patterns.n_cross_in_un_delta(n, 0.25) == exp_ns_cross[0]
+        assert cr.Patterns.n_cross_in_un_delta(n, 0.75) == exp_ns_cross[1]
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
