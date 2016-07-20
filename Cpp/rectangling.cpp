@@ -108,6 +108,20 @@ VectorXi rotate(const VectorXi& xs, size_t n)
     return rotated_xs;
 }
 
+VectorXi delta_wheel(const VectorXi& xs)
+{
+    if (xs.size() == 0)
+        return xs;
+
+    auto n = xs.size();
+    VectorXi d_xs {n};
+    for (VectorXi::Index i = 0; i != n - 1; ++i)
+        d_xs(i) = xs(i) ^ xs(i + 1);
+
+    d_xs(n - 1) = xs(n - 1) ^ xs(0);
+
+    return d_xs;
+}
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -834,6 +848,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("converge_FGS", &update_until_convergence<FactorGraphState>)
         .def("converge_ACS", &update_until_convergence<AccurateConvergenceState>)
         .def("rotate", &rotate)
+        .def("delta_wheel", &delta_wheel)
         ;
 
     return rect_module.ptr();
