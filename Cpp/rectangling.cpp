@@ -350,6 +350,8 @@ class Patterns
 {
 public:
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
+    Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
+
     static const size_t max_consecutive_same = 4;
 
     const VectorXi chi1, chi2;
@@ -365,6 +367,11 @@ public:
 };
 
 const size_t Patterns::max_consecutive_same;
+
+Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
+    : chi1(legal_wheel_pattern(rnd, n1)), chi2(legal_wheel_pattern(rnd, n2))
+{
+}
 
 size_t Patterns::n_cross_in_delta(size_t n, double u)
 {
