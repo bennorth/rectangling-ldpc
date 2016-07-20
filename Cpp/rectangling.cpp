@@ -91,6 +91,22 @@ MatrixXd unit_normal_shaped_like(rnd_engine_t& rnd, const MatrixXi& theta)
 VectorXi pattern_from_score(const VectorXd& scores)
 { return scores.unaryExpr([](double x) { return (x > 0.0) ? 1 : 0; }).cast<int>(); }
 
+// 'Rotate' a vector by n places.  The [0] entry of the resulting vector is the [n]
+// entry of the input vector.
+VectorXi rotate(const VectorXi& xs, size_t n)
+{
+    if (xs.size() == 0)
+        return xs;
+
+    n %= xs.size();
+    size_t n_rest = xs.size() - n;
+    VectorXi rotated_xs {xs.size()};
+    rotated_xs.head(n_rest) = xs.tail(n_rest);
+    rotated_xs.tail(n) = xs.head(n);
+
+    return rotated_xs;
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -759,6 +775,7 @@ PYBIND11_PLUGIN(rectangling) {
     rect_module
         .def("converge_FGS", &update_until_convergence<FactorGraphState>)
         .def("converge_ACS", &update_until_convergence<AccurateConvergenceState>)
+        .def("rotate", &rotate)
         ;
 
     return rect_module.ptr();
