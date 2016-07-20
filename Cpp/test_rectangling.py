@@ -274,6 +274,13 @@ class TestPatterns:
         assert len(patterns.chi1) == n1
         assert len(patterns.chi2) == n2
 
+    def test_inverted(self, engine_context):
+        for _ in range(100):
+            patterns = engine_context.make_Patterns(41, 31)
+            inv_patterns = patterns.inverted()
+            assert np.all(patterns.chi1 != inv_patterns.chi1)
+            assert np.all(patterns.chi2 != inv_patterns.chi2)
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))

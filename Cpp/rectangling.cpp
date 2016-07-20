@@ -359,6 +359,9 @@ public:
     bool is_legal() const
     { return wheel_is_legal(chi1) && wheel_is_legal(chi2); }
 
+    Patterns inverted() const
+    { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
+
 // Not really intended for public API, but for testability:
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
@@ -898,6 +901,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("max_run_length", &Patterns::max_run_length)
         .def("wheel_is_legal", &Patterns::wheel_is_legal)
         .def("is_legal", &Patterns::is_legal)
+        .def("inverted", &Patterns::inverted)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
