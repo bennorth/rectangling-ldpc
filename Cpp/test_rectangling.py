@@ -28,6 +28,23 @@ def test_matrix_interchange(function_name, expected_kind):
     nptest.assert_array_equal(mx, 42)
 
 
+@pytest.mark.parametrize(
+    'n, exp_rot_xs',
+    [(0, [0, 1, 2, 3, 4]),
+     (1, [1, 2, 3, 4, 0]),
+     (2, [2, 3, 4, 0, 1]),
+     (3, [3, 4, 0, 1, 2]),
+     (4, [4, 0, 1, 2, 3]),
+     (5, [0, 1, 2, 3, 4]),
+     (8, [3, 4, 0, 1, 2]),
+     ],
+    ids=compose(str, nth(0)))
+#
+def test_vector_rotate(n, exp_rot_xs):
+    nptest.assert_array_equal(cr.rotate(np.arange(5), n),
+                              np.array(exp_rot_xs))
+
+
 @pytest.fixture
 def engine_context():
     return cr.EngineContext(42)
