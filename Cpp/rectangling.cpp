@@ -361,6 +361,7 @@ public:
                                             const VectorXu& ns_dots);
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
+    static bool wheel_is_legal(const VectorXi& chi);
 };
 
 const size_t Patterns::max_consecutive_same;
@@ -473,6 +474,25 @@ size_t Patterns::max_run_length(const VectorXi& xs, int value_upper_bound)
     }
 
     return max_len;
+}
+
+bool Patterns::wheel_is_legal(const VectorXi& chi)
+{
+    // References are from 25D(e):
+
+    // 'un-Delta'd wheels must have, as nearly as possible, equal numbers of
+    // dots and crosses'
+
+    // 'Any deltaed wheels must have an even number of crosses'
+
+    // 'Delta'd [...] wheels must have, as nearly as possible, equal numbers of
+    // dots and crosses'
+
+    // 'legality forbade more than four consecutive like characters in the
+    // un-Delta wheel'
+
+    // 'i.e., [legality forbade] more than three consecutive dots in the Delta'd
+    // wheel'
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -840,6 +860,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("n_cross_in_un_delta", &Patterns::n_cross_in_un_delta)
         .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         .def("max_run_length", &Patterns::max_run_length)
+        .def("wheel_is_legal", &Patterns::wheel_is_legal)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
