@@ -218,6 +218,35 @@ class TestPatterns:
         assert cr.Patterns.max_run_length(xs, 2) == exp_mrl
         assert cr.Patterns.max_run_length(xs, 1) == exp_mdrl
 
+    def test_wheel_is_legal(self, engine_context):
+        # For a hypothetical 15-cam wheel, we need 8 crosses in D-chi, meaning
+        # 4 blocks of cross and 4 of dot.  There must either be 8 cross and 7
+        # dot in (un-Delta'd) chi, or 7 cross and 8 dot.
+        #
+        # Number of ways of choosing a list of four numbers from {1, 2, 3, 4}
+        # which add up to 8 is coeff of x^8 in (x + x^2 + x^3 + x^4)^4 = 31
+        #
+        # Number of ways of choosing a list of four numbers from {1, 2, 3, 4}
+        # which add up to 7 is coeff of x^7 in same thing = 20
+        #
+        # Remove factor of 4 because cycling through the blocks gives equivalent
+        # patterns.
+        #
+        # Then need a factor of two to decide (8 cross, 7 dot) vs vice-versa.
+        #
+        # Finally an extra factor of 15 to start anywhere.
+        #
+        # Expected n. legal wheels = 31 * 20 * (1/4) * 2 * 15 = 4,650.
+
+        n_legal = 0
+        for i in range(2 ** 15):
+            s_chi = '{:015b}'.format(i)
+            chi = np.array(list(s_chi), dtype=int)
+            n_legal += cr.Patterns.wheel_is_legal(chi)
+
+        assert n_legal == 4650
+
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
