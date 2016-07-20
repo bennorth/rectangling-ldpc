@@ -319,7 +319,27 @@ class Patterns
 public:
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
     const VectorXi chi1, chi2;
+
+// Not really intended for public API, but for testability:
+    static size_t n_cross_in_delta(size_t n, double u);
 };
+
+size_t Patterns::n_cross_in_delta(size_t n, double u)
+{
+    switch (n % 4)
+    {
+    case 0:
+        return n / 2;
+    case 1:
+        return (n - 1) / 2;
+    case 2:
+        return (u < 0.5) ? (n / 2 - 1) : (n / 2 + 1);
+    case 3:
+        return (n + 1) / 2;
+    default:
+        throw std::runtime_error("arithmetic has failed");
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -678,6 +698,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
+        .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
