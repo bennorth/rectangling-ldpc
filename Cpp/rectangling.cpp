@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <cmath>
+#include <cassert>
 
 #include <Eigen/Dense>
 
@@ -395,6 +396,9 @@ VectorXi Patterns::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
     size_t n_cross_un_delta = n_cross_in_un_delta(n, uniform(rnd));
     size_t n_dot_un_delta = n - n_cross_un_delta;
 
+    assert(n_cross_un_delta >= n_blocks);
+    assert(n_dot_un_delta >= n_blocks);
+
     // Adjust arguments back/forth for zero-based nature of DirichletState.
     auto generate_terms = [&rnd, n_blocks](size_t n_syms) {
         DirichletSamplingRun dsr {rnd, n_blocks,
@@ -405,6 +409,9 @@ VectorXi Patterns::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
     auto ns_cross = generate_terms(n_cross_un_delta);
     auto ns_dot = generate_terms(n_dot_un_delta);
     auto base_pattern = interleave_crosses_dots(ns_cross, ns_dot);
+
+    assert(static_cast<size_t>(base_pattern.size()) == n);
+
     return rotate(base_pattern, rnd(n));
 }
 
