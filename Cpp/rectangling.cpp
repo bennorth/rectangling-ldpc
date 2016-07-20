@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <cassert>
+#include <algorithm>
 
 #include <Eigen/Dense>
 
@@ -359,6 +360,7 @@ public:
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
                                             const VectorXu& ns_dots);
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
+    static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
 };
 
 const size_t Patterns::max_consecutive_same;
@@ -427,6 +429,50 @@ VectorXi Patterns::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
     assert(static_cast<size_t>(base_pattern.size()) == n);
 
     return rotate(base_pattern, rnd(n));
+}
+
+// The 'value_upper_bound' arg is a fudge; we know we only ever want to find:
+// the longest run of either '0' or '1' (achieved by value_upper_bound = 2), or
+// the longest run of '0' (achieved by value_upper_bound = 1)
+size_t Patterns::max_run_length(const VectorXi& xs, int value_upper_bound)
+{
+    auto n = xs.size();
+
+    if (n == 0)  // Dispatch pathological case first.
+        return 0;
+
+    // Establish the first position whose value is different from the previous
+    // one.  If no such position exists, 'change_idx' will be 'n'.
+    VectorXi::Index change_idx;
+    int running_val = xs(0);
+    for (change_idx = 1; change_idx != n; ++change_idx) {
+        int this_val = xs(change_idx);
+        if (this_val != running_val) {
+            running_val = this_val;
+            break;
+        }
+    }
+
+    // If no such position, then all values are the same.
+    if (change_idx == n)
+        return (xs(0) < value_upper_bound) ? n : 0;
+
+    // 'Unwrap' the cycle at the change-index and establish longest run, only
+    // updating 'max_len' where we satisfy 'value_upper_bound'.
+    size_t max_len = 0, this_len = 0;
+    for (auto i = change_idx;
+         (this_len == 0) || (i != change_idx);
+         i = ((i == n - 1) ? 0 : i + 1))
+    {
+        if (xs(i) != running_val)
+            this_len = 0;
+        running_val = xs(i);
+        ++this_len;
+        if (running_val < value_upper_bound)
+            max_len = std::max(this_len, max_len);
+    }
+
+    return max_len;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -793,6 +839,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
         .def("n_cross_in_un_delta", &Patterns::n_cross_in_un_delta)
         .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
+        .def("max_run_length", &Patterns::max_run_length)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
