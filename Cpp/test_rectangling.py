@@ -195,6 +195,29 @@ class TestPatterns:
         xs_rot1[-1] = xs[0]
         return xs ^ xs_rot1
 
+    @pytest.mark.parametrize(
+        'xs, exp_mrl, exp_mdrl',
+        [([], 0, 0),
+         ([1], 1, 0),
+         ([0], 1, 1),
+         ([1, 1, 1, 0, 0, 1, 0], 3, 2),
+         ([0, 1, 1, 1, 0, 0, 1, 0, 0], 3, 3),
+         ([0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0], 3, 2),
+         ([1] * 5, 5, 0),
+         ([0] * 5, 5, 5),
+         ([1] * 500, 500, 0),
+         ([0] * 500, 500, 500),
+         ([1, 1, 0, 0, 0, 1, 1], 4, 3),
+         ([0, 0, 1, 1, 1, 0, 0], 4, 4)],
+        ids=['empty', 'single-1', 'single-0',
+             'arbitrary-a', 'arbitrary-b', 'arbitrary-c',
+             'five-1', 'five-0', 'lots-1', 'lots-0',
+             'wrapped-1', 'wrapped-0'])
+    def test_max_run_length(self, xs, exp_mrl, exp_mdrl):
+        xs_arr = np.array(xs, dtype=int)
+        assert cr.Patterns.max_run_length(xs, 2) == exp_mrl
+        assert cr.Patterns.max_run_length(xs, 1) == exp_mdrl
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
