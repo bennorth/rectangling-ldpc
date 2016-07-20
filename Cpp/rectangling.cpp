@@ -339,6 +339,8 @@ public:
 // Not really intended for public API, but for testability:
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
+    static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
+                                            const VectorXu& ns_dots);
 };
 
 size_t Patterns::n_cross_in_delta(size_t n, double u)
@@ -361,6 +363,29 @@ size_t Patterns::n_cross_in_delta(size_t n, double u)
 size_t Patterns::n_cross_in_un_delta(size_t n, double u)
 {
     return (u < 0.5) ? (n / 2) : ((n + 1) / 2);
+}
+
+VectorXi Patterns::interleave_crosses_dots(const VectorXu& ns_crosses,
+                                           const VectorXu& ns_dots)
+{
+    size_t n_blocks = ns_crosses.size();
+    if (static_cast<size_t>(ns_dots.size()) != n_blocks)
+        throw std::runtime_error("mismatches ns_crosses, ns_dots");
+
+    size_t n_symbols = ns_crosses.sum() + ns_dots.sum();
+    VectorXi pattern {static_cast<int>(n_symbols)};
+
+    size_t i_pattern = 0;
+    for (size_t i_block = 0; i_block != n_blocks; ++i_block) {
+        size_t this_n_cross = ns_crosses(i_block);
+        for (size_t i_sym = 0; i_sym != this_n_cross; ++i_sym)
+            pattern(i_pattern++) = 1;
+        size_t this_n_dot = ns_dots(i_block);
+        for (size_t i_sym = 0; i_sym != this_n_dot; ++i_sym)
+            pattern(i_pattern++) = 0;
+    }
+
+    return pattern;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -722,6 +747,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_readonly("chi2", &Patterns::chi2)
         .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
         .def("n_cross_in_un_delta", &Patterns::n_cross_in_un_delta)
+        .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         ;
 
     py::class_<Observations>(rect_module, "Observations")
