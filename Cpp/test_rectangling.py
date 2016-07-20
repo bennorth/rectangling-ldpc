@@ -171,6 +171,9 @@ class TestPatterns:
         nptest.assert_array_equal(run_lengths[::2], ns_cross)
         nptest.assert_array_equal(run_lengths[1::2], ns_dot)
 
+    def test_max_consecutive_same(self):
+        assert isinstance(cr.Patterns.max_consecutive_same, int)
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))

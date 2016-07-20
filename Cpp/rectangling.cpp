@@ -334,6 +334,8 @@ class Patterns
 {
 public:
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
+    static const size_t max_consecutive_same = 4;
+
     const VectorXi chi1, chi2;
 
 // Not really intended for public API, but for testability:
@@ -342,6 +344,8 @@ public:
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
                                             const VectorXu& ns_dots);
 };
+
+const size_t Patterns::max_consecutive_same;
 
 size_t Patterns::n_cross_in_delta(size_t n, double u)
 {
@@ -736,6 +740,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<Patterns>(rect_module, "Patterns")
         .def(py::init<const VectorXi&, const VectorXi&>())
+        .def_readonly_static("max_consecutive_same", &Patterns::max_consecutive_same)
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
         .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
