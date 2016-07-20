@@ -122,6 +122,7 @@ class TestPatterns:
         ids=compose(str, nth(0)))
     #
     def test_n_cross_in_delta(self, n, exp_ns_cross):
+        assert [n % 2 for n in exp_ns_cross] == [0, 0]
         assert cr.Patterns.n_cross_in_delta(n, 0.25) == exp_ns_cross[0]
         assert cr.Patterns.n_cross_in_delta(n, 0.75) == exp_ns_cross[1]
 
