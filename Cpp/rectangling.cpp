@@ -372,20 +372,13 @@ VectorXi Patterns::interleave_crosses_dots(const VectorXu& ns_crosses,
     if (static_cast<size_t>(ns_dots.size()) != n_blocks)
         throw std::runtime_error("mismatches ns_crosses, ns_dots");
 
-    size_t n_symbols = ns_crosses.sum() + ns_dots.sum();
-    VectorXi pattern {static_cast<int>(n_symbols)};
-
-    size_t i_pattern = 0;
+    std::vector<int> vec_pattern;
     for (size_t i_block = 0; i_block != n_blocks; ++i_block) {
-        size_t this_n_cross = ns_crosses(i_block);
-        for (size_t i_sym = 0; i_sym != this_n_cross; ++i_sym)
-            pattern(i_pattern++) = 1;
-        size_t this_n_dot = ns_dots(i_block);
-        for (size_t i_sym = 0; i_sym != this_n_dot; ++i_sym)
-            pattern(i_pattern++) = 0;
+        vec_pattern.resize(vec_pattern.size() + ns_crosses(i_block), 1);
+        vec_pattern.resize(vec_pattern.size() + ns_dots(i_block), 0);
     }
 
-    return pattern;
+    return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
 }
 
 ////////////////////////////////////////////////////////////////////////
