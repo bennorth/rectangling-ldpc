@@ -478,21 +478,44 @@ size_t Patterns::max_run_length(const VectorXi& xs, int value_upper_bound)
 
 bool Patterns::wheel_is_legal(const VectorXi& chi)
 {
+    int n_cams = chi.size();
+    int n_crosses = chi.sum();
+    int n_dots = n_cams - n_crosses;
+
     // References are from 25D(e):
 
     // 'un-Delta'd wheels must have, as nearly as possible, equal numbers of
     // dots and crosses'
+    if ((n_crosses > n_dots + 1) || (n_dots > n_crosses + 1))
+        return false;
+
+    auto d_chi = delta_wheel(chi);
+    int n_crosses_delta = d_chi.sum();
 
     // 'Any deltaed wheels must have an even number of crosses'
+    if (n_crosses_delta % 2 == 1)
+        return false;
+
+    int n_dots_delta = n_cams - n_crosses_delta;
 
     // 'Delta'd [...] wheels must have, as nearly as possible, equal numbers of
     // dots and crosses'
+    int max_diff = (n_cams % 2 == 0) ? 2 : 1;
+    if ((n_crosses_delta > n_dots_delta + max_diff)
+        || (n_dots_delta > n_crosses_delta + max_diff))
+        return false;
 
     // 'legality forbade more than four consecutive like characters in the
     // un-Delta wheel'
+    if (max_run_length(chi) > max_consecutive_same)
+        return false;
 
     // 'i.e., [legality forbade] more than three consecutive dots in the Delta'd
     // wheel'
+    if (max_run_length(d_chi, 1) > (max_consecutive_same - 1))
+        return false;
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////
