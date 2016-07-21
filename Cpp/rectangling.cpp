@@ -352,6 +352,7 @@ public:
     WheelPattern(const VectorXi& xs) : xs(xs) {}
 
     bool is_legal() const;
+    size_t size() const { return static_cast<size_t>(xs.size()); }
 
     static const size_t max_consecutive_same = 4;
 
@@ -911,6 +912,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXi&>())
         .def_readonly("xs", &WheelPattern::xs)
         .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
+        .def("__len__", &WheelPattern::size)
         .def("is_legal", &WheelPattern::is_legal)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)

@@ -140,6 +140,7 @@ class TestWheelPattern:
         xs = np.array([1, 0, 1, 1, 0])
         p = cr.WheelPattern(xs)
         nptest.assert_array_equal(p.xs, xs)
+        assert len(p) == len(xs)
 
     def test_max_consecutive_same(self):
         assert isinstance(cr.WheelPattern.max_consecutive_same, int)
