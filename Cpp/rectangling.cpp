@@ -491,32 +491,6 @@ VectorXi WheelPattern::interleave_crosses_dots(const VectorXu& ns_crosses,
     return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
 }
 
-
-////////////////////////////////////////////////////////////////////////
-
-class Patterns
-{
-public:
-    Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
-    Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
-
-    const VectorXi chi1, chi2;
-
-    bool is_legal() const
-    { return WheelPattern(chi1).is_legal() && WheelPattern(chi2).is_legal(); }
-
-    Patterns inverted() const
-    { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
-
-// Not really intended for public API, but for testability:
-};
-
-Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
-    : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
-{
-}
-
-// NB Definition for WheelPattern method; will move up once dependent methods moved.
 VectorXi WheelPattern::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
 {
     // Draw from uniform even in cases where we won't need it, for consistency.
@@ -543,6 +517,31 @@ VectorXi WheelPattern::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
     assert(static_cast<size_t>(base_pattern.size()) == n);
 
     return rotate(base_pattern, rnd(n));
+}
+
+
+////////////////////////////////////////////////////////////////////////
+
+class Patterns
+{
+public:
+    Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
+    Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
+
+    const VectorXi chi1, chi2;
+
+    bool is_legal() const
+    { return WheelPattern(chi1).is_legal() && WheelPattern(chi2).is_legal(); }
+
+    Patterns inverted() const
+    { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
+
+// Not really intended for public API, but for testability:
+};
+
+Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
+    : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
+{
 }
 
 ////////////////////////////////////////////////////////////////////////
