@@ -375,6 +375,7 @@ public:
     WheelPattern integrated(int x0) const;
 
     WheelPattern with_bit_flipped(size_t flip_idx) const;
+    WheelPattern with_bits_flipped(const VectorXu& flip_idxs) const;
 
     std::string as_string() const;
 
@@ -425,6 +426,17 @@ WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
         throw std::runtime_error("flip_idx out of range");
 
     return with_bits_flipped_(std::array<size_t, 1>{flip_idx});
+}
+
+WheelPattern WheelPattern::with_bits_flipped(const VectorXu& flip_idxs) const
+{
+    auto flip_idxs_range = VectorRange<VectorXu>{flip_idxs};
+
+    for (const auto flip_idx : flip_idxs_range)
+        if (flip_idx >= size())
+            throw std::runtime_error("flip_idx out of range");
+
+    return with_bits_flipped_(flip_idxs_range);
 }
 
 template<typename T>
@@ -1023,6 +1035,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("deltaed", &WheelPattern::deltaed)
         .def("integrated", &WheelPattern::integrated)
         .def("with_bit_flipped", &WheelPattern::with_bit_flipped)
+        .def("with_bits_flipped", &WheelPattern::with_bits_flipped)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
         .def("n_cross_in_un_delta", &WheelPattern::n_cross_in_un_delta)
