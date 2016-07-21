@@ -249,6 +249,11 @@ class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
 
+    def test_construction_wheel_patterns(self):
+        wheel1 = cr.WheelPattern(np.array([1, 0, 1, 1, 0]))
+        wheel2 = cr.WheelPattern(np.array([0, 0, 1, 1]))
+        cr.Patterns(wheel1, wheel2)
+
     @staticmethod
     def delta_wheel(xs):
         xs_rot1 = np.empty_like(xs)

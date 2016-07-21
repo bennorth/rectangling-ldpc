@@ -526,6 +526,7 @@ WheelPattern WheelPattern::random_legal(rnd_engine_t& rnd, size_t n)
 class Patterns
 {
 public:
+    Patterns(const WheelPattern& chi1, const WheelPattern& chi2) : chi1(chi1), chi2(chi2) {}
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
     Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
 
@@ -921,6 +922,7 @@ PYBIND11_PLUGIN(rectangling) {
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
+        .def(py::init<const WheelPattern&, const WheelPattern&>())
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
