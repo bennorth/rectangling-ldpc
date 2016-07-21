@@ -654,6 +654,8 @@ public:
     VectorXi pattern_1() const { return pattern_from_score(s1()); }
     VectorXi pattern_2() const { return pattern_from_score(s2()); }
 
+    Patterns patterns() const { return {pattern_1(), pattern_2()}; }
+
 private:
     const Observations& obs_;
 
@@ -722,6 +724,8 @@ public:
 
     VectorXi pattern_1() const { return pattern_from_score(score_1_); }
     VectorXi pattern_2() const { return pattern_from_score(score_2_.transpose()); }
+
+    Patterns patterns() const { return {pattern_1(), pattern_2()}; }
 
 private:
     const Observations& obs_;
@@ -924,6 +928,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("s2", &FactorGraphState::s2)
         .def_property_readonly("pattern_1", &FactorGraphState::pattern_1)
         .def_property_readonly("pattern_2", &FactorGraphState::pattern_2)
+        .def_property_readonly("patterns", &FactorGraphState::patterns)
         ;
 
     py::class_<AccurateConvergenceState>(rect_module, "AccurateConvergenceState")
@@ -936,6 +941,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def_property_readonly("pattern_2", &AccurateConvergenceState::pattern_2)
         .def("update_score_1", &AccurateConvergenceState::update_score_1)
         .def("update_score_2", &AccurateConvergenceState::update_score_2)
+        .def_property_readonly("patterns", &AccurateConvergenceState::patterns)
         ;
 
     py::class_<EngineContext>(rect_module, "EngineContext")
