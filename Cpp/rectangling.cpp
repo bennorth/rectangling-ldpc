@@ -357,7 +357,7 @@ public:
     static const size_t max_consecutive_same = 4;
 
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
-    static VectorXi random_legal(rnd_engine_t& rnd, size_t n);
+    static WheelPattern random_legal(rnd_engine_t& rnd, size_t n);
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
@@ -492,7 +492,7 @@ VectorXi WheelPattern::interleave_crosses_dots(const VectorXu& ns_crosses,
     return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
 }
 
-VectorXi WheelPattern::random_legal(rnd_engine_t& rnd, size_t n)
+WheelPattern WheelPattern::random_legal(rnd_engine_t& rnd, size_t n)
 {
     // Draw from uniform even in cases where we won't need it, for consistency.
     trng::uniform_dist<double> uniform(0.0, 1.0);
@@ -517,7 +517,7 @@ VectorXi WheelPattern::random_legal(rnd_engine_t& rnd, size_t n)
 
     assert(static_cast<size_t>(base_pattern.size()) == n);
 
-    return rotate(base_pattern, rnd(n));
+    return {rotate(base_pattern, rnd(n))};
 }
 
 
