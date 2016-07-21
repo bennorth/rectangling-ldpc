@@ -521,7 +521,7 @@ VectorXi WheelPattern::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
 {
     // Draw from uniform even in cases where we won't need it, for consistency.
     trng::uniform_dist<double> uniform(0.0, 1.0);
-    size_t n_cross_delta = Patterns::n_cross_in_delta(n, uniform(rnd));
+    size_t n_cross_delta = n_cross_in_delta(n, uniform(rnd));
     size_t n_blocks = n_cross_delta / 2;
     size_t n_cross_un_delta = Patterns::n_cross_in_un_delta(n, uniform(rnd));
     size_t n_dot_un_delta = n - n_cross_un_delta;
