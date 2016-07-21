@@ -249,6 +249,12 @@ class TestWheelPattern:
 
         assert n_legal == 4650
 
+    def test_inverted(self, engine_context):
+        for _ in range(100):
+            wheel = engine_context.make_legal_wheel_pattern(41)
+            inv_wheel = wheel.inverted()
+            assert np.all(wheel.xs != inv_wheel.xs)
+
 
 class TestPatterns:
     def test_construction(self):

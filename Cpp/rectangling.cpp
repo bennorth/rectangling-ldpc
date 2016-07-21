@@ -356,6 +356,9 @@ public:
     bool is_legal() const;
     size_t size() const { return static_cast<size_t>(xs.size()); }
 
+    WheelPattern inverted() const
+    { return {1 - xs.array()}; }
+
     std::string as_string() const;
 
     static const size_t max_consecutive_same = 4;
@@ -941,6 +944,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("__repr__", &WheelPattern::as_string)
         .def("__len__", &WheelPattern::size)
         .def("is_legal", &WheelPattern::is_legal)
+        .def("inverted", &WheelPattern::inverted)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
         .def("n_cross_in_un_delta", &WheelPattern::n_cross_in_un_delta)
