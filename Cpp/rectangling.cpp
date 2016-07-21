@@ -862,7 +862,7 @@ public:
     DirichletSamplingRun make_DirichletSamplingRun(size_t n_terms, size_t max_term, size_t required_sum)
     { return DirichletSamplingRun(rnd_, n_terms, max_term, required_sum); }
 
-    VectorXi make_legal_wheel_pattern(size_t n)
+    WheelPattern make_legal_wheel_pattern(size_t n)
     { return WheelPattern::random_legal(rnd_, n); }
 
     Patterns make_Patterns(size_t n1, size_t n2)
