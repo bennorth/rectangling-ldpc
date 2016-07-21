@@ -187,6 +187,21 @@ class TestWheelPattern:
         assert cr.WheelPattern.n_cross_in_delta(n, 0.25) == exp_ns_cross[0]
         assert cr.WheelPattern.n_cross_in_delta(n, 0.75) == exp_ns_cross[1]
 
+    @pytest.mark.parametrize(
+        'n, exp_ns_cross',
+        [(41, [20, 21]),  # n % 4 == 1
+         (31, [15, 16]),  # n % 4 == 3
+         (29, [14, 15]),  # n % 4 == 1
+         (26, [13, 13]),  # n % 4 == 2
+         (23, [11, 12]),  # n % 4 == 3
+         (24, [12, 12]),  # n % 4 == 0
+         ],
+        ids=compose(str, nth(0)))
+    #
+    def test_n_cross_in_un_delta(self, n, exp_ns_cross):
+        assert cr.WheelPattern.n_cross_in_un_delta(n, 0.25) == exp_ns_cross[0]
+        assert cr.WheelPattern.n_cross_in_un_delta(n, 0.75) == exp_ns_cross[1]
+
     def test_is_legal(self, engine_context):
         # For a hypothetical 15-cam wheel, we need 8 crosses in D-chi, meaning
         # 4 blocks of cross and 4 of dot.  There must either be 8 cross and 7
@@ -220,21 +235,6 @@ class TestWheelPattern:
 class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
-
-    @pytest.mark.parametrize(
-        'n, exp_ns_cross',
-        [(41, [20, 21]),  # n % 4 == 1
-         (31, [15, 16]),  # n % 4 == 3
-         (29, [14, 15]),  # n % 4 == 1
-         (26, [13, 13]),  # n % 4 == 2
-         (23, [11, 12]),  # n % 4 == 3
-         (24, [12, 12]),  # n % 4 == 0
-         ],
-        ids=compose(str, nth(0)))
-    #
-    def test_n_cross_in_un_delta(self, n, exp_ns_cross):
-        assert cr.Patterns.n_cross_in_un_delta(n, 0.25) == exp_ns_cross[0]
-        assert cr.Patterns.n_cross_in_un_delta(n, 0.75) == exp_ns_cross[1]
 
     def test_interleave_crosses_dots(self):
         ns_cross = np.array([1, 4, 3, 1, 2])
