@@ -313,6 +313,16 @@ DirichletSamplingRun::DirichletSamplingRun(rnd_engine_t& rnd,
 
 ////////////////////////////////////////////////////////////////////////
 
+template<typename T>
+struct VectorRange {
+    VectorRange(const T& xs) : xs(xs) {}
+    const typename T::Scalar* begin() const { return xs.data(); }
+    const typename T::Scalar* end() const { return xs.data() + xs.size(); }
+    const T& xs;
+};
+
+////////////////////////////////////////////////////////////////////////
+
 /*
   Generating legal wheel patterns for Chi1 (41 cams) and Chi2 (31 cams)
 
