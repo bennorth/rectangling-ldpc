@@ -1,3 +1,4 @@
+#include <array>
 #include <string>
 #include <sstream>
 #include <stdexcept>
@@ -413,9 +414,7 @@ WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
     if (flip_idx >= size())
         throw std::runtime_error("flip_idx out of range");
 
-    VectorXi flipped_xs {xs};
-    flipped_xs(flip_idx) = 1 - flipped_xs(flip_idx);
-    return flipped_xs;
+    return with_bits_flipped_(std::array<size_t, 1>{flip_idx});
 }
 
 template<typename T>
