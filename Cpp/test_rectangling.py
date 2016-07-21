@@ -275,11 +275,10 @@ class TestWheelPattern:
 
     def test_bit_flip(self):
         wheel = cr.WheelPattern(16, 0)
-        for i in range(len(wheel)):
+        size = len(wheel)
+        for i in range(size):
             wheel_1 = wheel.with_bit_flipped(i)
-            assert wheel_1.xs[i] == 1
-            assert np.all(wheel_1.xs[:i] == 0)
-            assert np.all(wheel_1.xs[i+1:] == 0)
+            assert list(np.where(wheel_1.xs)[0]) == [i]
 
     def test_bit_flip_bad_index(self):
         wheel = cr.WheelPattern(16, 0)
