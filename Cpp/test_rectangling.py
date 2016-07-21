@@ -260,6 +260,11 @@ class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
 
+    def test_str(self):
+        p = cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
+        assert str(p) == ('<Patterns: Chi_1: <Wheel: 10110>;\n'
+                          '           Chi_2: <Wheel: 0011>>')
+
     def test_construction_wheel_patterns(self):
         wheel1 = cr.WheelPattern(np.array([1, 0, 1, 1, 0]))
         wheel2 = cr.WheelPattern(np.array([0, 0, 1, 1]))

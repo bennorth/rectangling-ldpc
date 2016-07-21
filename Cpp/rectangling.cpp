@@ -552,6 +552,8 @@ public:
     bool is_legal() const
     { return chi1.is_legal() && chi2.is_legal(); }
 
+    std::string as_string() const;
+
     Patterns inverted() const
     { return {chi1.inverted(), chi2.inverted()}; }
 
@@ -562,6 +564,15 @@ Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
     : chi1(WheelPattern::random_legal(rnd, n1)), chi2(WheelPattern::random_legal(rnd, n2))
 {
 }
+
+std::string Patterns::as_string() const
+{
+    std::ostringstream oss;
+    oss << "<Patterns: Chi_1: " << chi1.as_string()
+        << ";\n           Chi_2: " << chi2.as_string() << ">";
+    return oss.str();
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -956,6 +967,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
+        .def("__str__", &Patterns::as_string)
+        .def("__repr__", &Patterns::as_string)
         .def("is_legal", &Patterns::is_legal)
         .def("inverted", &Patterns::inverted)
         ;
