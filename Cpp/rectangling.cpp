@@ -538,7 +538,7 @@ VectorXi WheelPattern::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
 
     auto ns_cross = generate_terms(n_cross_un_delta);
     auto ns_dot = generate_terms(n_dot_un_delta);
-    auto base_pattern = Patterns::interleave_crosses_dots(ns_cross, ns_dot);
+    auto base_pattern = interleave_crosses_dots(ns_cross, ns_dot);
 
     assert(static_cast<size_t>(base_pattern.size()) == n);
 
