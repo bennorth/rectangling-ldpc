@@ -360,6 +360,8 @@ public:
     WheelPattern inverted() const
     { return {1 - xs.array()}; }
 
+    WheelPattern with_bit_flipped(size_t flip_idx) const;
+
     std::string as_string() const;
 
     static const size_t max_consecutive_same = 4;
@@ -375,6 +377,16 @@ public:
 };
 
 const size_t WheelPattern::max_consecutive_same;
+
+WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
+{
+    if (flip_idx >= size())
+        throw std::runtime_error("flip_idx out of range");
+
+    VectorXi flipped_xs {xs};
+    flipped_xs(flip_idx) = 1 - flipped_xs(flip_idx);
+    return flipped_xs;
+}
 
 bool WheelPattern::is_legal() const
 {
@@ -958,6 +970,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("__len__", &WheelPattern::size)
         .def("is_legal", &WheelPattern::is_legal)
         .def("inverted", &WheelPattern::inverted)
+        .def("with_bit_flipped", &WheelPattern::with_bit_flipped)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
         .def("n_cross_in_un_delta", &WheelPattern::n_cross_in_un_delta)

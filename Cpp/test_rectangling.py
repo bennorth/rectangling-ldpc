@@ -260,6 +260,14 @@ class TestWheelPattern:
             inv_wheel = wheel.inverted()
             assert np.all(wheel.xs != inv_wheel.xs)
 
+    def test_bit_flip(self):
+        wheel = cr.WheelPattern(16, 0)
+        for i in range(len(wheel)):
+            wheel_1 = wheel.with_bit_flipped(i)
+            assert wheel_1.xs[i] == 1
+            assert np.all(wheel_1.xs[:i] == 0)
+            assert np.all(wheel_1.xs[i+1:] == 0)
+
 
 class TestPatterns:
     def test_construction(self):
