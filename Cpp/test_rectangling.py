@@ -134,6 +134,13 @@ def zero_obs():
 def sample_obs(engine_context, sample_chi1, sample_chi2):
     return engine_context.make_Observations(sample_chi1, sample_chi2, 1.25, 9000)
 
+
+class TestWheelPattern:
+    def test_construction(self):
+        xs = np.array([1, 0, 1, 1, 0])
+        p = cr.WheelPattern(xs)
+
+
 class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
