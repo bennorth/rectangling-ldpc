@@ -533,7 +533,7 @@ public:
     const WheelPattern chi1, chi2;
 
     bool is_legal() const
-    { return WheelPattern(chi1).is_legal() && WheelPattern(chi2).is_legal(); }
+    { return chi1.is_legal() && chi2.is_legal(); }
 
     Patterns inverted() const
     { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
