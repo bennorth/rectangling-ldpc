@@ -270,7 +270,7 @@ class TestPatterns:
     def _test_random_legal_pattern_1(self, engine_context, n_cams):
         chi = engine_context.make_legal_wheel_pattern(n_cams)
         assert len(chi) == n_cams
-        assert cr.Patterns.wheel_is_legal(chi)
+        assert cr.WheelPattern(chi).is_legal()
         return ''.join(map(str, chi))
 
     def test_is_legal(self, engine_context):
