@@ -932,7 +932,6 @@ PYBIND11_PLUGIN(rectangling) {
         .def("n_cross_in_un_delta", &Patterns::n_cross_in_un_delta)
         .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         .def("max_run_length", &Patterns::max_run_length)
-        .def("wheel_is_legal", &Patterns::wheel_is_legal)
         .def("is_legal", &Patterns::is_legal)
         .def("inverted", &Patterns::inverted)
         ;
