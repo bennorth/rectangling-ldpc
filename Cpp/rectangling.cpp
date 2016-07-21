@@ -1,3 +1,5 @@
+#include <string>
+#include <sstream>
 #include <stdexcept>
 #include <cmath>
 #include <cassert>
@@ -354,6 +356,8 @@ public:
     bool is_legal() const;
     size_t size() const { return static_cast<size_t>(xs.size()); }
 
+    std::string as_string() const;
+
     static const size_t max_consecutive_same = 4;
 
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
@@ -408,6 +412,16 @@ bool WheelPattern::is_legal() const
         return false;
 
     return true;
+}
+
+std::string WheelPattern::as_string() const
+{
+    std::ostringstream oss;
+    oss << "<Wheel: ";
+    for (VectorXi::Index i = 0; i != xs.size(); ++i)
+        oss << xs(i);
+    oss << ">";
+    return oss.str();
 }
 
 // The 'value_upper_bound' arg is a fudge; we know we only ever want to find:
@@ -913,6 +927,8 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXi&>())
         .def_readonly("xs", &WheelPattern::xs)
         .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
+        .def("__str__", &WheelPattern::as_string)
+        .def("__repr__", &WheelPattern::as_string)
         .def("__len__", &WheelPattern::size)
         .def("is_legal", &WheelPattern::is_legal)
         .def("max_run_length", &WheelPattern::max_run_length)

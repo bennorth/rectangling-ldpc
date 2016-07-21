@@ -142,6 +142,11 @@ class TestWheelPattern:
         nptest.assert_array_equal(p.xs, xs)
         assert len(p) == len(xs)
 
+    def test_str(self):
+        xs = np.array([1, 0, 1, 1, 0])
+        p = cr.WheelPattern(xs)
+        assert str(p) == '<Wheel: {}>'.format(''.join(map(str, xs)))
+
     def test_max_consecutive_same(self):
         assert isinstance(cr.WheelPattern.max_consecutive_same, int)
 
@@ -274,7 +279,7 @@ class TestPatterns:
         chi = engine_context.make_legal_wheel_pattern(n_cams)
         assert len(chi) == n_cams
         assert chi.is_legal()
-        return ''.join(map(str, chi))
+        return str(chi)
 
     def test_is_legal(self, engine_context):
         # Individual wheels' is_legal() tested above, so sanity check only:
