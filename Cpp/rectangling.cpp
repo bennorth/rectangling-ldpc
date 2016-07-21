@@ -553,7 +553,7 @@ public:
     { return chi1.is_legal() && chi2.is_legal(); }
 
     Patterns inverted() const
-    { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
+    { return {chi1.inverted(), chi2.inverted()}; }
 
 // Not really intended for public API, but for testability:
 };
