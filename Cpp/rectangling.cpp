@@ -352,6 +352,7 @@ class WheelPattern
 {
 public:
     WheelPattern(const VectorXi& xs) : xs(xs) {}
+    WheelPattern(size_t n, int x) : xs(VectorXi::Constant(n, x)) {}
 
     bool is_legal() const;
     size_t size() const { return static_cast<size_t>(xs.size()); }
@@ -949,6 +950,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<WheelPattern>(rect_module, "WheelPattern")
         .def(py::init<const VectorXi&>())
+        .def(py::init<size_t, int>())
         .def_readonly("xs", &WheelPattern::xs)
         .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
         .def("__str__", &WheelPattern::as_string)

@@ -142,6 +142,11 @@ class TestWheelPattern:
         nptest.assert_array_equal(p.xs, xs)
         assert len(p) == len(xs)
 
+    @pytest.mark.parametrize('n, x', [(5, 0), (3, 1)])
+    def test_constant_construction(self, n, x):
+        wheel = cr.WheelPattern(n, x)
+        nptest.assert_array_equal(wheel.xs, np.full(n, x, dtype=int))
+
     def test_str(self):
         xs = np.array([1, 0, 1, 1, 0])
         p = cr.WheelPattern(xs)
