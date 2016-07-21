@@ -288,6 +288,11 @@ class TestWheelPattern:
                     wheel_3 = wheel.with_bits_flipped(idxs_3)
                     nptest.assert_array_equal(np.where(wheel_3.xs)[0], idxs_3)
 
+    def test_nop_bit_flip(self):
+        wheel = cr.WheelPattern(16, 0)
+        nptest.assert_array_equal(wheel.with_bits_flipped([]).xs,
+                                  wheel.xs)
+
     def test_bit_flip_bad_index(self):
         wheel = cr.WheelPattern(16, 0)
         pytest.raises_regexp(RuntimeError, 'flip_idx out of range',
