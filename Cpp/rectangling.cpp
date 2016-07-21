@@ -532,7 +532,7 @@ VectorXi Patterns::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
     // Adjust arguments back/forth for zero-based nature of DirichletState.
     auto generate_terms = [&rnd, n_blocks](size_t n_syms) {
         DirichletSamplingRun dsr {rnd, n_blocks,
-                                  max_consecutive_same - 1, n_syms - n_blocks};
+                                  WheelPattern::max_consecutive_same - 1, n_syms - n_blocks};
         return (dsr.result().array() + 1).eval();
     };
 
