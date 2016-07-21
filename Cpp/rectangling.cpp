@@ -358,6 +358,8 @@ public:
 
 const size_t WheelPattern::max_consecutive_same;
 
+size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
+
 ////////////////////////////////////////////////////////////////////////
 
 class Patterns
@@ -544,6 +546,9 @@ bool Patterns::wheel_is_legal(const VectorXi& chi)
 
     return true;
 }
+
+size_t max_run_length(const VectorXi& xs, int value_upper_bound)
+{ return Patterns::max_run_length(xs, value_upper_bound); }
 
 ////////////////////////////////////////////////////////////////////////
 
