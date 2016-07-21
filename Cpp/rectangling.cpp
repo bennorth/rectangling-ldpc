@@ -351,6 +351,8 @@ class WheelPattern
 public:
     WheelPattern(const VectorXi& xs) : xs(xs) {}
 
+    bool is_legal() const;
+
     static const size_t max_consecutive_same = 4;
 
     VectorXi xs;
@@ -359,6 +361,48 @@ public:
 const size_t WheelPattern::max_consecutive_same;
 
 size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
+
+bool WheelPattern::is_legal() const
+{
+    int n_cams = xs.size();
+    int n_crosses = xs.sum();
+    int n_dots = n_cams - n_crosses;
+
+    // References are from 25D(e):
+
+    // 'un-Delta'd wheels must have, as nearly as possible, equal numbers of
+    // dots and crosses'
+    if ((n_crosses > n_dots + 1) || (n_dots > n_crosses + 1))
+        return false;
+
+    auto d_xs = delta_wheel(xs);
+    int n_crosses_delta = d_xs.sum();
+
+    // 'Any deltaed wheels must have an even number of crosses'
+    if (n_crosses_delta % 2 == 1)
+        return false;
+
+    int n_dots_delta = n_cams - n_crosses_delta;
+
+    // 'Delta'd [...] wheels must have, as nearly as possible, equal numbers of
+    // dots and crosses'
+    int max_diff = (n_cams % 2 == 0) ? 2 : 1;
+    if ((n_crosses_delta > n_dots_delta + max_diff)
+        || (n_dots_delta > n_crosses_delta + max_diff))
+        return false;
+
+    // 'legality forbade more than four consecutive like characters in the
+    // un-Delta wheel'
+    if (max_run_length(xs) > max_consecutive_same)
+        return false;
+
+    // 'i.e., [legality forbade] more than three consecutive dots in the Delta'd
+    // wheel'
+    if (max_run_length(d_xs, 1) > (max_consecutive_same - 1))
+        return false;
+
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -385,7 +429,8 @@ public:
                                             const VectorXu& ns_dots);
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
-    static bool wheel_is_legal(const VectorXi& chi);
+    static bool wheel_is_legal(const VectorXi& chi)
+    { return WheelPattern(chi).is_legal(); }
 };
 
 const size_t Patterns::max_consecutive_same;
@@ -503,48 +548,6 @@ size_t Patterns::max_run_length(const VectorXi& xs, int value_upper_bound)
     }
 
     return max_len;
-}
-
-bool Patterns::wheel_is_legal(const VectorXi& chi)
-{
-    int n_cams = chi.size();
-    int n_crosses = chi.sum();
-    int n_dots = n_cams - n_crosses;
-
-    // References are from 25D(e):
-
-    // 'un-Delta'd wheels must have, as nearly as possible, equal numbers of
-    // dots and crosses'
-    if ((n_crosses > n_dots + 1) || (n_dots > n_crosses + 1))
-        return false;
-
-    auto d_chi = delta_wheel(chi);
-    int n_crosses_delta = d_chi.sum();
-
-    // 'Any deltaed wheels must have an even number of crosses'
-    if (n_crosses_delta % 2 == 1)
-        return false;
-
-    int n_dots_delta = n_cams - n_crosses_delta;
-
-    // 'Delta'd [...] wheels must have, as nearly as possible, equal numbers of
-    // dots and crosses'
-    int max_diff = (n_cams % 2 == 0) ? 2 : 1;
-    if ((n_crosses_delta > n_dots_delta + max_diff)
-        || (n_dots_delta > n_crosses_delta + max_diff))
-        return false;
-
-    // 'legality forbade more than four consecutive like characters in the
-    // un-Delta wheel'
-    if (max_run_length(chi) > max_consecutive_same)
-        return false;
-
-    // 'i.e., [legality forbade] more than three consecutive dots in the Delta'd
-    // wheel'
-    if (max_run_length(d_chi, 1) > (max_consecutive_same - 1))
-        return false;
-
-    return true;
 }
 
 size_t max_run_length(const VectorXi& xs, int value_upper_bound)
@@ -917,6 +920,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def(py::init<const VectorXi&>())
         .def_readonly("xs", &WheelPattern::xs)
         .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
+        .def("is_legal", &WheelPattern::is_legal)
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
