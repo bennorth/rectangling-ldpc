@@ -141,6 +141,9 @@ class TestWheelPattern:
         p = cr.WheelPattern(xs)
         nptest.assert_array_equal(p.xs, xs)
 
+    def test_max_consecutive_same(self):
+        assert isinstance(cr.WheelPattern.max_consecutive_same, int)
+
 
 class TestPatterns:
     def test_construction(self):

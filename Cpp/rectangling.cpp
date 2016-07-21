@@ -351,8 +351,12 @@ class WheelPattern
 public:
     WheelPattern(const VectorXi& xs) : xs(xs) {}
 
+    static const size_t max_consecutive_same = 4;
+
     VectorXi xs;
 };
+
+const size_t WheelPattern::max_consecutive_same;
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -907,6 +911,7 @@ PYBIND11_PLUGIN(rectangling) {
     py::class_<WheelPattern>(rect_module, "WheelPattern")
         .def(py::init<const VectorXi&>())
         .def_readonly("xs", &WheelPattern::xs)
+        .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
