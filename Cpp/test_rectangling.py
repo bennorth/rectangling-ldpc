@@ -268,6 +268,11 @@ class TestWheelPattern:
             assert np.all(wheel_1.xs[:i] == 0)
             assert np.all(wheel_1.xs[i+1:] == 0)
 
+    def test_bit_flip_bad_index(self):
+        wheel = cr.WheelPattern(16, 0)
+        pytest.raises_regexp(RuntimeError, 'flip_idx out of range',
+                             wheel.with_bit_flipped, 16)
+
 
 class TestPatterns:
     def test_construction(self):
