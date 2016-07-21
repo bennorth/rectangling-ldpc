@@ -246,6 +246,18 @@ class TestPatterns:
 
         assert n_legal == 4650
 
+    @pytest.mark.parametrize('n_cams', [41, 31, 29, 26, 23])
+    def test_random_legal_pattern(self, engine_context, n_cams):
+        chi_samples = [self._test_random_legal_pattern_1(engine_context, n_cams)
+                       for _ in range(1000)]
+        # Allow for birthday paradox:
+        assert len(set(chi_samples)) > 800
+
+    def _test_random_legal_pattern_1(self, engine_context, n_cams):
+        chi = engine_context.make_legal_wheel_pattern(n_cams)
+        assert len(chi) == n_cams
+        assert cr.Patterns.wheel_is_legal(chi)
+        return ''.join(map(str, chi))
 
 class TestObservations:
     def test_construction(self):
