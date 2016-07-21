@@ -459,7 +459,7 @@ public:
     const VectorXi chi1, chi2;
 
     bool is_legal() const
-    { return wheel_is_legal(chi1) && wheel_is_legal(chi2); }
+    { return WheelPattern(chi1).is_legal() && WheelPattern(chi2).is_legal(); }
 
     Patterns inverted() const
     { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
@@ -470,8 +470,6 @@ public:
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
                                             const VectorXu& ns_dots);
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
-    static bool wheel_is_legal(const VectorXi& chi)
-    { return WheelPattern(chi).is_legal(); }
 };
 
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
