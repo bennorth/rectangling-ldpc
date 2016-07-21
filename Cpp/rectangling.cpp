@@ -1106,8 +1106,8 @@ PYBIND11_PLUGIN(rectangling) {
         ;
 
     rect_module
-        .def("converge_FGS", &update_until_convergence<FactorGraphState>)
-        .def("converge_ACS", &update_until_convergence<AccurateConvergenceState>)
+        .def("converge", &update_until_convergence<FactorGraphState>)
+        .def("converge", &update_until_convergence<AccurateConvergenceState>)
         .def("rotate", &rotate)
         .def("delta_wheel", &delta_wheel)
         ;

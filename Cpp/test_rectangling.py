@@ -493,7 +493,7 @@ class TestFactorGraphState(TestDecodingState):
     py_cls = pr.FactorGraphState
     c_cls = cr.FactorGraphState
     c_make_fun_name = 'make_FactorGraphState'
-    c_converge_fun = cr.converge_FGS
+    c_converge_fun = cr.converge
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
@@ -523,7 +523,7 @@ class TestAccurateConvergenceState(TestDecodingState):
     py_cls = pr.AccurateConvergenceState
     c_cls = cr.AccurateConvergenceState
     c_make_fun_name = 'make_AccurateConvergenceState'
-    c_converge_fun = cr.converge_ACS
+    c_converge_fun = cr.converge
 
     @pytest.mark.parametrize('state_label', ['sample', 'random'])
     def test_update_score_1(self, engine_context, sample_obs, state_label):
