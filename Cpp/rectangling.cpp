@@ -346,6 +346,16 @@ DirichletSamplingRun::DirichletSamplingRun(rnd_engine_t& rnd,
 
 ////////////////////////////////////////////////////////////////////////
 
+class WheelPattern
+{
+public:
+    WheelPattern(const VectorXi& xs) : xs(xs) {}
+
+    VectorXi xs;
+};
+
+////////////////////////////////////////////////////////////////////////
+
 class Patterns
 {
 public:
@@ -892,6 +902,10 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<DirichletSamplingRun>(rect_module, "DirichletSamplingRun")
         .def_property_readonly("result", &DirichletSamplingRun::result)
+        ;
+
+    py::class_<WheelPattern>(rect_module, "WheelPattern")
+        .def(py::init<const VectorXi&>())
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
