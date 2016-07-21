@@ -139,6 +139,7 @@ class TestWheelPattern:
     def test_construction(self):
         xs = np.array([1, 0, 1, 1, 0])
         p = cr.WheelPattern(xs)
+        nptest.assert_array_equal(p.xs, xs)
 
 
 class TestPatterns:

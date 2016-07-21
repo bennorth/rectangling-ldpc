@@ -906,6 +906,7 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<WheelPattern>(rect_module, "WheelPattern")
         .def(py::init<const VectorXi&>())
+        .def_readonly("xs", &WheelPattern::xs)
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
