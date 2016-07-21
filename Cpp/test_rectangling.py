@@ -248,9 +248,6 @@ class TestPatterns:
         nptest.assert_array_equal(run_lengths[::2], ns_cross)
         nptest.assert_array_equal(run_lengths[1::2], ns_dot)
 
-    def test_max_consecutive_same(self):
-        assert isinstance(cr.Patterns.max_consecutive_same, int)
-
     @staticmethod
     def delta_wheel(xs):
         xs_rot1 = np.empty_like(xs)
