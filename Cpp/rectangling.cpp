@@ -360,8 +360,6 @@ public:
 
 const size_t WheelPattern::max_consecutive_same;
 
-size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
-
 bool WheelPattern::is_legal() const
 {
     int n_cams = xs.size();
@@ -549,9 +547,6 @@ size_t Patterns::max_run_length(const VectorXi& xs, int value_upper_bound)
 
     return max_len;
 }
-
-size_t max_run_length(const VectorXi& xs, int value_upper_bound)
-{ return Patterns::max_run_length(xs, value_upper_bound); }
 
 ////////////////////////////////////////////////////////////////////////
 
