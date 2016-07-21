@@ -356,7 +356,7 @@ public:
     static const size_t max_consecutive_same = 4;
 
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
-    static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
+    static VectorXi random_legal(rnd_engine_t& rnd, size_t n);
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
@@ -491,7 +491,7 @@ VectorXi WheelPattern::interleave_crosses_dots(const VectorXu& ns_crosses,
     return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
 }
 
-VectorXi WheelPattern::legal_wheel_pattern(rnd_engine_t& rnd, size_t n)
+VectorXi WheelPattern::random_legal(rnd_engine_t& rnd, size_t n)
 {
     // Draw from uniform even in cases where we won't need it, for consistency.
     trng::uniform_dist<double> uniform(0.0, 1.0);
@@ -540,7 +540,7 @@ public:
 };
 
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
-    : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
+    : chi1(WheelPattern::random_legal(rnd, n1)), chi2(WheelPattern::random_legal(rnd, n2))
 {
 }
 
@@ -861,7 +861,7 @@ public:
     { return DirichletSamplingRun(rnd_, n_terms, max_term, required_sum); }
 
     VectorXi make_legal_wheel_pattern(size_t n)
-    { return WheelPattern::legal_wheel_pattern(rnd_, n); }
+    { return WheelPattern::random_legal(rnd_, n); }
 
     Patterns make_Patterns(size_t n1, size_t n2)
     { return Patterns(rnd_, n1, n2); }
