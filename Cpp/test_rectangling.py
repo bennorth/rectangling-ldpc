@@ -260,6 +260,13 @@ class TestWheelPattern:
             inv_wheel = wheel.inverted()
             assert np.all(wheel.xs != inv_wheel.xs)
 
+    def test_deltaed(self, engine_context):
+        for _ in range(100):
+            wheel = engine_context.make_legal_wheel_pattern(41)
+            wheel_xs = wheel.xs
+            d_wheel_xs = cr.delta_wheel(wheel_xs)
+            nptest.assert_array_equal(wheel.deltaed().xs, d_wheel_xs)
+
     def test_bit_flip(self):
         wheel = cr.WheelPattern(16, 0)
         for i in range(len(wheel)):

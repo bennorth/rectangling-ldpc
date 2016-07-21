@@ -360,6 +360,8 @@ public:
     WheelPattern inverted() const
     { return {1 - xs.array()}; }
 
+    WheelPattern deltaed() const;
+
     WheelPattern with_bit_flipped(size_t flip_idx) const;
 
     std::string as_string() const;
@@ -377,6 +379,11 @@ public:
 };
 
 const size_t WheelPattern::max_consecutive_same;
+
+WheelPattern WheelPattern::deltaed() const
+{
+    return {delta_wheel(xs)};
+}
 
 WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
 {
@@ -970,6 +977,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("__len__", &WheelPattern::size)
         .def("is_legal", &WheelPattern::is_legal)
         .def("inverted", &WheelPattern::inverted)
+        .def("deltaed", &WheelPattern::deltaed)
         .def("with_bit_flipped", &WheelPattern::with_bit_flipped)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
