@@ -359,6 +359,8 @@ public:
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
     static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
+    static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
+                                            const VectorXu& ns_dots);
 
     VectorXi xs;
 };
@@ -473,6 +475,22 @@ size_t WheelPattern::n_cross_in_un_delta(size_t n, double u)
     return (u < 0.5) ? (n / 2) : ((n + 1) / 2);
 }
 
+VectorXi WheelPattern::interleave_crosses_dots(const VectorXu& ns_crosses,
+                                               const VectorXu& ns_dots)
+{
+    size_t n_blocks = ns_crosses.size();
+    if (static_cast<size_t>(ns_dots.size()) != n_blocks)
+        throw std::runtime_error("mismatches ns_crosses, ns_dots");
+
+    std::vector<int> vec_pattern;
+    for (size_t i_block = 0; i_block != n_blocks; ++i_block) {
+        vec_pattern.resize(vec_pattern.size() + ns_crosses(i_block), 1);
+        vec_pattern.resize(vec_pattern.size() + ns_dots(i_block), 0);
+    }
+
+    return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -491,29 +509,11 @@ public:
     { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
 
 // Not really intended for public API, but for testability:
-    static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
-                                            const VectorXu& ns_dots);
 };
 
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
     : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
 {
-}
-
-VectorXi Patterns::interleave_crosses_dots(const VectorXu& ns_crosses,
-                                           const VectorXu& ns_dots)
-{
-    size_t n_blocks = ns_crosses.size();
-    if (static_cast<size_t>(ns_dots.size()) != n_blocks)
-        throw std::runtime_error("mismatches ns_crosses, ns_dots");
-
-    std::vector<int> vec_pattern;
-    for (size_t i_block = 0; i_block != n_blocks; ++i_block) {
-        vec_pattern.resize(vec_pattern.size() + ns_crosses(i_block), 1);
-        vec_pattern.resize(vec_pattern.size() + ns_dots(i_block), 0);
-    }
-
-    return VectorXi(Eigen::Map<VectorXi>(vec_pattern.data(), vec_pattern.size()));
 }
 
 // NB Definition for WheelPattern method; will move up once dependent methods moved.
@@ -916,13 +916,13 @@ PYBIND11_PLUGIN(rectangling) {
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
         .def("n_cross_in_un_delta", &WheelPattern::n_cross_in_un_delta)
+        .def("interleave_crosses_dots", &WheelPattern::interleave_crosses_dots)
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
-        .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         .def("is_legal", &Patterns::is_legal)
         .def("inverted", &Patterns::inverted)
         ;
