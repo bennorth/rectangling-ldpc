@@ -474,7 +474,7 @@ public:
 };
 
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
-    : chi1(legal_wheel_pattern(rnd, n1)), chi2(legal_wheel_pattern(rnd, n2))
+    : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
 {
 }
 
@@ -862,7 +862,7 @@ public:
     { return DirichletSamplingRun(rnd_, n_terms, max_term, required_sum); }
 
     VectorXi make_legal_wheel_pattern(size_t n)
-    { return Patterns::legal_wheel_pattern(rnd_, n); }
+    { return WheelPattern::legal_wheel_pattern(rnd_, n); }
 
     Patterns make_Patterns(size_t n1, size_t n2)
     { return Patterns(rnd_, n1, n2); }
