@@ -529,7 +529,7 @@ public:
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
     Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
 
-    const VectorXi chi1, chi2;
+    const WheelPattern chi1, chi2;
 
     bool is_legal() const
     { return WheelPattern(chi1).is_legal() && WheelPattern(chi2).is_legal(); }
