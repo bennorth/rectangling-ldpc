@@ -279,6 +279,14 @@ class TestWheelPattern:
         for i in range(size):
             wheel_1 = wheel.with_bit_flipped(i)
             assert list(np.where(wheel_1.xs)[0]) == [i]
+            for j in range(i + 1, size):
+                idxs_2 = np.array([i, j])
+                wheel_2 = wheel.with_bits_flipped(idxs_2)
+                nptest.assert_array_equal(np.where(wheel_2.xs)[0], idxs_2)
+                for k in range(j + 1, size):
+                    idxs_3 = np.array([i, j, k])
+                    wheel_3 = wheel.with_bits_flipped(idxs_3)
+                    nptest.assert_array_equal(np.where(wheel_3.xs)[0], idxs_3)
 
     def test_bit_flip_bad_index(self):
         wheel = cr.WheelPattern(16, 0)
