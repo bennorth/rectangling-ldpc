@@ -246,7 +246,9 @@ class TestPatterns:
 
         assert n_legal == 4650
 
-    @pytest.mark.parametrize('n_cams', [41, 31, 29, 26, 23])
+    n_cams = [41, 31, 29, 26, 23]
+
+    @pytest.mark.parametrize('n_cams', n_cams)
     def test_random_legal_pattern(self, engine_context, n_cams):
         chi_samples = [self._test_random_legal_pattern_1(engine_context, n_cams)
                        for _ in range(1000)]
