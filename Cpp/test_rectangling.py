@@ -267,6 +267,12 @@ class TestWheelPattern:
             d_wheel_xs = cr.delta_wheel(wheel_xs)
             nptest.assert_array_equal(wheel.deltaed().xs, d_wheel_xs)
 
+    def test_integrated(self, engine_context):
+        for _ in range(100):
+            wheel = engine_context.make_legal_wheel_pattern(41)
+            wheel_round_trip = wheel.deltaed().integrated(wheel.xs[0])
+            nptest.assert_array_equal(wheel_round_trip.xs, wheel.xs)
+
     def test_bit_flip(self):
         wheel = cr.WheelPattern(16, 0)
         for i in range(len(wheel)):

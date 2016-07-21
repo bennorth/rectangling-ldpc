@@ -361,6 +361,7 @@ public:
     { return {1 - xs.array()}; }
 
     WheelPattern deltaed() const;
+    WheelPattern integrated(int x0) const;
 
     WheelPattern with_bit_flipped(size_t flip_idx) const;
 
@@ -383,6 +384,24 @@ const size_t WheelPattern::max_consecutive_same;
 WheelPattern WheelPattern::deltaed() const
 {
     return {delta_wheel(xs)};
+}
+
+WheelPattern WheelPattern::integrated(int x0) const
+{
+    if (xs.sum() % 2 == 1)
+        throw std::runtime_error(
+            "cannot integrate wheel with odd number of crosses");
+
+    auto xs_size = static_cast<VectorXi::Index>(size());
+
+    VectorXi integrated_xs {xs_size};
+    integrated_xs(0) = x0;
+
+    int running_x = x0;
+    for (VectorXi::Index i = 1; i != xs_size; ++i)
+        running_x = integrated_xs(i) = xs(i-1) ^ running_x;
+
+    return integrated_xs;
 }
 
 WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
@@ -978,6 +997,7 @@ PYBIND11_PLUGIN(rectangling) {
         .def("is_legal", &WheelPattern::is_legal)
         .def("inverted", &WheelPattern::inverted)
         .def("deltaed", &WheelPattern::deltaed)
+        .def("integrated", &WheelPattern::integrated)
         .def("with_bit_flipped", &WheelPattern::with_bit_flipped)
         .def("max_run_length", &WheelPattern::max_run_length)
         .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
