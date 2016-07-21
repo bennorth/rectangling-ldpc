@@ -456,8 +456,6 @@ public:
     Patterns(const VectorXi& chi1, const VectorXi& chi2) : chi1(chi1), chi2(chi2) {}
     Patterns(rnd_engine_t& rnd, size_t n1, size_t n2);
 
-    static const size_t max_consecutive_same = 4;
-
     const VectorXi chi1, chi2;
 
     bool is_legal() const
@@ -475,8 +473,6 @@ public:
     static bool wheel_is_legal(const VectorXi& chi)
     { return WheelPattern(chi).is_legal(); }
 };
-
-const size_t Patterns::max_consecutive_same;
 
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
     : chi1(legal_wheel_pattern(rnd, n1)), chi2(legal_wheel_pattern(rnd, n2))
@@ -922,7 +918,6 @@ PYBIND11_PLUGIN(rectangling) {
 
     py::class_<Patterns>(rect_module, "Patterns")
         .def(py::init<const VectorXi&, const VectorXi&>())
-        .def_readonly_static("max_consecutive_same", &Patterns::max_consecutive_same)
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
         .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
