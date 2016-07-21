@@ -202,6 +202,18 @@ class TestWheelPattern:
         assert cr.WheelPattern.n_cross_in_un_delta(n, 0.25) == exp_ns_cross[0]
         assert cr.WheelPattern.n_cross_in_un_delta(n, 0.75) == exp_ns_cross[1]
 
+    def test_interleave_crosses_dots(self):
+        ns_cross = np.array([1, 4, 3, 1, 2])
+        ns_dot = np.array([3, 2, 2, 1, 2])
+        pattern = cr.WheelPattern.interleave_crosses_dots(ns_cross, ns_dot)
+
+        # Should start with a 'cross':
+        assert pattern[0] == 1
+
+        run_lengths = np.array([len(list(g)) for x, g in groupby(pattern)])
+        nptest.assert_array_equal(run_lengths[::2], ns_cross)
+        nptest.assert_array_equal(run_lengths[1::2], ns_dot)
+
     def test_is_legal(self, engine_context):
         # For a hypothetical 15-cam wheel, we need 8 crosses in D-chi, meaning
         # 4 blocks of cross and 4 of dot.  There must either be 8 cross and 7
@@ -235,18 +247,6 @@ class TestWheelPattern:
 class TestPatterns:
     def test_construction(self):
         cr.Patterns(np.array([1, 0, 1, 1, 0]), np.array([0, 0, 1, 1]))
-
-    def test_interleave_crosses_dots(self):
-        ns_cross = np.array([1, 4, 3, 1, 2])
-        ns_dot = np.array([3, 2, 2, 1, 2])
-        pattern = cr.Patterns.interleave_crosses_dots(ns_cross, ns_dot)
-
-        # Should start with a 'cross':
-        assert pattern[0] == 1
-
-        run_lengths = np.array([len(list(g)) for x, g in groupby(pattern)])
-        nptest.assert_array_equal(run_lengths[::2], ns_cross)
-        nptest.assert_array_equal(run_lengths[1::2], ns_dot)
 
     @staticmethod
     def delta_wheel(xs):
