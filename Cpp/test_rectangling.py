@@ -475,7 +475,6 @@ class TestDecodingState:
 
         converged_p, m_patterns = pr.converge_fg(py_state, 5, 50)
         self.c_converge_fun(c_state, 5, 50)
-        #assert False
 
 class TestFactorGraphState(TestDecodingState):
     def test_construction(self, engine_context, sample_obs):
