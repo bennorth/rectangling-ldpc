@@ -357,6 +357,7 @@ public:
 
     static size_t max_run_length(const VectorXi& xs, int value_upper_bound = 2);
     static VectorXi legal_wheel_pattern(rnd_engine_t& rnd, size_t n);
+    static size_t n_cross_in_delta(size_t n, double u);
 
     VectorXi xs;
 };
@@ -449,6 +450,23 @@ size_t WheelPattern::max_run_length(const VectorXi& xs, int value_upper_bound)
     return max_len;
 }
 
+size_t WheelPattern::n_cross_in_delta(size_t n, double u)
+{
+    switch (n % 4)
+    {
+    case 0:
+        return n / 2;
+    case 1:
+        return (n - 1) / 2;
+    case 2:
+        return (u < 0.5) ? (n / 2 - 1) : (n / 2 + 1);
+    case 3:
+        return (n + 1) / 2;
+    default:
+        throw std::runtime_error("arithmetic has failed");
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -467,7 +485,6 @@ public:
     { return Patterns(1 - chi1.array(), 1 - chi2.array()); }
 
 // Not really intended for public API, but for testability:
-    static size_t n_cross_in_delta(size_t n, double u);
     static size_t n_cross_in_un_delta(size_t n, double u);
     static VectorXi interleave_crosses_dots(const VectorXu& ns_crosses,
                                             const VectorXu& ns_dots);
@@ -476,23 +493,6 @@ public:
 Patterns::Patterns(rnd_engine_t& rnd, size_t n1, size_t n2)
     : chi1(WheelPattern::legal_wheel_pattern(rnd, n1)), chi2(WheelPattern::legal_wheel_pattern(rnd, n2))
 {
-}
-
-size_t Patterns::n_cross_in_delta(size_t n, double u)
-{
-    switch (n % 4)
-    {
-    case 0:
-        return n / 2;
-    case 1:
-        return (n - 1) / 2;
-    case 2:
-        return (u < 0.5) ? (n / 2 - 1) : (n / 2 + 1);
-    case 3:
-        return (n + 1) / 2;
-    default:
-        throw std::runtime_error("arithmetic has failed");
-    }
 }
 
 size_t Patterns::n_cross_in_un_delta(size_t n, double u)
@@ -914,13 +914,13 @@ PYBIND11_PLUGIN(rectangling) {
         .def_readonly_static("max_consecutive_same", &WheelPattern::max_consecutive_same)
         .def("is_legal", &WheelPattern::is_legal)
         .def("max_run_length", &WheelPattern::max_run_length)
+        .def("n_cross_in_delta", &WheelPattern::n_cross_in_delta)
         ;
 
     py::class_<Patterns>(rect_module, "Patterns")
         .def(py::init<const VectorXi&, const VectorXi&>())
         .def_readonly("chi1", &Patterns::chi1)
         .def_readonly("chi2", &Patterns::chi2)
-        .def("n_cross_in_delta", &Patterns::n_cross_in_delta)
         .def("n_cross_in_un_delta", &Patterns::n_cross_in_un_delta)
         .def("interleave_crosses_dots", &Patterns::interleave_crosses_dots)
         .def("is_legal", &Patterns::is_legal)
