@@ -267,6 +267,13 @@ class TestPatterns:
             patterns = engine_context.make_Patterns(41, 31)
             assert patterns.is_legal()
 
+    @pytest.mark.parametrize('n1', n_cams)
+    @pytest.mark.parametrize('n2', n_cams)
+    def test_random_patterns(self, engine_context, n1, n2):
+        patterns = engine_context.make_Patterns(n1, n2)
+        assert len(patterns.chi1) == n1
+        assert len(patterns.chi2) == n2
+
 class TestObservations:
     def test_construction(self):
         cr.Observations(1.25, np.array([[3, 2, 1], [2, 2, 0]], dtype='i'))
