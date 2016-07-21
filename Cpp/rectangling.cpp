@@ -377,6 +377,10 @@ public:
                                             const VectorXu& ns_dots);
 
     VectorXi xs;
+
+private:
+    template<typename T>
+    WheelPattern with_bits_flipped_(const T& flip_idxs) const;
 };
 
 const size_t WheelPattern::max_consecutive_same;
@@ -412,6 +416,17 @@ WheelPattern WheelPattern::with_bit_flipped(size_t flip_idx) const
     VectorXi flipped_xs {xs};
     flipped_xs(flip_idx) = 1 - flipped_xs(flip_idx);
     return flipped_xs;
+}
+
+template<typename T>
+WheelPattern WheelPattern::with_bits_flipped_(const T& flip_idxs) const
+{
+    VectorXi flipped_xs {xs};
+
+    for (const auto i : flip_idxs)
+        flipped_xs(i) = 1 - flipped_xs(i);
+
+    return {flipped_xs};
 }
 
 bool WheelPattern::is_legal() const
