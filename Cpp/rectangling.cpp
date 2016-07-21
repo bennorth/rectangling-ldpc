@@ -571,6 +571,10 @@ public:
                  const VectorXi& chi1, const VectorXi& chi2,
                  double zeta, size_t n_observations);
 
+    Observations(rnd_engine_t& rnd,
+                 const WheelPattern& chi1, const WheelPattern& chi2,
+                 double zeta, size_t n_observations);
+
     Observations(rnd_engine_t& rnd, const Patterns& patterns,
                  double zeta, size_t n_observations);
 
@@ -605,6 +609,12 @@ Observations::Observations(rnd_engine_t& rnd,
                            const VectorXi& chi1, const VectorXi& chi2,
                            double zeta, size_t n_observations)
     : Observations(zeta, random_theta_(rnd, chi1, chi2, zeta, n_observations))
+{}
+
+Observations::Observations(rnd_engine_t& rnd,
+                           const WheelPattern& chi1, const WheelPattern& chi2,
+                           double zeta, size_t n_observations)
+    : Observations(rnd, chi1.xs, chi2.xs, zeta, n_observations)
 {}
 
 Observations::Observations(rnd_engine_t& rnd,
