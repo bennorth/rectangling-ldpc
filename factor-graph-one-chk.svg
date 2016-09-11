@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="480.61618"
+   height="264.49997"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="factor-graph-one-chk.svg"
+   inkscape:export-filename="/mnt/sdb1/bb/D/20160328-Rectangling/factor-graph-messages.png"
+   inkscape:export-xdpi="78.650002"
+   inkscape:export-ydpi="78.650002">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="345.60306"
+     inkscape:cy="106.47329"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-bbox="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="1000"
+     inkscape:window-x="1680"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:object-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-object-midpoints="false"
+     inkscape:object-nodes="true"
+     fit-margin-top="4"
+     fit-margin-left="4"
+     fit-margin-right="4"
+     fit-margin-bottom="4"
+     inkscape:showpageshadow="false"
+     showborder="true"
+     inkscape:snap-global="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="109px"
+       originy="-820.00003px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(109,32.137789)">
+    <path
+       style="fill:none;stroke:#2a37e0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 230,164.86218 0,-177.499997"
+       id="path3260"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#297b7b;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 230,162.36218 0,65"
+       id="path3915"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#000000;fill-opacity:0;stroke:#24a231;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m -50,162.36218 260,0"
+       id="path4052"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="fill:#36b9bc;fill-opacity:1;stroke:#297b7b;stroke-opacity:1"
+       id="rect3779"
+       width="40"
+       height="40"
+       x="210"
+       y="142.36218" />
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif"
+       x="216.58203"
+       y="179.51843"
+       id="text3919"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3921"
+         x="216.58203"
+         y="179.51843">+</tspan></text>
+    <g
+       id="g3433"
+       transform="translate(-148.29766,35.000028)">
+      <text
+         sodipodi:linespacing="100%"
+         id="text3783"
+         y="167.36218"
+         x="85"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           y="167.36218"
+           x="85"
+           id="tspan3785"
+           sodipodi:role="line">x</tspan></text>
+      <text
+         sodipodi:linespacing="100%"
+         id="text3791"
+         y="172.94794"
+         x="99.015251"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           y="172.94794"
+           x="99.015251"
+           id="tspan3431"
+           sodipodi:role="line">i</tspan></text>
+    </g>
+    <g
+       id="g3463"
+       transform="translate(30.736483,-76.873743)">
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="240.92482"
+         y="276.31357"
+         id="text3163"
+         sodipodi:linespacing="100%"
+         transform="scale(0.94423946,1.0590534)"><tspan
+           id="tspan3461"
+           sodipodi:role="line"
+           x="240.92482"
+           y="276.31357">i,j</tspan></text>
+      <text
+         transform="scale(0.94423946,1.0590534)"
+         sodipodi:linespacing="100%"
+         id="text3195"
+         y="273.10797"
+         x="226.9165"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           y="273.10797"
+           x="226.9165"
+           sodipodi:role="line"
+           id="tspan3197">θ</tspan></text>
+    </g>
+    <g
+       id="g3445"
+       transform="translate(67.147354,-37.935427)">
+      <text
+         xml:space="preserve"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="222.85265"
+         y="32.362183"
+         id="text4263"
+         sodipodi:linespacing="100%"><tspan
+           y="32.362183"
+           x="222.85265"
+           id="tspan3226"
+           sodipodi:role="line">y</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="234.35925"
+         y="37.947937"
+         id="text4271"
+         sodipodi:linespacing="100%"><tspan
+           y="37.947937"
+           x="234.35925"
+           id="tspan3443"
+           sodipodi:role="line">j</tspan></text>
+    </g>
+    <g
+       id="g3495"
+       transform="translate(-136.25,26.000028)">
+      <text
+         xml:space="preserve"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="146.25"
+         y="121.36218"
+         id="text3477"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan3479"
+           x="146.25"
+           y="121.36218">x</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="160.26526"
+         y="128.44746"
+         id="text3481"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan3483"
+           x="160.26526"
+           y="128.44746">i</tspan></text>
+      <text
+         sodipodi:linespacing="100%"
+         id="text3489"
+         y="111.6979"
+         x="161.26483"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           y="111.6979"
+           x="161.26483"
+           id="tspan3493"
+           sodipodi:role="line">(j)</tspan></text>
+    </g>
+    <path
+       style="fill:#24a231;fill-opacity:1;stroke:none"
+       d="m 5,152.36221 20,10 -20,10 z"
+       id="path3503"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g4293"
+       transform="translate(-33.852661,-68)">
+      <text
+         sodipodi:linespacing="100%"
+         id="text4275"
+         y="110.36218"
+         x="273.85266"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           id="tspan4277"
+           x="273.85266"
+           y="110.36218">y</tspan></text>
+      <text
+         sodipodi:linespacing="100%"
+         id="text4279"
+         y="115.94794"
+         x="285.35925"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           id="tspan4281"
+           x="285.35925"
+           y="115.94794">j</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="289.07156"
+         y="99.861259"
+         id="text4287"
+         sodipodi:linespacing="100%"><tspan
+           y="99.861259"
+           x="289.07156"
+           id="tspan4291"
+           sodipodi:role="line">(i)</tspan></text>
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       id="path4301"
+       d="M 240,22.362183 230,42.36218 220,22.362183 z"
+       style="fill:#2a37e0;fill-opacity:1;stroke:none" />
+    <path
+       style="fill:#297b7b;fill-opacity:1;stroke:none"
+       d="m 240,212.36218 -10,-19.99999 -10,19.99999 z"
+       id="path4323"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#2a37e0;fill-opacity:1;stroke:none"
+       d="m 240,132.36218 -10,-19.99999 -10,19.99999 z"
+       id="path4366"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4368"
+       d="m 200,152.36218 -20,10 20,10 z"
+       style="fill:#24a231;fill-opacity:1;stroke:none" />
+    <g
+       id="g6016">
+      <text
+         transform="scale(0.94423946,1.0590534)"
+         xml:space="preserve"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         x="255.67055"
+         y="110.53162"
+         id="text4382"
+         sodipodi:linespacing="100%"><tspan
+           id="tspan4435"
+           sodipodi:role="line"
+           x="255.67055"
+           y="110.53162">f(     ,     )</tspan></text>
+      <g
+         id="g4401"
+         transform="translate(147.85827,-4.6390189)">
+        <text
+           xml:space="preserve"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="146.25"
+           y="121.36218"
+           id="text4403"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan4405"
+             x="146.25"
+             y="121.36218">x</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="160.26526"
+           y="128.44746"
+           id="text4407"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan4409"
+             x="160.26526"
+             y="128.44746">i</tspan></text>
+        <text
+           sodipodi:linespacing="100%"
+           id="text4411"
+           y="111.6979"
+           x="161.26483"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"><tspan
+             y="111.6979"
+             x="161.26483"
+             id="tspan4413"
+             sodipodi:role="line">(j)</tspan></text>
+      </g>
+      <g
+         id="g4423"
+         transform="translate(42.027592,-172.17704)">
+        <text
+           xml:space="preserve"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="240.92482"
+           y="276.31357"
+           id="text4425"
+           sodipodi:linespacing="100%"
+           transform="scale(0.94423946,1.0590534)"><tspan
+             id="tspan4427"
+             sodipodi:role="line"
+             x="240.92482"
+             y="276.31357">i,j</tspan></text>
+        <text
+           transform="scale(0.94423946,1.0590534)"
+           sodipodi:linespacing="100%"
+           id="text4429"
+           y="273.10797"
+           x="226.9165"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"><tspan
+             y="273.10797"
+             x="226.9165"
+             sodipodi:role="line"
+             id="tspan4431">θ</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g6000">
+      <text
+         sodipodi:linespacing="100%"
+         id="text4455"
+         y="142.42766"
+         x="113.44909"
+         style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+         xml:space="preserve"
+         transform="scale(0.94423946,1.0590534)"><tspan
+           y="142.42766"
+           x="113.44909"
+           sodipodi:role="line"
+           id="tspan4457">f(     ,     )</tspan></text>
+      <g
+         transform="translate(-91.763514,-138.39744)"
+         id="g4473">
+        <text
+           transform="scale(0.94423946,1.0590534)"
+           sodipodi:linespacing="100%"
+           id="text4475"
+           y="276.31357"
+           x="240.92482"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"><tspan
+             y="276.31357"
+             x="240.92482"
+             sodipodi:role="line"
+             id="tspan4477">i,j</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="226.9165"
+           y="273.10797"
+           id="text4479"
+           sodipodi:linespacing="100%"
+           transform="scale(0.94423946,1.0590534)"><tspan
+             id="tspan4481"
+             sodipodi:role="line"
+             x="226.9165"
+             y="273.10797">θ</tspan></text>
+      </g>
+      <g
+         id="g4497"
+         transform="translate(-114.59614,40.140588)">
+        <text
+           sodipodi:linespacing="100%"
+           id="text4499"
+           y="110.36218"
+           x="273.85266"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"><tspan
+             sodipodi:role="line"
+             id="tspan4501"
+             x="273.85266"
+             y="110.36218">y</tspan></text>
+        <text
+           sodipodi:linespacing="100%"
+           id="text4503"
+           y="115.94794"
+           x="285.35925"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"><tspan
+             sodipodi:role="line"
+             id="tspan4505"
+             x="285.35925"
+             y="115.94794">j</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:14px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="289.07156"
+           y="99.861259"
+           id="text4507"
+           sodipodi:linespacing="100%"><tspan
+             y="99.861259"
+             x="289.07156"
+             id="tspan4509"
+             sodipodi:role="line">(i)</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g5898">
+      <rect
+         ry="8.9741879"
+         y="142.36218"
+         x="-104.5"
+         height="40"
+         width="100"
+         id="rect5733"
+         style="fill:#55dc65;fill-opacity:1;stroke:#24a231;stroke-opacity:1" />
+      <g
+         transform="translate(28.744781,-74.20144)"
+         id="g4977">
+        <text
+           sodipodi:linespacing="100%"
+           id="text4945"
+           y="227.49948"
+           x="-116.06887"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           xml:space="preserve"
+           transform="scale(0.94423946,1.0590534)"><tspan
+             y="227.49948"
+             x="-116.06887"
+             sodipodi:role="line"
+             id="tspan4957">Δχ (i)</tspan></text>
+        <text
+           sodipodi:linespacing="100%"
+           id="text4949"
+           y="237.4803"
+           x="-90.410988"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif"
+           xml:space="preserve"
+           transform="scale(0.94423946,1.0590534)"><tspan
+             y="237.4803"
+             x="-90.410988"
+             sodipodi:role="line"
+             id="tspan4959">1</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g5890"
+       transform="translate(104.48929,-3.6201731)">
+      <rect
+         style="fill:#616de0;fill-opacity:1;stroke:#2a37e0;stroke-opacity:1"
+         id="rect5693"
+         width="100"
+         height="40"
+         x="75.510712"
+         y="-24.017616"
+         ry="8.9741879" />
+      <g
+         transform="translate(208.91041,-240.58124)"
+         id="g5039">
+        <text
+           transform="scale(0.94423946,1.0590534)"
+           xml:space="preserve"
+           style="font-size:24px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif Italic"
+           x="-116.06887"
+           y="227.49948"
+           id="text5041"
+           sodipodi:linespacing="100%"><tspan
+             y="227.49948"
+             x="-116.06887"
+             id="tspan5043"
+             sodipodi:role="line">Δχ (j)</tspan></text>
+        <text
+           transform="scale(0.94423946,1.0590534)"
+           xml:space="preserve"
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Serif;-inkscape-font-specification:Droid Serif"
+           x="-90.410988"
+           y="237.4803"
+           id="text5045"
+           sodipodi:linespacing="100%"><tspan
+             y="237.4803"
+             x="-90.410988"
+             id="tspan5047"
+             sodipodi:role="line">2</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
