@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Lorenz cipher 'Rectangling' and Belief Propagation</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="hugo-octopress.css" type="text/css" />
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Lorenz cipher 'Rectangling' and Belief Propagation</h1>
+</div>
+<div class="home-link">
+<p>
+<a href="http://www.redfrontdoor.org/blog/">Ben North</a>, September 2016
+</p>
+</div>
+<h2 id="motivation-and-background">Motivation and background</h2>
+<p>This write-up assumes some level of background knowledge of the Lorenz cipher machine and the attacks automated by Colossus. The <a href="https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Lorenz_cipher">Wikipedia article</a> gives a good description, as does the source material provided by the <a href="http://www.ellsbury.com/tunny/tunny-000.htm"><em>General Report on Tunny</em></a> (henceforth <em>GRT</em>).</p>
+<p>The motivation for this study came in two parts:</p>
+<ul>
+<li><h3 id="question-posed-by-tutte">Question posed by Tutte</h3>
+<p>The book <em><a href="https://global.oup.com/academic/product/colossus-9780199578146?cc=us&amp;lang=en&amp;">Colossus: The secrets of Bletchley Park's code-breaking computers</a></em> has an appendix written by William T. Tutte, '<em>My Work at Bletchley Park</em>'. <a href="https://en.wikipedia.org/wiki/W._T._Tutte">Tutte</a> was the Bletchley Park codebreaker who, in what has been called 'one of the greatest intellectual feats of World War II', reverse-engineered the structure of the Lorenz cipher machine just from a sample of key. In this appendix, he writes (p.368, <strong>emphasis</strong> added):</p>
+<blockquote>
+<p>Having got a key <em>K</em>, we can write</p>
+<div style="text-align:center">
+<p><em>Δ</em>(<em>K</em><sub>1</sub> + <em>K</em><sub>2</sub>) = <em>Δ</em>(<em>χ</em><sub>1</sub> + <em>χ</em><sub>2</sub>) + <em>Δ</em>(<em>ψ</em><sub>1</sub> + <em>ψ</em><sub>2</sub>).</p>
+</div>
+But <em>Δ</em>(<em>ψ</em><sub>1</sub> + <em>ψ</em><sub>2</sub>) is about 70 per cent dot. <em>['Dot' is the term used for a binary zero.]</em> Hence <em>Δ</em>(<em>K</em><sub>1</sub> + <em>K</em><sub>2</sub>) must be in 70 per cent agreement with <em>Δ</em>(<em>χ</em><sub>1</sub> + <em>χ</em><sub>2</sub>). And the agreement would still be 70 percent for other pairs of impulses. <strong>Surely with 1000 or so letters of key the rectangle method would have resolved <em>Δ</em>(<em>K</em><sub>1</sub> + <em>K</em><sub>2</sub>) into <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub>?</strong> I suppose I could check this if I went to enough trouble. But what would be the point now, so long after the last Fish message was sent? On second thoughts the problem could be reformulated as one in pure mathematics and so made worth solving. It would not be the first of Bletchley's little problems to undergo such a transformation.
+</blockquote>
+<p>I thought the <strong>emphasised</strong> question was an interesting one.</p></li>
+<li><h3 id="similarity-to-belief-propagation-for-low-density-parity-check-codes">Similarity to Belief Propagation for Low-Density Parity Check codes</h3>
+<p><em>GRT</em> explains the procedures and formulae used in recovering the <em>χ</em> wheels from ciphertext, and they struck me as very similar to the Belief Propagation algorithm used for decoding LDPC codes. I thought it would be interesting to more properly compare the two methods, and also to ask whether Belief Propagation, first proposed in 1982, was an improvement over the methods used at Bletchley Park.</p></li>
+</ul>
+<p>This study combines these points, and looks at chi-breaking from key under both the 'accurate convergence' described in <em>GRT</em> and the 'belief propagation' approach. Can we recover <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub> from 1000 or so letters of <em>K</em>?</p>
+<h2 id="channel-capacity-information-per-letter">Channel capacity, information per letter</h2>
+<p>We can get a sanity-check sense for whether '1000 or so letters of key' will be sufficient to break χ<sub>1</sub> and χ<sub>2</sub> by looking at the information carried in one received bit of <em>K</em><sub>12</sub>. We have to recover at most 72 bits (χ<sub>1</sub> is of length 41; χ<sub>2</sub> is of length 31; 'at most' because there are constraints on the patterns, described more fully below).</p>
+<p>The received bit depends on the value of <em>B</em>, the 'dot'-biased noise term <em>Δ</em>(<em>ψ</em><sub>1</sub> + <em>ψ</em><sub>2</sub>), as follows:</p>
+<ul>
+<li>If <em>B</em> = 0, we receive the true value of <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) — this happens 70% of the time; or</li>
+<li>if <em>B</em> = 1, we receive the complement of <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) — this happens 30% of the time.</li>
+</ul>
+<p>This is a '<a href="https://en.wikipedia.org/wiki/Binary_symmetric_channel">binary symmetric channel</a>', with capacity 1 − <em>H</em><sub><em>b</em></sub>(<em>p</em>), where <em>H</em><sub><em>b</em></sub> is the <a href="https://en.wikipedia.org/wiki/Binary_entropy_function">binary entropy function</a> and <em>p</em> is the crossover probability, here 30%. In our case, then, the capacity is 1 − <em>H</em><sub><em>b</em></sub>(0·3) = 0·119. Receiving 1000 such values ought to provide 119 bits of information, then, which exceeds the 72 we require. So on the face of it, we do have enough information; but whether our decoding algorithm is good enough to extract it is another question.</p>
+<h2 id="chi-breaking-by-rectangling">Chi-breaking by 'Rectangling'</h2>
+<p>The process of 'Rectangling' used at Bletchley Park for recovering the wheel patterns is described in detail in <a href="http://www.ellsbury.com/tunny/tunny-113.htm">Chapter 24 of GRT</a>, but to summarise:</p>
+<p>The unknown <em>χ</em><sub>1</sub> wheel can be represented as a binary-valued vector of length 41 (indexed from 0 up to 40); similarly, the <em>χ</em><sub>2</sub> wheel by a 31-long vector. We can generate a '<em>χ</em> stream', a time series of length-2 vectors whose first component is consecutive entries from <em>χ</em><sub>1</sub> and second <em>χ</em><sub>2</sub> by rotating these wheels (together) one bit-position at a time. We are interested in the streams <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub>, where <em>Δχ</em><sub><em>k</em></sub>(<em>t</em>) = χ<sub><em>k</em></sub>(<em>t</em>) + χ<sub><em>k</em></sub>(<em>t</em> − 1). (The 'delta' implies difference but in the xor-based arithmetic used, addition is the same as subtraction.) We are also interested in their sum, denoted <em>Δχ</em><sub>12</sub> = <em>Δχ</em><sub>1</sub> + <em>Δχ</em><sub>2</sub>, which is cyclic of length 41 × 31 = 1271.</p>
+<p>The model is that there is also a 'biased coin' <em>B</em> which produces 0 more often than it produces 1. We flip this coin independently for each <em>t</em>, and then observe a sequence of <em>Δχ</em><sub>1</sub>(<em>t</em>) + <em>Δχ</em><sub>2</sub>(<em>t</em>) + <em>B</em>(<em>t</em>).</p>
+<p>The challenge is to recover <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub>. This is only possible up to the transformation which inverts all bits of both <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub>, because such a transformation would leave the observed <em>Δχ</em><sub>12</sub> unchanged. We do also have some constraints on the <em>Δχ</em> vectors; an immediate one is that such a vector must have an even number of 1s (otherwise it could not be 'integrated' to find <em>χ</em>), and see the discussion of 'legal wheels' below.</p>
+<h3 id="what-is-the-biased-coin">What is the 'biased coin'?</h3>
+<p>The 'biased coin' <em>B</em> can be:</p>
+<p>If we are working with intercepted ciphertext, <em>B</em> is <em>ΔD</em><sub>12</sub>, the sum of the first and second impulses of delta-de-<em>χ</em> (i.e., delta-<em>ψ</em> + delta-plain).</p>
+<p>If, as pondered in the Tutte quote motivating this study, we are working with a section of key <em>K</em> recovered from a depth, <em>B</em> is <em>Δψ</em><sub>12</sub>. Hence the equation in the quote:</p>
+<div style="text-align:center">
+<p><em>Δ</em>(<em>K</em><sub>1</sub> + <em>K</em><sub>2</sub>) = <em>Δ</em>(<em>χ</em><sub>1</sub> + <em>χ</em><sub>2</sub>) + <em>Δ</em>(<em>ψ</em><sub>1</sub> + <em>ψ</em><sub>2</sub>).</p>
+</div>
+<h2 id="reduction-of-observations-to-rectangle-of-counts">Reduction of observations to rectangle of counts</h2>
+<p>In full, the information we have is a list of the observed <em>Δχ</em><sub>1</sub>(<em>t</em> % 41) + <em>Δχ</em><sub>2</sub>(<em>t</em> % 31) + <em>B</em>(<em>t</em>) values for 0 ≤ <em>t</em> &lt; <em>T</em>, where <em>T</em> is the number of letters received.</p>
+<p>Since all <em>B</em>(<em>t</em>) are independent, and because of the cyclic nature of the <em>Δχ</em> streams, we can reduce the information to just a difference of 'number of 0s − number of 1s' corresponding to each <em>Δχ</em><sub>1</sub>(<em>i</em>) and <em>Δχ</em><sub>2</sub>(<em>j</em>). If we receive fewer than 1271 letters, we'll receive no information for some (<em>i</em>, <em>j</em>) pairs.</p>
+<p>The information we have is therefore a 'rectangle' of signed counts, called <em>θ</em>(<em>i</em>, <em>j</em>).</p>
+<h2 id="iterative-convergence">Iterative 'convergence'</h2>
+<p>The following process for estimating the <em>Δχ</em><sub>2</sub> and <em>Δχ</em><sub>1</sub> vectors from the <em>θ</em>(<em>i</em>, <em>j</em>) rectangle is described in <a href="http://www.ellsbury.com/tunny/tunny-120.htm">Section 24C of GRT</a>, and was known as 'crude convergence'.</p>
+<p>The idea was, approximately speaking: Hypothesise some vector of 41 values for <em>Δχ</em><sub>1</sub> (a 'start'). Then, for each <em>j &lt; 31</em>, look at all the <em>θ</em>(<em>i</em>, <em>j</em>) for <em>i</em> &lt; 41. Because <em>B</em> gives 0 more often than it gives 1, a positive <em>θ</em>(<em>i</em>, <em>j</em>) is evidence that <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) = 0, i.e., that <em>Δχ</em><sub>2</sub>(<em>j</em>) = <em>Δχ</em><sub>1</sub>(<em>i</em>). A negative <em>θ</em>(<em>i</em>, <em>j</em>) is evidence that <em>Δχ</em><sub>2</sub>(<em>j</em>) ≠ <em>Δχ</em><sub>1</sub>(<em>i</em>).</p>
+<p>Pretending for a minute that we know all <em>Δχ</em><sub>1</sub> values to be correct, then, this means:</p>
+<ul>
+<li><em>θ</em>(<em>i</em>, <em>j</em>) &gt; 0 and <em>Δχ</em><sub>1</sub>(<em>i</em>) = 0 is evidence for <em>Δχ</em><sub>2</sub>(<em>j</em>) = 0;</li>
+<li><em>θ</em>(<em>i</em>, <em>j</em>) &gt; 0 and <em>Δχ</em><sub>1</sub>(<em>i</em>) = 1 is evidence for <em>Δχ</em><sub>2</sub>(<em>j</em>) = 1;</li>
+<li><em>θ</em>(<em>i</em>, <em>j</em>) &lt; 0 and <em>Δχ</em><sub>1</sub>(<em>i</em>) = 0 is evidence for <em>Δχ</em><sub>2</sub>(<em>j</em>) = 1;</li>
+<li><em>θ</em>(<em>i</em>, <em>j</em>) &lt; 0 and <em>Δχ</em><sub>1</sub>(<em>i</em>) = 1 is evidence for <em>Δχ</em><sub>2</sub>(<em>j</em>) = 0.</li>
+</ul>
+<p>Let <em>ε</em><sub>1</sub> be the vector which has the value +1 whenever <em>Δχ</em><sub>1</sub> = 0 and the value −1 whenever <em>Δχ</em><sub>1</sub> = 1. Then Σ<sub> <em>i</em></sub> [<em>ε</em><sub>1</sub>(<em>i</em>)<em>θ</em>(<em>i</em>, <em>j</em>)] is, in some sense, the total evidence that <em>Δχ</em><sub>2</sub>(<em>j</em>) = 0. If this sum is negative, we should suspect that <em>Δχ</em><sub>2</sub>(<em>j</em>) = 1.</p>
+<p>In this way, we determine, on the preponderence of evidence, the most likely value of each <em>Δχ</em><sub>2</sub>(<em>j</em>).</p>
+<p>Then, fix that 31-long vector <em>Δχ</em><sub>2</sub> and run the same process in the other direction to estimate <em>Δχ</em><sub>1</sub>. Repeat. The idea is that this process will converge to a good estimate of the two <em>Δχ</em> vectors.</p>
+<h3 id="accurate-convergence">Accurate convergence</h3>
+<p>The process of 'accurate convergence' handles the calculation in a more formal probabilistic setting, and derives a more accurate procedure. It tracks a continuous score for how likely each bit is to be zero or one, as opposed to just which value is more likely. The details are given in <a href="http://www.ellsbury.com/tunny/tunny-130.htm">Section 24W(a) of GRT</a>, but in summary:</p>
+<p>First define <em>ζ</em> as the ratio <em>P</em>(<em>B</em> = 0) / <em>P</em>(<em>B</em> = 1), i.e., the factor by which it is more likely that <em>B</em> will yield 0 rather than 1. For our case, where '<em>Δ</em>(<em>ψ</em><sub>1</sub> + <em>ψ</em><sub>2</sub>) is about 70 per cent dot', we have <em>ζ</em> ≈ 2·33.</p>
+<p>Then define the 'score' <em>x</em><sub><em>i</em></sub> as the log-base-<em>ζ</em>-likelihood-ratio of the hypothesis '<em>Δχ</em><sub>1</sub>(<em>i</em>) = 0' (as compared to the alternative '<em>Δχ</em><sub>1</sub>(<em>i</em>) = 1'). Similarly, <em>y</em><sub><em>j</em></sub> is the score of the hypothesis <em>Δχ</em><sub>2</sub>(<em>j</em>) = 0. By alternating between</p>
+<ul>
+<li>treating the <em>x</em><sub><em>i</em></sub> as 'true' and updating the <em>y</em><sub><em>j</em></sub> accordingly; and</li>
+<li>treating the <em>y</em><sub><em>j</em></sub> as 'true' and updating the <em>x</em><sub><em>i</em></sub> accordingly,</li>
+</ul>
+<p>we obtain the following update rules:</p>
+<p><span class="math display">\[y_j = \sum_i f(\theta_{ij}, x_i);\quad x_i = \sum_j f(\theta_{ij}, y_j)\]</span> where <span class="math display">\[f(k, l) = \log_\zeta \left(\frac{\zeta^{k+l} + 1}{\zeta^k + \zeta^l}\right).\]</span></p>
+<p>The process of 'accurate convergence' performs these updates in turn until convergence of the signs of the scores, at which point the two <em>Δχ</em> vectors have been estimated.</p>
+<h2 id="similarity-to-belief-propagation-methods-for-ldpc-codes">Similarity to Belief Propagation methods for LDPC codes</h2>
+<p>It occurred to me that the rectangling problem is very similar to the decoding problem for <a href="https://en.wikipedia.org/wiki/Low-density_parity-check_code">Low-Density Parity Check</a> error-correcting systems, in the following sense.</p>
+<p>When rectangling, we have a large collection of bits for which:</p>
+<ul>
+<li>there are parity relations between small subsets of them;</li>
+<li>we receive noisy information on the values of the bits,</li>
+</ul>
+<p>and this is exactly the set-up for a LDPC code.</p>
+<p>Expressing rectangling in LDPC terms, the transmitted bits are the individual <em>Δχ</em><sub>1</sub>(<em>i</em>) and <em>Δχ</em><sub>2</sub>(<em>j</em>), and also their (xor) sums <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>). We receive no direct information on any <em>Δχ</em><sub>1</sub>(<em>i</em>) or <em>Δχ</em><sub>2</sub>(<em>j</em>) but do have some noisy information on each <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) — the <em>θ</em>(<em>i</em>, <em>j</em>) counts of excess zeros over ones. We can think of this as a situation where, in LDPC terms, we receive no data bits, and only have noisy information on the parity bits.</p>
+<h3 id="decoding-ldpc-codes-via-belief-propagation">Decoding LDPC codes via Belief Propagation</h3>
+<p>One popular decoding method for LDPC codes is Belief Propagation, one of a set of 'Factor Graph' algorithms. This paper gives a clear explanation of this class of algorithms:</p>
+<ul>
+<li>'<em>KFL</em>' — <a href="http://vision.unipv.it/IA2/Factor%20graphs%20and%20the%20sum-product%20algorithm.pdf">Kschischang, Frey, and Loeliger: 'Factor Graphs and the Sum-Product Algorithm'</a></li>
+</ul>
+<p>In a Factor Graph setting, we view the LDPC decoding problem on a graph whose nodes are of three types: variables, checks, or observations. The graph's edges show which variables are related by parity checks, and which variable appears in which observation.</p>
+<p>In our case, the parity checks arise from the definition of <em>Δχ</em><sub>12</sub>:</p>
+<div style="text-align:center">
+<p><em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) = <em>Δχ</em><sub>1</sub>(<em>i</em>) + <em>Δχ</em><sub>2</sub>(<em>j</em>).</p>
+</div>
+<p>Equivalently,</p>
+<div style="text-align:center">
+<p><em>Δχ</em><sub>1</sub>(<em>i</em>) + <em>Δχ</em><sub>2</sub>(<em>j</em>) + <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>) = 0.</p>
+</div>
+<p>Our variables, then, are the 41 <em>Δχ</em><sub>1</sub> values, the 31 <em>Δχ</em><sub>2</sub> values, and the 1271 <em>Δχ</em><sub>12</sub> values. As a factor graph, we also have 'dongle' nodes for the observations <em>θ</em>(<em>i</em>, <em>j</em>) concerning <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>), and check nodes for the relationship between <em>Δχ</em><sub>1</sub>(<em>i</em>), <em>Δχ</em><sub>2</sub>(<em>j</em>), and <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>). For a simplified 2 × 3 case, the graph is:</p>
+<div style="text-align:center; margin: 1.5ex 0ex;">
+<div class="figure">
+<img src="factor-graph-chi.png" />
+
+</div>
+</div>
+<p>Each square '+' node indicates that the variables connected to it must sum to zero.</p>
+<p>The 'message passing' algorithm (see the <em>KFL</em> paper for details) gives update rules in terms of numerical messages passed between nodes. In our case, we use the log-base-<span class="math inline">\(\zeta\)</span>-likelihood-ratio representation, and define <em>x</em><sub><em>i</em></sub> to be the value of the <em>Δχ</em><sub>1</sub>(<em>i</em>) node, which is the sum of that node's incoming messages. Similarly, <em>y</em><sub><em>j</em></sub> is the value of the <em>Δχ</em><sub>2</sub>(<em>j</em>) node. These scores mean exactly the same as the <em>x</em><sub><em>i</em></sub> and <em>y</em><sub><em>j</em></sub> scores of the Accurate Convergence scheme.</p>
+<p>The computation performed by a variable node for the LLR representation is just to sum the incoming message values (p.512 of <em>KFL</em>).</p>
+<p>The computation performed by each of our degree-three check nodes is via the function <span class="math display">\[CHK(\lambda_1, \lambda_2) = \frac{1 +
+\lambda_1\lambda_2}{\lambda_1 + \lambda_2}.\]</span> where <span class="math inline">\(\lambda\)</span> are the likelihood ratio values (NB <em>not</em> the log-likelihood ratios). In terms of log-likelihood-ratio values <em>k</em> and <em>l</em>, then: <span class="math display">\[CHK(k, l)
+  = \log_\zeta\left(\frac{1 + \zeta^k\zeta^l}{\zeta^k + \zeta^l}\right).\]</span> which is identical to the Bletchley Park <span class="math inline">\(f()\)</span> function for accurate convergence; we will therefore rename it <span class="math inline">\(f\)</span>. This <span class="math inline">\(f\)</span> function is only ever called with some <em>θ</em>(<em>i</em>, <em>j</em>) as one of its arguments; no messages get sent towards the 'dongle' node containing the observation <em>θ</em>(<em>i</em>, <em>j</em>).</p>
+<p>We keep track of <em>x</em><sub><em>i</em></sub><sup>(<em>j</em>)</sup>, the most recent message emitted by the variable node for <em>Δχ</em><sub>1</sub>(<em>i</em>) along the edge to the check node that variable shares with <em>Δχ</em><sub>2</sub>(<em>j</em>). The message value <em>y</em><sub><em>j</em></sub><sup>(<em>i</em>)</sup> is defined similarly. The messages into and out of a check node are:</p>
+<div style="text-align:center; margin: 1.5ex 0ex;">
+<div class="figure">
+<img src="factor-graph-one-chk.png" />
+
+</div>
+</div>
+<p>The score <em>x</em><sub><em>i</em></sub> is the log-<em>ζ</em>-likelihood-ratio of '<em>Δχ</em><sub>1</sub>(<em>i</em>) = 0', and it is updated via the 31 incoming messages, to</p>
+<p><span class="math display">\[x_i = \sum_{j=0}^{30} f(\theta_{ij}, y^{(i)}_j).\]</span></p>
+<p>Note that this is almost the same as the Accurate Convergence update rule, except there the summand is <em>f</em>(<em>θ</em><sub>ij</sub>, <em>y</em><sub><em>j</em></sub>) rather than the <em>f</em>(<em>θ</em><sub>ij</sub>, <em>y</em><sub><em>j</em></sub><sup>(<em>i</em>)</sup>) we have here.</p>
+<p>The message <em>y</em><sub><em>j</em></sub><sup>(<em>i</em>)</sup>, in turn, is the sum of all messages which <em>Δχ</em><sub>2</sub>(<em>j</em>) receives over all other edges, i.e., all edges besides the one connecting it to <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>). Equivalently, <em>y</em><sub><em>j</em></sub><sup>(<em>i</em>)</sup> is the sum of all incoming messages (which is the score, <em>y</em><sub><em>j</em></sub>) reduced by the message it received along the edge connecting it to <em>Δχ</em><sub>12</sub>(<em>i</em>, <em>j</em>):</p>
+<p><span class="math display">\[y^{(i)}_j = y_j - f(\theta_{ij}, x^{(j)}_i).\]</span></p>
+<p>For a 'large' number of incoming edges, we might hope that the difference between <em>y</em><sub><em>j</em></sub> and <em>y</em><sub><em>j</em></sub><sup>(<em>i</em>)</sup> would be small, in which case Belief Propagation and Accurate Convergence should behave very similarly.</p>
+<h2 id="importance-of-legality-constraint">Importance of 'legality' constraint</h2>
+<p>The actual operational <em>χ</em> patterns were significantly constrained. The rules for a valid ('legal') <em>χ</em> pattern are described in <a href="http://www.ellsbury.com/tunny/tunny-046.htm">Section 22B of GRT</a>:</p>
+<ul>
+<li><em>χ</em> must have, as nearly as possible, an equal number of 0s and 1s;</li>
+<li><em>Δχ</em> must be a valid differenced wheel in that it must have an even number of 1s;</li>
+<li><em>Δχ</em> must have, as nearly as possible, an equal number of 0s and 1s;</li>
+<li><em>χ</em> must not have more than four consecutive equal values (equivalently, <em>Δχ</em> must not have more than three consecutive 0s).</li>
+</ul>
+<p>It seems that these extra constraints were important when <em>χ</em>-breaking; <a href="http://www.ellsbury.com/tunny/tunny-165.htm">Section 25D(e) of GRT</a> talks about adjusting candidate wheels to make them legal. Not many details are given, but we can imagine that an approach a little like the following might have been used. No doubt the methods used by the experienced codebreakers were more sophisticated.</p>
+<h3 id="finding-nearby-legal-wheel">Finding 'nearby' legal wheel</h3>
+<p>Recall that we can only recover the delta-wheels up to the transformation which inverts all bits of both of them — that transformation preserves <em>Δχ</em><sub>12</sub>, which is all we (noisily) observe. In view of this, we adopt the following steps for finding a pair of legal wheels 'close' to the converged estimate:</p>
+<p>If the converged state (or its inverse) consists of two legal <em>Δχ</em> wheels, accept it.</p>
+<p>Otherwise, use the magnitude of the <em>x</em><sub><em>i</em></sub> scores (for <em>Δχ</em><sub>1</sub>) and the <em>y</em><sub><em>j</em></sub> scores (for <em>Δχ</em><sub>2</sub>) to rank each wheel's bits in order from least certain to most certain, and take the least certain twelve for each wheel. Try flipping each single bit in turn; if that gives a legal <em>Δχ</em> wheel (or the inversion of one), add it to list of candidates for that wheel, noting the 'cost' (how much evidence was overruled), and whether the wheel needed to be inverted. Then try flipping two bits at a time, then three. Rank all candidates for each wheel from least costly to most.</p>
+<p>Combine a candidate <em>Δχ</em><sub>1</sub> with a candidate <em>Δχ</em><sub>2</sub> such that either neither wheel is inverted or both are inverted. Accept the least costly candidate pair of wheels.</p>
+<h3 id="generating-legal-wheels">Generating legal wheels</h3>
+<p>For the experiments described shortly, we need to be able to randomly generate legal wheels and evaluate the algorithms' performance on them. <a href="http://www.ellsbury.com/tunny/tunny-192.htm">Section 25X of GRT</a> notes that legal wheels may be enumerated by a process which, for the 41-long <em>χ</em><sub>1</sub> wheel, boils down to choosing ten integers, each between 1 and 4 inclusive, with sum 20; and another ten such with sum 21. These are the lengths of blocks of 0s and 1s.</p>
+<p>The problem of randomly generating sets of ten such numbers, uniformly over all possibilities, turned out to be an interesting sub-project in the course of this study. I solved it by adapting the algorithm described in the paper <a href="http://tcslab.csce.kyushu-u.ac.jp/~kijima/papers/METR2003-17.pdf">Polynomial Time Perfect Sampler for Discretized Dirichlet Distribution</a> (Matsui and Kijima) to incorporate an upper bound on the values each summand may take. I have not formally proved that the modified algorithm obeys all requirements to generate uniform samples, but I think it does, and the behaviour seems reasonable. For present purposes, then, it is certainly acceptable.</p>
+<h2 id="simulations">Simulations</h2>
+<p>To explore these ideas, we can simulate the process of attemping to recover the two <em>Δχ</em> patterns as follows:</p>
+<ul>
+<li>Generate a random legal <em>χ<sub>1</sub></em> wheel and a random legal <em>χ<sub>2</sub></em> wheel.</li>
+<li>From these, find the two <em>Δχ</em> wheels.</li>
+<li>Generate 1000 independent samples of <em>B</em> (i.e., <em>Δψ</em><sub>12</sub>), with <em>P</em>(<em>B</em> = 0) of 70%</li>
+<li>Combine to create a sequence of 1000 values of <em>K<sub>12</sub></em> via <em>K<sub>12</sub></em> = <em>Δχ</em><sub>12</sub> + <em>B</em>.</li>
+<li>Form into rectangle <em>θ</em>(<em>i</em>, <em>j</em>) by counting excess 0s over 1s for each (<em>i</em>, <em>j</em>).</li>
+<li>For each algorithm (Accurate Convergence and Belief Propagation):
+<ul>
+<li>Using a random starting estimate for the wheels' scores, apply the algorithm to find a 'raw' estimate of the two <em>Δχ</em> wheels.</li>
+<li>Count the number of correct bits in the estimates vs the ground truth patterns. Because of the inversion ambiguity, take the 'number correct' evaluation as the greater of the actual number of correct bits, and 72 − (raw number correct).</li>
+<li>Apply the 'find nearby legal wheel pair' process.</li>
+<li>Count the number of correct bits in these new patterns. This time we will not have an inverted wheel (because we must have arrived at <em>Δχ</em> patterns with an even number of 1s), and so there is no 'also consider 72 − (raw number correct)' step.</li>
+</ul></li>
+</ul>
+<p>This simulation was performed 1,000,000 times, and the proportion of cases achieving at least <em>N</em> correct bits, for various <em>N</em>, was found. We are hoping for a high proportion of cases achieving a high number of correct bits.</p>
+<h3 id="results">Results</h3>
+<p>The performance of the two algorithms, before and after legality enforcement, was as follows.</p>
+<div style="text-align:center; margin: 1.5ex 0ex;">
+<div class="figure">
+<img src="fig-20160908-2.png" />
+
+</div>
+</div>
+<h3 id="observations">Observations</h3>
+<p>Left graph: Even before error correction using the legality constraint, both methods do well. They perfectly recover the wheel patterns around a third of the time, and 'almost' succeed (getting at most two bits wrong) a further half of the time. The Belief Propagation algorithm does very slightly better, although not meaningfully.</p>
+<p>Right graph: After adjusting the recovered patterns so as to find a legal pair of wheel patterns, the 'perfect recovery' rate jumps to around 80% for each algorithm. The 'almost success' rate, allowing up to two wrong bits, jumps to around 95%. Note that we only ever get an even number of bits right, as an odd number of incorrect bits would mean one proposed delta-wheel would have an odd number of 1s, an impossibility.</p>
+<p>These experiments have studied the most difficult pair of wheels, i.e., the longest ones. Breaking the shorter <em>χ</em> wheels would presumably be easier, with the algorithms achieving a higher success rate.</p>
+<p>Although Belief Propagation does appear to perform slightly better than Accurate Convergence, I do not think it would have been useful to the codebreakers at Bletchley Park. The much greater amount of state required to run the algorithm (41 × 31 messages values rather than 41 + 31 scores) would make it impracticable to perform manually.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>The detailed behaviour of the algorithms could be characterised more fully, but we have learnt enough to answer Tutte's question</p>
+<blockquote>
+<p>Surely with 1000 or so letters of key the rectangle method would have resolved <em>Δ</em>(<em>K</em><sub>1</sub> + <em>K</em><sub>2</sub>) into <em>Δχ</em><sub>1</sub> and <em>Δχ</em><sub>2</sub>?</p>
+</blockquote>
+<p>with 'very likely, yes'.</p>
+<h2 id="source-code">Source code</h2>
+<p>Available on github: <a href="https://github.com/bennorth/rectangling-ldpc">bennorth/rectangling-ldpc</a>.</p>
+<div class="home-link">
+<p>
+<a href="http://www.redfrontdoor.org/blog/">Ben North</a>, September 2016
+</p>
+</div>
+<p>
+This web-page content Copyright 2016 Ben North; licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+</p>
+</div>
+</body>
+</html>
