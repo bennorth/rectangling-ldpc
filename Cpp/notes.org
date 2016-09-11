@@ -1,4 +1,4 @@
-#+TITLE: Installation notes for working with pybind11/eigen
+#+TITLE: Installation notes for working with pybind11/eigen/trng
 
 
 * Install eigen into conda env
@@ -41,3 +41,15 @@ Make headers available:
 ln -s ~/dev/tar/pybind11-1.8/include/pybind11 $CONDA_ENV_PATH/include
 
 PyBind11 is header-only so that's it.
+
+
+* Random number generator
+
+wget http://numbercrunch.de/trng/trng-4.19.tar.gz
+
+(20160911: But numbercrunch.de is right now showing up as empty; maybe
+need to find alternative location for tarball?  Have emailed author.)
+
+Then 'make install' as usual into conda prefix.
+
+GitHub location:  https://github.com/rabauke/trng4
