@@ -1,0 +1,39 @@
+Code
+
+    Cpp/rectangling.cpp
+    Cpp/py_rectangling.py
+    Cpp/test_rectangling.py
+    Cpp/20160908-rectangling.ipynb
+
+is hereby made available under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 3
+of the License, or (at your option) any later version.
+
+The file LICENCE.txt contains a copy of this License, whose copyright is
+held by the Free Software Foundation, and which itself is freely
+distributable in unmodified form.
+
+
+------------------------------------------------------------------------
+
+Figures
+
+    factor-graph-chi.svg
+    factor-graph-one-chk.svg
+
+are hereby made available under the Creative Commons Attribution
+Share-Alike licence.  A summary of this licence, and link to the full
+version, can be found here:
+
+    http://creativecommons.org/licenses/by-sa/4.0/
+
+
+------------------------------------------------------------------------
+
+Trivial content
+
+    Cpp/make.sh
+    Cpp/notes.org
+    render.sh
+
+is hereby placed into the public domain.
