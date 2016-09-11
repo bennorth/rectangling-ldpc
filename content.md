@@ -1,4 +1,4 @@
-# Lorenz cipher 'Rectangling' and Belief Propagation
+% Lorenz cipher 'Rectangling' and Belief Propagation
 
 <div class="home-link"><p><a href="http://www.redfrontdoor.org/blog/">Ben North</a>, September 2016</p></div>
 
