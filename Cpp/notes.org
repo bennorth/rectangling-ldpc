@@ -1,0 +1,43 @@
+#+TITLE: Installation notes for working with pybind11/eigen
+
+
+* Install eigen into conda env
+
+wget http://bitbucket.org/eigen/eigen/get/3.2.8.tar.bz2
+
+Untar, then move header directory into conda env:
+
+mv -vi Eigen $CONDA_ENV_PATH/include
+
+Eigen is header-only so that's it.
+
+Except!  For various tools to find it, also need to:
+
+touch $CONDA_ENV_PATH/include/signature_of_eigen3_matrix_library
+
+
+* Install pybind11
+
+** Prerequisites
+
+conda install cmake
+
+To get latest version.
+
+** PyBind itself
+
+wget https://github.com/pybind/pybind11/archive/v1.8.tar.gz
+
+Untar, then
+
+cmake .
+make -j 4
+make test
+
+All passed.
+
+Make headers available:
+
+ln -s ~/dev/tar/pybind11-1.8/include/pybind11 $CONDA_ENV_PATH/include
+
+PyBind11 is header-only so that's it.
