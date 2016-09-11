@@ -30,6 +30,15 @@ version, can be found here:
 
 ------------------------------------------------------------------------
 
+Support file
+
+    hugo-octopress.css
+
+is mostly copyright Parsia Hakimian (with minor modifications copyright
+Ben North), used and available under the MIT license.
+
+------------------------------------------------------------------------
+
 Trivial content
 
     Cpp/make.sh
