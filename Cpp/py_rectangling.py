@@ -22,7 +22,10 @@ class FactorGraphState(namedtuple('FactorGraphState', 'obs score_1 score_2')):
     def with_score_1_updated(self):
         """
         Calculate new values for score_1.
-        Find Mij message received from K1i along the edge which (via check node involving K12ij) comes from K2j.
+
+        Find Mij message received from K1i along the edge which (via
+        check node involving K12ij) comes from K2j.
+
         Sum (over j) of these is 'xi'.  Then new score_1[ij] = xi - Mij.
         """
         msgs = self.obs.chk_f(self.score_2)
